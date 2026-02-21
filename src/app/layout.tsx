@@ -1,10 +1,11 @@
 import "@/styles/globals.css";
 
-import {ClerkProvider} from "@clerk/nextjs"
+import { ClerkProvider } from "@clerk/nextjs"
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "AI X GIT",
@@ -24,11 +25,12 @@ export default function RootLayout({
 
     <ClerkProvider>
 
-    <html lang="en" className={`${geist.variable}`}>
-      <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
-    </html>
+      <html lang="en" className={`${geist.variable}`}>
+        <body>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <Toaster richColors />
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
