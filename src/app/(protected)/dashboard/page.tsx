@@ -6,7 +6,12 @@ import React from "react";
 function DashBoardPage() {
   const { user } = useUser();
 
-  return <div>{user?.firstName}</div>;
+  return (
+    <>
+      <div>{user?.firstName}</div>
+      <div>{user?.lastName}</div>
+    </>
+  );
 }
 
 export default DashBoardPage;
