@@ -1,135 +1,209 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import useProject from "@/hooks/use-project";
-
 import { cn } from "@/lib/utils";
 import {
-    Bot,
-    CreditCard,
-    LayoutDashboard,
-    Plus,
-    Presentation,
+  Bot,
+  CreditCard,
+  FolderGit2,
+  LayoutDashboard,
+  Plus,
+  Presentation,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 const items = [
-    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-    { title: "Q&A", url: "/qa", icon: Bot },
-    { title: "Meetings", url: "/meetings", icon: Presentation },
-    { title: "Billing", url: "/billing", icon: CreditCard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Q&A", url: "/qa", icon: Bot },
+  { title: "Meetings", url: "/meetings", icon: Presentation },
+  { title: "Billing", url: "/billing", icon: CreditCard },
 ];
 
+const getProjectMeta = (githubUrl?: string | null) => {
+  if (!githubUrl) return "Private repository";
+
+  try {
+    const { hostname, pathname } = new URL(githubUrl);
+    return `${hostname}${pathname}`;
+  } catch {
+    return githubUrl;
+  }
+};
+
 export function AppSidebar() {
-    const pathname = usePathname();
-    const [projectId, setProjectId] = useState<string | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+  const { projects, isLoading, error, projectId, setProjectId } = useProject();
+  const { open } = useSidebar();
 
-    const { open } = useSidebar();
+  return (
+    <Sidebar collapsible="icon" variant="floating">
+      <SidebarHeader>
+        <div className={cn("flex", "items-center", "gap-2")}>
+          <Image src="/logo1.png" alt="logo" width={40} height={40} />
+          {open && (
+            <h1 className={cn("text-xl", "font-bold", "text-primary/80")}>
+              Dionysus
+            </h1>
+          )}
+        </div>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link
+                      href={item.url}
+                      className={cn("transition-colors", {
+                        "!bg-primary !text-white": pathname === item.url,
+                      })}
+                    >
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-    // FIX 1: Provide a fallback empty array in case the hook returns undefined initially
-    const { projects = [] } = useProject() || {};
+        <SidebarGroup>
+          <SidebarGroupLabel className="flex items-center justify-between">
+            <span>Your Projects</span>
+            {open && <Badge variant="secondary">{projects.length}</Badge>}
+          </SidebarGroupLabel>
 
-    return (
-        <Sidebar collapsible="icon" variant="floating">
-            <SidebarHeader>
-                <div className={cn("flex", "items-center", "gap-2")}>
-                    <Image src="/logo1.png" alt="logo" width={40} height={40} />
-                    {open && (
-                        <h1 className={cn("text-xl", "font-bold", "text-primary/80")}>
-                            Dionysus
-                        </h1>
-                    )}
-                </div>
-            </SidebarHeader>
-            <SidebarContent>
-                {/* -------- Application -------- */}
-                <SidebarGroup>
-                    <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {isLoading && (
+                <>
+                  {Array.from({ length: 3 }).map((_, idx) => (
+                    <SidebarMenuItem key={`project-skeleton-${idx}`}>
+                      <div className="flex items-center gap-2 rounded-lg border p-2">
+                        <Skeleton className="size-8 rounded-md" />
+                        {open && (
+                          <div className="w-full space-y-1">
+                            <Skeleton className="h-3 w-2/3" />
+                            <Skeleton className="h-2.5 w-1/2" />
+                          </div>
+                        )}
+                      </div>
+                    </SidebarMenuItem>
+                  ))}
+                </>
+              )}
 
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <Link
-                                            href={item.url}
-                                            className={cn({
-                                                "!bg-primary !text-white": pathname === item.url,
-                                            })}
-                                        >
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+              {error && (
+                <SidebarMenuItem className="text-xs text-destructive">
+                  Failed to load projects
+                </SidebarMenuItem>
+              )}
 
-                {/* -------- Projects -------- */}
-                <SidebarGroup>
-                    <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
+              {!isLoading && !error && projects.length === 0 && (
+                <SidebarMenuItem>
+                  <div className="rounded-lg border border-dashed p-3 text-xs text-muted-foreground">
+                    No projects yet. Create one to get started.
+                  </div>
+                </SidebarMenuItem>
+              )}
 
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {/* FIX 1 continued: Optional chaining just in case */}
-                            {projects?.map((project) => (
-                                <SidebarMenuItem key={project.id}>
-                                    <SidebarMenuButton asChild>
-                                        <div
-                                            onClick={() => setProjectId(project.id)}
-                                            className={cn('flex', 'items-center', 'gap-2', 'cursor-pointer')}
-                                        >
-                                            <div
-                                                className={cn(
-                                                    "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary",
-                                                    {
-                                                        "bg-primary text-white":
-                                                            project.id === projectId,
-                                                    }
-                                                )}
-                                            >
-                                                {project.name[0]}
-                                            </div>
-                                            <span>{project.name}</span>
-                                        </div>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+              {projects.map((project) => {
+                const isActive = project.id === projectId;
+                return (
+                  <SidebarMenuItem key={project.id}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProjectId(project.id);
+                        if (pathname !== "/dashboard") {
+                          router.push("/dashboard");
+                        }
+                      }}
+                      className={cn(
+                        "w-full rounded-xl border p-2 text-left transition-all duration-150",
+                        "hover:border-primary/30 hover:bg-primary/5",
+                        {
+                          "border-primary/40 bg-primary/10 shadow-sm": isActive,
+                          "border-border/60": !isActive,
+                        },
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={cn(
+                            "flex size-8 shrink-0 items-center justify-center rounded-md border text-xs font-semibold",
+                            {
+                              "border-primary bg-primary text-primary-foreground":
+                                isActive,
+                              "border-border bg-background text-muted-foreground":
+                                !isActive,
+                            },
+                          )}
+                        >
+                          {project.name.slice(0, 1).toUpperCase()}
+                        </div>
 
-                            {open && (
-                                <SidebarMenuItem>
-                                    {/* FIX 2: Wrapped in SidebarMenuButton for proper shadcn formatting */}
-                                    <SidebarMenuButton asChild>
-                                        <Link href="/create">
-                                            <Button variant="outline" className="w-fit">
-                                                <Plus className={cn('mr-2', 'size-4')} />
-                                                Create Project
-                                            </Button>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            )}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-            </SidebarContent>
-        </Sidebar>
-    );
+                        {open && (
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-sm font-medium">
+                              {project.name}
+                            </div>
+                            <div className="truncate text-xs text-muted-foreground">
+                              {getProjectMeta(project.githubUrl)}
+                            </div>
+                          </div>
+                        )}
+
+                        {open && isActive && (
+                          <Badge className="shrink-0" variant="default">
+                            Active
+                          </Badge>
+                        )}
+                        {!open && <FolderGit2 className="size-4" />}
+                      </div>
+                    </button>
+                  </SidebarMenuItem>
+                );
+              })}
+
+              {open && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href="/create">
+                      <Button className="w-full justify-start" variant="outline">
+                        <Plus className="mr-2 size-4" />
+                        Create Project
+                      </Button>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  );
 }

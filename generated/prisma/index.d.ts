@@ -24,10 +24,25 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
 /**
- * Model UserToProject
+ * Model Commit
  * 
  */
-export type UserToProject = $Result.DefaultSelection<Prisma.$UserToProjectPayload>
+export type Commit = $Result.DefaultSelection<Prisma.$CommitPayload>
+/**
+ * Model Issue
+ * 
+ */
+export type Issue = $Result.DefaultSelection<Prisma.$IssuePayload>
+/**
+ * Model Meeting
+ * 
+ */
+export type Meeting = $Result.DefaultSelection<Prisma.$MeetingPayload>
+/**
+ * Model Question
+ * 
+ */
+export type Question = $Result.DefaultSelection<Prisma.$QuestionPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -168,14 +183,44 @@ export class PrismaClient<
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.userToProject`: Exposes CRUD operations for the **UserToProject** model.
+   * `prisma.commit`: Exposes CRUD operations for the **Commit** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more UserToProjects
-    * const userToProjects = await prisma.userToProject.findMany()
+    * // Fetch zero or more Commits
+    * const commits = await prisma.commit.findMany()
     * ```
     */
-  get userToProject(): Prisma.UserToProjectDelegate<ExtArgs, ClientOptions>;
+  get commit(): Prisma.CommitDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.issue`: Exposes CRUD operations for the **Issue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Issues
+    * const issues = await prisma.issue.findMany()
+    * ```
+    */
+  get issue(): Prisma.IssueDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.meeting`: Exposes CRUD operations for the **Meeting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Meetings
+    * const meetings = await prisma.meeting.findMany()
+    * ```
+    */
+  get meeting(): Prisma.MeetingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.question`: Exposes CRUD operations for the **Question** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Questions
+    * const questions = await prisma.question.findMany()
+    * ```
+    */
+  get question(): Prisma.QuestionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -619,7 +664,10 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Project: 'Project',
-    UserToProject: 'UserToProject'
+    Commit: 'Commit',
+    Issue: 'Issue',
+    Meeting: 'Meeting',
+    Question: 'Question'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -638,7 +686,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "project" | "userToProject"
+      modelProps: "user" | "project" | "commit" | "issue" | "meeting" | "question"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -790,77 +838,299 @@ export namespace Prisma {
           }
         }
       }
-      UserToProject: {
-        payload: Prisma.$UserToProjectPayload<ExtArgs>
-        fields: Prisma.UserToProjectFieldRefs
+      Commit: {
+        payload: Prisma.$CommitPayload<ExtArgs>
+        fields: Prisma.CommitFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.UserToProjectFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload> | null
+            args: Prisma.CommitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.UserToProjectFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>
+            args: Prisma.CommitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>
           }
           findFirst: {
-            args: Prisma.UserToProjectFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload> | null
+            args: Prisma.CommitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.UserToProjectFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>
+            args: Prisma.CommitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>
           }
           findMany: {
-            args: Prisma.UserToProjectFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>[]
+            args: Prisma.CommitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>[]
           }
           create: {
-            args: Prisma.UserToProjectCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>
+            args: Prisma.CommitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>
           }
           createMany: {
-            args: Prisma.UserToProjectCreateManyArgs<ExtArgs>
+            args: Prisma.CommitCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.UserToProjectCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>[]
+            args: Prisma.CommitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>[]
           }
           delete: {
-            args: Prisma.UserToProjectDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>
+            args: Prisma.CommitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>
           }
           update: {
-            args: Prisma.UserToProjectUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>
+            args: Prisma.CommitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>
           }
           deleteMany: {
-            args: Prisma.UserToProjectDeleteManyArgs<ExtArgs>
+            args: Prisma.CommitDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.UserToProjectUpdateManyArgs<ExtArgs>
+            args: Prisma.CommitUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.UserToProjectUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>[]
+            args: Prisma.CommitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>[]
           }
           upsert: {
-            args: Prisma.UserToProjectUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserToProjectPayload>
+            args: Prisma.CommitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CommitPayload>
           }
           aggregate: {
-            args: Prisma.UserToProjectAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUserToProject>
+            args: Prisma.CommitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCommit>
           }
           groupBy: {
-            args: Prisma.UserToProjectGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UserToProjectGroupByOutputType>[]
+            args: Prisma.CommitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CommitGroupByOutputType>[]
           }
           count: {
-            args: Prisma.UserToProjectCountArgs<ExtArgs>
-            result: $Utils.Optional<UserToProjectCountAggregateOutputType> | number
+            args: Prisma.CommitCountArgs<ExtArgs>
+            result: $Utils.Optional<CommitCountAggregateOutputType> | number
+          }
+        }
+      }
+      Issue: {
+        payload: Prisma.$IssuePayload<ExtArgs>
+        fields: Prisma.IssueFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IssueFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IssueFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>
+          }
+          findFirst: {
+            args: Prisma.IssueFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IssueFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>
+          }
+          findMany: {
+            args: Prisma.IssueFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>[]
+          }
+          create: {
+            args: Prisma.IssueCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>
+          }
+          createMany: {
+            args: Prisma.IssueCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IssueCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>[]
+          }
+          delete: {
+            args: Prisma.IssueDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>
+          }
+          update: {
+            args: Prisma.IssueUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>
+          }
+          deleteMany: {
+            args: Prisma.IssueDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IssueUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.IssueUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>[]
+          }
+          upsert: {
+            args: Prisma.IssueUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IssuePayload>
+          }
+          aggregate: {
+            args: Prisma.IssueAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIssue>
+          }
+          groupBy: {
+            args: Prisma.IssueGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IssueGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IssueCountArgs<ExtArgs>
+            result: $Utils.Optional<IssueCountAggregateOutputType> | number
+          }
+        }
+      }
+      Meeting: {
+        payload: Prisma.$MeetingPayload<ExtArgs>
+        fields: Prisma.MeetingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MeetingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MeetingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          findFirst: {
+            args: Prisma.MeetingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MeetingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          findMany: {
+            args: Prisma.MeetingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+          }
+          create: {
+            args: Prisma.MeetingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          createMany: {
+            args: Prisma.MeetingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MeetingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+          }
+          delete: {
+            args: Prisma.MeetingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          update: {
+            args: Prisma.MeetingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          deleteMany: {
+            args: Prisma.MeetingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MeetingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MeetingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>[]
+          }
+          upsert: {
+            args: Prisma.MeetingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MeetingPayload>
+          }
+          aggregate: {
+            args: Prisma.MeetingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMeeting>
+          }
+          groupBy: {
+            args: Prisma.MeetingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MeetingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MeetingCountArgs<ExtArgs>
+            result: $Utils.Optional<MeetingCountAggregateOutputType> | number
+          }
+        }
+      }
+      Question: {
+        payload: Prisma.$QuestionPayload<ExtArgs>
+        fields: Prisma.QuestionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QuestionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QuestionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          findFirst: {
+            args: Prisma.QuestionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QuestionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          findMany: {
+            args: Prisma.QuestionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+          }
+          create: {
+            args: Prisma.QuestionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          createMany: {
+            args: Prisma.QuestionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QuestionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+          }
+          delete: {
+            args: Prisma.QuestionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          update: {
+            args: Prisma.QuestionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          deleteMany: {
+            args: Prisma.QuestionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QuestionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.QuestionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>[]
+          }
+          upsert: {
+            args: Prisma.QuestionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuestionPayload>
+          }
+          aggregate: {
+            args: Prisma.QuestionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQuestion>
+          }
+          groupBy: {
+            args: Prisma.QuestionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QuestionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QuestionCountArgs<ExtArgs>
+            result: $Utils.Optional<QuestionCountAggregateOutputType> | number
           }
         }
       }
@@ -962,7 +1232,10 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     project?: ProjectOmit
-    userToProject?: UserToProjectOmit
+    commit?: CommitOmit
+    issue?: IssueOmit
+    meeting?: MeetingOmit
+    question?: QuestionOmit
   }
 
   /* Types for Logging */
@@ -1043,11 +1316,13 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    userToProjects: number
+    Question: number
+    Project: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    userToProjects?: boolean | UserCountOutputTypeCountUserToProjectsArgs
+    Question?: boolean | UserCountOutputTypeCountQuestionArgs
+    Project?: boolean | UserCountOutputTypeCountProjectArgs
   }
 
   // Custom InputTypes
@@ -1064,8 +1339,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountUserToProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserToProjectWhereInput
+  export type UserCountOutputTypeCountQuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectWhereInput
   }
 
 
@@ -1074,11 +1356,17 @@ export namespace Prisma {
    */
 
   export type ProjectCountOutputType = {
-    userToProjects: number
+    Commit: number
+    Meeting: number
+    Question: number
+    User: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    userToProjects?: boolean | ProjectCountOutputTypeCountUserToProjectsArgs
+    Commit?: boolean | ProjectCountOutputTypeCountCommitArgs
+    Meeting?: boolean | ProjectCountOutputTypeCountMeetingArgs
+    Question?: boolean | ProjectCountOutputTypeCountQuestionArgs
+    User?: boolean | ProjectCountOutputTypeCountUserArgs
   }
 
   // Custom InputTypes
@@ -1095,8 +1383,60 @@ export namespace Prisma {
   /**
    * ProjectCountOutputType without action
    */
-  export type ProjectCountOutputTypeCountUserToProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserToProjectWhereInput
+  export type ProjectCountOutputTypeCountCommitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommitWhereInput
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountMeetingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingWhereInput
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountQuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionWhereInput
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+
+  /**
+   * Count Type MeetingCountOutputType
+   */
+
+  export type MeetingCountOutputType = {
+    Issue: number
+  }
+
+  export type MeetingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Issue?: boolean | MeetingCountOutputTypeCountIssueArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MeetingCountOutputType without action
+   */
+  export type MeetingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MeetingCountOutputType
+     */
+    select?: MeetingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MeetingCountOutputType without action
+   */
+  export type MeetingCountOutputTypeCountIssueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IssueWhereInput
   }
 
 
@@ -1110,94 +1450,52 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
 
-  export type UserAvgAggregateOutputType = {
-    credits: number | null
-  }
-
-  export type UserSumAggregateOutputType = {
-    credits: number | null
-  }
-
   export type UserMinAggregateOutputType = {
     id: string | null
+    name: string | null
     createdAt: Date | null
-    updateAt: Date | null
-    imageUrl: string | null
-    firstName: string | null
-    lastName: string | null
-    emailAddress: string | null
-    credits: number | null
+    updatedAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
+    name: string | null
     createdAt: Date | null
-    updateAt: Date | null
-    imageUrl: string | null
-    firstName: string | null
-    lastName: string | null
-    emailAddress: string | null
-    credits: number | null
+    updatedAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
+    name: number
     createdAt: number
-    updateAt: number
-    imageUrl: number
-    firstName: number
-    lastName: number
-    emailAddress: number
-    credits: number
+    updatedAt: number
     _all: number
   }
 
 
-  export type UserAvgAggregateInputType = {
-    credits?: true
-  }
-
-  export type UserSumAggregateInputType = {
-    credits?: true
-  }
-
   export type UserMinAggregateInputType = {
     id?: true
+    name?: true
     createdAt?: true
-    updateAt?: true
-    imageUrl?: true
-    firstName?: true
-    lastName?: true
-    emailAddress?: true
-    credits?: true
+    updatedAt?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
+    name?: true
     createdAt?: true
-    updateAt?: true
-    imageUrl?: true
-    firstName?: true
-    lastName?: true
-    emailAddress?: true
-    credits?: true
+    updatedAt?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
+    name?: true
     createdAt?: true
-    updateAt?: true
-    imageUrl?: true
-    firstName?: true
-    lastName?: true
-    emailAddress?: true
-    credits?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -1239,18 +1537,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: UserAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UserSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1281,24 +1567,16 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
-    _avg?: UserAvgAggregateInputType
-    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
 
   export type UserGroupByOutputType = {
     id: string
+    name: string
     createdAt: Date
-    updateAt: Date
-    imageUrl: string | null
-    firstName: string | null
-    lastName: string | null
-    emailAddress: string
-    credits: number
+    updatedAt: Date
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1319,53 +1597,39 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
     createdAt?: boolean
-    updateAt?: boolean
-    imageUrl?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    emailAddress?: boolean
-    credits?: boolean
-    userToProjects?: boolean | User$userToProjectsArgs<ExtArgs>
+    updatedAt?: boolean
+    Question?: boolean | User$QuestionArgs<ExtArgs>
+    Project?: boolean | User$ProjectArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
     createdAt?: boolean
-    updateAt?: boolean
-    imageUrl?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    emailAddress?: boolean
-    credits?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
     createdAt?: boolean
-    updateAt?: boolean
-    imageUrl?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    emailAddress?: boolean
-    credits?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
+    name?: boolean
     createdAt?: boolean
-    updateAt?: boolean
-    imageUrl?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    emailAddress?: boolean
-    credits?: boolean
+    updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updateAt" | "imageUrl" | "firstName" | "lastName" | "emailAddress" | "credits", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    userToProjects?: boolean | User$userToProjectsArgs<ExtArgs>
+    Question?: boolean | User$QuestionArgs<ExtArgs>
+    Project?: boolean | User$ProjectArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1374,17 +1638,14 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      userToProjects: Prisma.$UserToProjectPayload<ExtArgs>[]
+      Question: Prisma.$QuestionPayload<ExtArgs>[]
+      Project: Prisma.$ProjectPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      name: string
       createdAt: Date
-      updateAt: Date
-      imageUrl: string | null
-      firstName: string | null
-      lastName: string | null
-      emailAddress: string
-      credits: number
+      updatedAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1779,7 +2040,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    userToProjects<T extends User$userToProjectsArgs<ExtArgs> = {}>(args?: Subset<T, User$userToProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Question<T extends User$QuestionArgs<ExtArgs> = {}>(args?: Subset<T, User$QuestionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Project<T extends User$ProjectArgs<ExtArgs> = {}>(args?: Subset<T, User$ProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1810,13 +2072,9 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
+    readonly name: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
-    readonly updateAt: FieldRef<"User", 'DateTime'>
-    readonly imageUrl: FieldRef<"User", 'String'>
-    readonly firstName: FieldRef<"User", 'String'>
-    readonly lastName: FieldRef<"User", 'String'>
-    readonly emailAddress: FieldRef<"User", 'String'>
-    readonly credits: FieldRef<"User", 'Int'>
+    readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -2205,27 +2463,51 @@ export namespace Prisma {
   }
 
   /**
-   * User.userToProjects
+   * User.Question
    */
-  export type User$userToProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$QuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Question
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: QuestionSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Question
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: QuestionOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
-    where?: UserToProjectWhereInput
-    orderBy?: UserToProjectOrderByWithRelationInput | UserToProjectOrderByWithRelationInput[]
-    cursor?: UserToProjectWhereUniqueInput
+    include?: QuestionInclude<ExtArgs> | null
+    where?: QuestionWhereInput
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    cursor?: QuestionWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UserToProjectScalarFieldEnum | UserToProjectScalarFieldEnum[]
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * User.Project
+   */
+  export type User$ProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: ProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: ProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectInclude<ExtArgs> | null
+    where?: ProjectWhereInput
+    orderBy?: ProjectOrderByWithRelationInput | ProjectOrderByWithRelationInput[]
+    cursor?: ProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectScalarFieldEnum | ProjectScalarFieldEnum[]
   }
 
   /**
@@ -2259,58 +2541,64 @@ export namespace Prisma {
 
   export type ProjectMinAggregateOutputType = {
     id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
     name: string | null
     githubUrl: string | null
-    deletedAt: Date | null
+    documentation: string | null
+    mermaidGraph: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ProjectMaxAggregateOutputType = {
     id: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
     name: string | null
     githubUrl: string | null
-    deletedAt: Date | null
+    documentation: string | null
+    mermaidGraph: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ProjectCountAggregateOutputType = {
     id: number
-    createdAt: number
-    updatedAt: number
     name: number
     githubUrl: number
-    deletedAt: number
+    documentation: number
+    mermaidGraph: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
   export type ProjectMinAggregateInputType = {
     id?: true
-    createdAt?: true
-    updatedAt?: true
     name?: true
     githubUrl?: true
-    deletedAt?: true
+    documentation?: true
+    mermaidGraph?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ProjectMaxAggregateInputType = {
     id?: true
-    createdAt?: true
-    updatedAt?: true
     name?: true
     githubUrl?: true
-    deletedAt?: true
+    documentation?: true
+    mermaidGraph?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ProjectCountAggregateInputType = {
     id?: true
-    createdAt?: true
-    updatedAt?: true
     name?: true
     githubUrl?: true
-    deletedAt?: true
+    documentation?: true
+    mermaidGraph?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -2388,11 +2676,12 @@ export namespace Prisma {
 
   export type ProjectGroupByOutputType = {
     id: string
+    name: string
+    githubUrl: string | null
+    documentation: string | null
+    mermaidGraph: string | null
     createdAt: Date
     updatedAt: Date
-    name: string
-    githubUrl: string
-    deletedAt: Date | null
     _count: ProjectCountAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
@@ -2414,45 +2703,55 @@ export namespace Prisma {
 
   export type ProjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     name?: boolean
     githubUrl?: boolean
-    deletedAt?: boolean
-    userToProjects?: boolean | Project$userToProjectsArgs<ExtArgs>
+    documentation?: boolean
+    mermaidGraph?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Commit?: boolean | Project$CommitArgs<ExtArgs>
+    Meeting?: boolean | Project$MeetingArgs<ExtArgs>
+    Question?: boolean | Project$QuestionArgs<ExtArgs>
+    User?: boolean | Project$UserArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     name?: boolean
     githubUrl?: boolean
-    deletedAt?: boolean
+    documentation?: boolean
+    mermaidGraph?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     name?: boolean
     githubUrl?: boolean
-    deletedAt?: boolean
+    documentation?: boolean
+    mermaidGraph?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectScalar = {
     id?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
     name?: boolean
     githubUrl?: boolean
-    deletedAt?: boolean
+    documentation?: boolean
+    mermaidGraph?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "githubUrl" | "deletedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "githubUrl" | "documentation" | "mermaidGraph" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    userToProjects?: boolean | Project$userToProjectsArgs<ExtArgs>
+    Commit?: boolean | Project$CommitArgs<ExtArgs>
+    Meeting?: boolean | Project$MeetingArgs<ExtArgs>
+    Question?: boolean | Project$QuestionArgs<ExtArgs>
+    User?: boolean | Project$UserArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2461,15 +2760,19 @@ export namespace Prisma {
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
-      userToProjects: Prisma.$UserToProjectPayload<ExtArgs>[]
+      Commit: Prisma.$CommitPayload<ExtArgs>[]
+      Meeting: Prisma.$MeetingPayload<ExtArgs>[]
+      Question: Prisma.$QuestionPayload<ExtArgs>[]
+      User: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      name: string
+      githubUrl: string | null
+      documentation: string | null
+      mermaidGraph: string | null
       createdAt: Date
       updatedAt: Date
-      name: string
-      githubUrl: string
-      deletedAt: Date | null
     }, ExtArgs["result"]["project"]>
     composites: {}
   }
@@ -2864,7 +3167,10 @@ export namespace Prisma {
    */
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    userToProjects<T extends Project$userToProjectsArgs<ExtArgs> = {}>(args?: Subset<T, Project$userToProjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Commit<T extends Project$CommitArgs<ExtArgs> = {}>(args?: Subset<T, Project$CommitArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Meeting<T extends Project$MeetingArgs<ExtArgs> = {}>(args?: Subset<T, Project$MeetingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Question<T extends Project$QuestionArgs<ExtArgs> = {}>(args?: Subset<T, Project$QuestionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    User<T extends Project$UserArgs<ExtArgs> = {}>(args?: Subset<T, Project$UserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2895,11 +3201,12 @@ export namespace Prisma {
    */
   interface ProjectFieldRefs {
     readonly id: FieldRef<"Project", 'String'>
-    readonly createdAt: FieldRef<"Project", 'DateTime'>
-    readonly updatedAt: FieldRef<"Project", 'DateTime'>
     readonly name: FieldRef<"Project", 'String'>
     readonly githubUrl: FieldRef<"Project", 'String'>
-    readonly deletedAt: FieldRef<"Project", 'DateTime'>
+    readonly documentation: FieldRef<"Project", 'String'>
+    readonly mermaidGraph: FieldRef<"Project", 'String'>
+    readonly createdAt: FieldRef<"Project", 'DateTime'>
+    readonly updatedAt: FieldRef<"Project", 'DateTime'>
   }
     
 
@@ -3288,27 +3595,99 @@ export namespace Prisma {
   }
 
   /**
-   * Project.userToProjects
+   * Project.Commit
    */
-  export type Project$userToProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Project$CommitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
-    where?: UserToProjectWhereInput
-    orderBy?: UserToProjectOrderByWithRelationInput | UserToProjectOrderByWithRelationInput[]
-    cursor?: UserToProjectWhereUniqueInput
+    include?: CommitInclude<ExtArgs> | null
+    where?: CommitWhereInput
+    orderBy?: CommitOrderByWithRelationInput | CommitOrderByWithRelationInput[]
+    cursor?: CommitWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UserToProjectScalarFieldEnum | UserToProjectScalarFieldEnum[]
+    distinct?: CommitScalarFieldEnum | CommitScalarFieldEnum[]
+  }
+
+  /**
+   * Project.Meeting
+   */
+  export type Project$MeetingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    where?: MeetingWhereInput
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    cursor?: MeetingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Project.Question
+   */
+  export type Project$QuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    where?: QuestionWhereInput
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    cursor?: QuestionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Project.User
+   */
+  export type Project$UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -3331,357 +3710,410 @@ export namespace Prisma {
 
 
   /**
-   * Model UserToProject
+   * Model Commit
    */
 
-  export type AggregateUserToProject = {
-    _count: UserToProjectCountAggregateOutputType | null
-    _min: UserToProjectMinAggregateOutputType | null
-    _max: UserToProjectMaxAggregateOutputType | null
+  export type AggregateCommit = {
+    _count: CommitCountAggregateOutputType | null
+    _min: CommitMinAggregateOutputType | null
+    _max: CommitMaxAggregateOutputType | null
   }
 
-  export type UserToProjectMinAggregateOutputType = {
+  export type CommitMinAggregateOutputType = {
     id: string | null
+    commitMessage: string | null
+    commitHash: string | null
+    commitAuthorName: string | null
+    commitAuthorAvatar: string | null
+    commitDate: Date | null
+    summary: string | null
+    projectId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string | null
-    projectId: string | null
   }
 
-  export type UserToProjectMaxAggregateOutputType = {
+  export type CommitMaxAggregateOutputType = {
     id: string | null
+    commitMessage: string | null
+    commitHash: string | null
+    commitAuthorName: string | null
+    commitAuthorAvatar: string | null
+    commitDate: Date | null
+    summary: string | null
+    projectId: string | null
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string | null
-    projectId: string | null
   }
 
-  export type UserToProjectCountAggregateOutputType = {
+  export type CommitCountAggregateOutputType = {
     id: number
+    commitMessage: number
+    commitHash: number
+    commitAuthorName: number
+    commitAuthorAvatar: number
+    commitDate: number
+    summary: number
+    projectId: number
     createdAt: number
     updatedAt: number
-    userId: number
-    projectId: number
     _all: number
   }
 
 
-  export type UserToProjectMinAggregateInputType = {
+  export type CommitMinAggregateInputType = {
     id?: true
+    commitMessage?: true
+    commitHash?: true
+    commitAuthorName?: true
+    commitAuthorAvatar?: true
+    commitDate?: true
+    summary?: true
+    projectId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
-    projectId?: true
   }
 
-  export type UserToProjectMaxAggregateInputType = {
+  export type CommitMaxAggregateInputType = {
     id?: true
+    commitMessage?: true
+    commitHash?: true
+    commitAuthorName?: true
+    commitAuthorAvatar?: true
+    commitDate?: true
+    summary?: true
+    projectId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
-    projectId?: true
   }
 
-  export type UserToProjectCountAggregateInputType = {
+  export type CommitCountAggregateInputType = {
     id?: true
+    commitMessage?: true
+    commitHash?: true
+    commitAuthorName?: true
+    commitAuthorAvatar?: true
+    commitDate?: true
+    summary?: true
+    projectId?: true
     createdAt?: true
     updatedAt?: true
-    userId?: true
-    projectId?: true
     _all?: true
   }
 
-  export type UserToProjectAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which UserToProject to aggregate.
+     * Filter which Commit to aggregate.
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UserToProjects to fetch.
+     * Determine the order of Commits to fetch.
      */
-    orderBy?: UserToProjectOrderByWithRelationInput | UserToProjectOrderByWithRelationInput[]
+    orderBy?: CommitOrderByWithRelationInput | CommitOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: UserToProjectWhereUniqueInput
+    cursor?: CommitWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UserToProjects from the position of the cursor.
+     * Take `±n` Commits from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UserToProjects.
+     * Skip the first `n` Commits.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned UserToProjects
+     * Count returned Commits
     **/
-    _count?: true | UserToProjectCountAggregateInputType
+    _count?: true | CommitCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: UserToProjectMinAggregateInputType
+    _min?: CommitMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: UserToProjectMaxAggregateInputType
+    _max?: CommitMaxAggregateInputType
   }
 
-  export type GetUserToProjectAggregateType<T extends UserToProjectAggregateArgs> = {
-        [P in keyof T & keyof AggregateUserToProject]: P extends '_count' | 'count'
+  export type GetCommitAggregateType<T extends CommitAggregateArgs> = {
+        [P in keyof T & keyof AggregateCommit]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateUserToProject[P]>
-      : GetScalarType<T[P], AggregateUserToProject[P]>
+        : GetScalarType<T[P], AggregateCommit[P]>
+      : GetScalarType<T[P], AggregateCommit[P]>
   }
 
 
 
 
-  export type UserToProjectGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserToProjectWhereInput
-    orderBy?: UserToProjectOrderByWithAggregationInput | UserToProjectOrderByWithAggregationInput[]
-    by: UserToProjectScalarFieldEnum[] | UserToProjectScalarFieldEnum
-    having?: UserToProjectScalarWhereWithAggregatesInput
+  export type CommitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CommitWhereInput
+    orderBy?: CommitOrderByWithAggregationInput | CommitOrderByWithAggregationInput[]
+    by: CommitScalarFieldEnum[] | CommitScalarFieldEnum
+    having?: CommitScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: UserToProjectCountAggregateInputType | true
-    _min?: UserToProjectMinAggregateInputType
-    _max?: UserToProjectMaxAggregateInputType
+    _count?: CommitCountAggregateInputType | true
+    _min?: CommitMinAggregateInputType
+    _max?: CommitMaxAggregateInputType
   }
 
-  export type UserToProjectGroupByOutputType = {
+  export type CommitGroupByOutputType = {
     id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date
+    summary: string
+    projectId: string
     createdAt: Date
     updatedAt: Date
-    userId: string
-    projectId: string
-    _count: UserToProjectCountAggregateOutputType | null
-    _min: UserToProjectMinAggregateOutputType | null
-    _max: UserToProjectMaxAggregateOutputType | null
+    _count: CommitCountAggregateOutputType | null
+    _min: CommitMinAggregateOutputType | null
+    _max: CommitMaxAggregateOutputType | null
   }
 
-  type GetUserToProjectGroupByPayload<T extends UserToProjectGroupByArgs> = Prisma.PrismaPromise<
+  type GetCommitGroupByPayload<T extends CommitGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<UserToProjectGroupByOutputType, T['by']> &
+      PickEnumerable<CommitGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof UserToProjectGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof CommitGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], UserToProjectGroupByOutputType[P]>
-            : GetScalarType<T[P], UserToProjectGroupByOutputType[P]>
+              : GetScalarType<T[P], CommitGroupByOutputType[P]>
+            : GetScalarType<T[P], CommitGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type UserToProjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type CommitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    commitMessage?: boolean
+    commitHash?: boolean
+    commitAuthorName?: boolean
+    commitAuthorAvatar?: boolean
+    commitDate?: boolean
+    summary?: boolean
+    projectId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    projectId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["userToProject"]>
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["commit"]>
 
-  export type UserToProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type CommitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    commitMessage?: boolean
+    commitHash?: boolean
+    commitAuthorName?: boolean
+    commitAuthorAvatar?: boolean
+    commitDate?: boolean
+    summary?: boolean
+    projectId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    projectId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["userToProject"]>
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["commit"]>
 
-  export type UserToProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type CommitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    commitMessage?: boolean
+    commitHash?: boolean
+    commitAuthorName?: boolean
+    commitAuthorAvatar?: boolean
+    commitDate?: boolean
+    summary?: boolean
+    projectId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    projectId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["userToProject"]>
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["commit"]>
 
-  export type UserToProjectSelectScalar = {
+  export type CommitSelectScalar = {
     id?: boolean
+    commitMessage?: boolean
+    commitHash?: boolean
+    commitAuthorName?: boolean
+    commitAuthorAvatar?: boolean
+    commitDate?: boolean
+    summary?: boolean
+    projectId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    userId?: boolean
-    projectId?: boolean
   }
 
-  export type UserToProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "userId" | "projectId", ExtArgs["result"]["userToProject"]>
-  export type UserToProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  export type CommitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commitMessage" | "commitHash" | "commitAuthorName" | "commitAuthorAvatar" | "commitDate" | "summary" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["commit"]>
+  export type CommitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
-  export type UserToProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  export type CommitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
-  export type UserToProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  export type CommitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
 
-  export type $UserToProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "UserToProject"
+  export type $CommitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Commit"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      project: Prisma.$ProjectPayload<ExtArgs>
+      Project: Prisma.$ProjectPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      commitMessage: string
+      commitHash: string
+      commitAuthorName: string
+      commitAuthorAvatar: string
+      commitDate: Date
+      summary: string
+      projectId: string
       createdAt: Date
       updatedAt: Date
-      userId: string
-      projectId: string
-    }, ExtArgs["result"]["userToProject"]>
+    }, ExtArgs["result"]["commit"]>
     composites: {}
   }
 
-  type UserToProjectGetPayload<S extends boolean | null | undefined | UserToProjectDefaultArgs> = $Result.GetResult<Prisma.$UserToProjectPayload, S>
+  type CommitGetPayload<S extends boolean | null | undefined | CommitDefaultArgs> = $Result.GetResult<Prisma.$CommitPayload, S>
 
-  type UserToProjectCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<UserToProjectFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: UserToProjectCountAggregateInputType | true
+  type CommitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CommitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CommitCountAggregateInputType | true
     }
 
-  export interface UserToProjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserToProject'], meta: { name: 'UserToProject' } }
+  export interface CommitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Commit'], meta: { name: 'Commit' } }
     /**
-     * Find zero or one UserToProject that matches the filter.
-     * @param {UserToProjectFindUniqueArgs} args - Arguments to find a UserToProject
+     * Find zero or one Commit that matches the filter.
+     * @param {CommitFindUniqueArgs} args - Arguments to find a Commit
      * @example
-     * // Get one UserToProject
-     * const userToProject = await prisma.userToProject.findUnique({
+     * // Get one Commit
+     * const commit = await prisma.commit.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends UserToProjectFindUniqueArgs>(args: SelectSubset<T, UserToProjectFindUniqueArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends CommitFindUniqueArgs>(args: SelectSubset<T, CommitFindUniqueArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one UserToProject that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Commit that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {UserToProjectFindUniqueOrThrowArgs} args - Arguments to find a UserToProject
+     * @param {CommitFindUniqueOrThrowArgs} args - Arguments to find a Commit
      * @example
-     * // Get one UserToProject
-     * const userToProject = await prisma.userToProject.findUniqueOrThrow({
+     * // Get one Commit
+     * const commit = await prisma.commit.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UserToProjectFindUniqueOrThrowArgs>(args: SelectSubset<T, UserToProjectFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends CommitFindUniqueOrThrowArgs>(args: SelectSubset<T, CommitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first UserToProject that matches the filter.
+     * Find the first Commit that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectFindFirstArgs} args - Arguments to find a UserToProject
+     * @param {CommitFindFirstArgs} args - Arguments to find a Commit
      * @example
-     * // Get one UserToProject
-     * const userToProject = await prisma.userToProject.findFirst({
+     * // Get one Commit
+     * const commit = await prisma.commit.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends UserToProjectFindFirstArgs>(args?: SelectSubset<T, UserToProjectFindFirstArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends CommitFindFirstArgs>(args?: SelectSubset<T, CommitFindFirstArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first UserToProject that matches the filter or
+     * Find the first Commit that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectFindFirstOrThrowArgs} args - Arguments to find a UserToProject
+     * @param {CommitFindFirstOrThrowArgs} args - Arguments to find a Commit
      * @example
-     * // Get one UserToProject
-     * const userToProject = await prisma.userToProject.findFirstOrThrow({
+     * // Get one Commit
+     * const commit = await prisma.commit.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends UserToProjectFindFirstOrThrowArgs>(args?: SelectSubset<T, UserToProjectFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends CommitFindFirstOrThrowArgs>(args?: SelectSubset<T, CommitFindFirstOrThrowArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more UserToProjects that matches the filter.
+     * Find zero or more Commits that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {CommitFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all UserToProjects
-     * const userToProjects = await prisma.userToProject.findMany()
+     * // Get all Commits
+     * const commits = await prisma.commit.findMany()
      * 
-     * // Get first 10 UserToProjects
-     * const userToProjects = await prisma.userToProject.findMany({ take: 10 })
+     * // Get first 10 Commits
+     * const commits = await prisma.commit.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const userToProjectWithIdOnly = await prisma.userToProject.findMany({ select: { id: true } })
+     * const commitWithIdOnly = await prisma.commit.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UserToProjectFindManyArgs>(args?: SelectSubset<T, UserToProjectFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends CommitFindManyArgs>(args?: SelectSubset<T, CommitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a UserToProject.
-     * @param {UserToProjectCreateArgs} args - Arguments to create a UserToProject.
+     * Create a Commit.
+     * @param {CommitCreateArgs} args - Arguments to create a Commit.
      * @example
-     * // Create one UserToProject
-     * const UserToProject = await prisma.userToProject.create({
+     * // Create one Commit
+     * const Commit = await prisma.commit.create({
      *   data: {
-     *     // ... data to create a UserToProject
+     *     // ... data to create a Commit
      *   }
      * })
      * 
      */
-    create<T extends UserToProjectCreateArgs>(args: SelectSubset<T, UserToProjectCreateArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends CommitCreateArgs>(args: SelectSubset<T, CommitCreateArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many UserToProjects.
-     * @param {UserToProjectCreateManyArgs} args - Arguments to create many UserToProjects.
+     * Create many Commits.
+     * @param {CommitCreateManyArgs} args - Arguments to create many Commits.
      * @example
-     * // Create many UserToProjects
-     * const userToProject = await prisma.userToProject.createMany({
+     * // Create many Commits
+     * const commit = await prisma.commit.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends UserToProjectCreateManyArgs>(args?: SelectSubset<T, UserToProjectCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends CommitCreateManyArgs>(args?: SelectSubset<T, CommitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many UserToProjects and returns the data saved in the database.
-     * @param {UserToProjectCreateManyAndReturnArgs} args - Arguments to create many UserToProjects.
+     * Create many Commits and returns the data saved in the database.
+     * @param {CommitCreateManyAndReturnArgs} args - Arguments to create many Commits.
      * @example
-     * // Create many UserToProjects
-     * const userToProject = await prisma.userToProject.createManyAndReturn({
+     * // Create many Commits
+     * const commit = await prisma.commit.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many UserToProjects and only return the `id`
-     * const userToProjectWithIdOnly = await prisma.userToProject.createManyAndReturn({
+     * // Create many Commits and only return the `id`
+     * const commitWithIdOnly = await prisma.commit.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3691,28 +4123,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UserToProjectCreateManyAndReturnArgs>(args?: SelectSubset<T, UserToProjectCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends CommitCreateManyAndReturnArgs>(args?: SelectSubset<T, CommitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a UserToProject.
-     * @param {UserToProjectDeleteArgs} args - Arguments to delete one UserToProject.
+     * Delete a Commit.
+     * @param {CommitDeleteArgs} args - Arguments to delete one Commit.
      * @example
-     * // Delete one UserToProject
-     * const UserToProject = await prisma.userToProject.delete({
+     * // Delete one Commit
+     * const Commit = await prisma.commit.delete({
      *   where: {
-     *     // ... filter to delete one UserToProject
+     *     // ... filter to delete one Commit
      *   }
      * })
      * 
      */
-    delete<T extends UserToProjectDeleteArgs>(args: SelectSubset<T, UserToProjectDeleteArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends CommitDeleteArgs>(args: SelectSubset<T, CommitDeleteArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one UserToProject.
-     * @param {UserToProjectUpdateArgs} args - Arguments to update one UserToProject.
+     * Update one Commit.
+     * @param {CommitUpdateArgs} args - Arguments to update one Commit.
      * @example
-     * // Update one UserToProject
-     * const userToProject = await prisma.userToProject.update({
+     * // Update one Commit
+     * const commit = await prisma.commit.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3722,30 +4154,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UserToProjectUpdateArgs>(args: SelectSubset<T, UserToProjectUpdateArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends CommitUpdateArgs>(args: SelectSubset<T, CommitUpdateArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more UserToProjects.
-     * @param {UserToProjectDeleteManyArgs} args - Arguments to filter UserToProjects to delete.
+     * Delete zero or more Commits.
+     * @param {CommitDeleteManyArgs} args - Arguments to filter Commits to delete.
      * @example
-     * // Delete a few UserToProjects
-     * const { count } = await prisma.userToProject.deleteMany({
+     * // Delete a few Commits
+     * const { count } = await prisma.commit.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends UserToProjectDeleteManyArgs>(args?: SelectSubset<T, UserToProjectDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends CommitDeleteManyArgs>(args?: SelectSubset<T, CommitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more UserToProjects.
+     * Update zero or more Commits.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {CommitUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many UserToProjects
-     * const userToProject = await prisma.userToProject.updateMany({
+     * // Update many Commits
+     * const commit = await prisma.commit.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3755,14 +4187,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends UserToProjectUpdateManyArgs>(args: SelectSubset<T, UserToProjectUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends CommitUpdateManyArgs>(args: SelectSubset<T, CommitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more UserToProjects and returns the data updated in the database.
-     * @param {UserToProjectUpdateManyAndReturnArgs} args - Arguments to update many UserToProjects.
+     * Update zero or more Commits and returns the data updated in the database.
+     * @param {CommitUpdateManyAndReturnArgs} args - Arguments to update many Commits.
      * @example
-     * // Update many UserToProjects
-     * const userToProject = await prisma.userToProject.updateManyAndReturn({
+     * // Update many Commits
+     * const commit = await prisma.commit.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3771,8 +4203,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more UserToProjects and only return the `id`
-     * const userToProjectWithIdOnly = await prisma.userToProject.updateManyAndReturn({
+     * // Update zero or more Commits and only return the `id`
+     * const commitWithIdOnly = await prisma.commit.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -3785,56 +4217,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends UserToProjectUpdateManyAndReturnArgs>(args: SelectSubset<T, UserToProjectUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends CommitUpdateManyAndReturnArgs>(args: SelectSubset<T, CommitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one UserToProject.
-     * @param {UserToProjectUpsertArgs} args - Arguments to update or create a UserToProject.
+     * Create or update one Commit.
+     * @param {CommitUpsertArgs} args - Arguments to update or create a Commit.
      * @example
-     * // Update or create a UserToProject
-     * const userToProject = await prisma.userToProject.upsert({
+     * // Update or create a Commit
+     * const commit = await prisma.commit.upsert({
      *   create: {
-     *     // ... data to create a UserToProject
+     *     // ... data to create a Commit
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the UserToProject we want to update
+     *     // ... the filter for the Commit we want to update
      *   }
      * })
      */
-    upsert<T extends UserToProjectUpsertArgs>(args: SelectSubset<T, UserToProjectUpsertArgs<ExtArgs>>): Prisma__UserToProjectClient<$Result.GetResult<Prisma.$UserToProjectPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends CommitUpsertArgs>(args: SelectSubset<T, CommitUpsertArgs<ExtArgs>>): Prisma__CommitClient<$Result.GetResult<Prisma.$CommitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of UserToProjects.
+     * Count the number of Commits.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectCountArgs} args - Arguments to filter UserToProjects to count.
+     * @param {CommitCountArgs} args - Arguments to filter Commits to count.
      * @example
-     * // Count the number of UserToProjects
-     * const count = await prisma.userToProject.count({
+     * // Count the number of Commits
+     * const count = await prisma.commit.count({
      *   where: {
-     *     // ... the filter for the UserToProjects we want to count
+     *     // ... the filter for the Commits we want to count
      *   }
      * })
     **/
-    count<T extends UserToProjectCountArgs>(
-      args?: Subset<T, UserToProjectCountArgs>,
+    count<T extends CommitCountArgs>(
+      args?: Subset<T, CommitCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], UserToProjectCountAggregateOutputType>
+          : GetScalarType<T['select'], CommitCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a UserToProject.
+     * Allows you to perform aggregations operations on a Commit.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {CommitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -3854,13 +4286,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends UserToProjectAggregateArgs>(args: Subset<T, UserToProjectAggregateArgs>): Prisma.PrismaPromise<GetUserToProjectAggregateType<T>>
+    aggregate<T extends CommitAggregateArgs>(args: Subset<T, CommitAggregateArgs>): Prisma.PrismaPromise<GetCommitAggregateType<T>>
 
     /**
-     * Group by UserToProject.
+     * Group by Commit.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserToProjectGroupByArgs} args - Group by arguments.
+     * @param {CommitGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3875,14 +4307,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends UserToProjectGroupByArgs,
+      T extends CommitGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UserToProjectGroupByArgs['orderBy'] }
-        : { orderBy?: UserToProjectGroupByArgs['orderBy'] },
+        ? { orderBy: CommitGroupByArgs['orderBy'] }
+        : { orderBy?: CommitGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3931,23 +4363,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, UserToProjectGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserToProjectGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, CommitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCommitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the UserToProject model
+   * Fields of the Commit model
    */
-  readonly fields: UserToProjectFieldRefs;
+  readonly fields: CommitFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for UserToProject.
+   * The delegate class that acts as a "Promise-like" for Commit.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UserToProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__CommitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    Project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3974,425 +4405,3733 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the UserToProject model
+   * Fields of the Commit model
    */
-  interface UserToProjectFieldRefs {
-    readonly id: FieldRef<"UserToProject", 'String'>
-    readonly createdAt: FieldRef<"UserToProject", 'DateTime'>
-    readonly updatedAt: FieldRef<"UserToProject", 'DateTime'>
-    readonly userId: FieldRef<"UserToProject", 'String'>
-    readonly projectId: FieldRef<"UserToProject", 'String'>
+  interface CommitFieldRefs {
+    readonly id: FieldRef<"Commit", 'String'>
+    readonly commitMessage: FieldRef<"Commit", 'String'>
+    readonly commitHash: FieldRef<"Commit", 'String'>
+    readonly commitAuthorName: FieldRef<"Commit", 'String'>
+    readonly commitAuthorAvatar: FieldRef<"Commit", 'String'>
+    readonly commitDate: FieldRef<"Commit", 'DateTime'>
+    readonly summary: FieldRef<"Commit", 'String'>
+    readonly projectId: FieldRef<"Commit", 'String'>
+    readonly createdAt: FieldRef<"Commit", 'DateTime'>
+    readonly updatedAt: FieldRef<"Commit", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * UserToProject findUnique
+   * Commit findUnique
    */
-  export type UserToProjectFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * Filter, which UserToProject to fetch.
+     * Filter, which Commit to fetch.
      */
-    where: UserToProjectWhereUniqueInput
+    where: CommitWhereUniqueInput
   }
 
   /**
-   * UserToProject findUniqueOrThrow
+   * Commit findUniqueOrThrow
    */
-  export type UserToProjectFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * Filter, which UserToProject to fetch.
+     * Filter, which Commit to fetch.
      */
-    where: UserToProjectWhereUniqueInput
+    where: CommitWhereUniqueInput
   }
 
   /**
-   * UserToProject findFirst
+   * Commit findFirst
    */
-  export type UserToProjectFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * Filter, which UserToProject to fetch.
+     * Filter, which Commit to fetch.
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UserToProjects to fetch.
+     * Determine the order of Commits to fetch.
      */
-    orderBy?: UserToProjectOrderByWithRelationInput | UserToProjectOrderByWithRelationInput[]
+    orderBy?: CommitOrderByWithRelationInput | CommitOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for UserToProjects.
+     * Sets the position for searching for Commits.
      */
-    cursor?: UserToProjectWhereUniqueInput
+    cursor?: CommitWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UserToProjects from the position of the cursor.
+     * Take `±n` Commits from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UserToProjects.
+     * Skip the first `n` Commits.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of UserToProjects.
+     * Filter by unique combinations of Commits.
      */
-    distinct?: UserToProjectScalarFieldEnum | UserToProjectScalarFieldEnum[]
+    distinct?: CommitScalarFieldEnum | CommitScalarFieldEnum[]
   }
 
   /**
-   * UserToProject findFirstOrThrow
+   * Commit findFirstOrThrow
    */
-  export type UserToProjectFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * Filter, which UserToProject to fetch.
+     * Filter, which Commit to fetch.
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UserToProjects to fetch.
+     * Determine the order of Commits to fetch.
      */
-    orderBy?: UserToProjectOrderByWithRelationInput | UserToProjectOrderByWithRelationInput[]
+    orderBy?: CommitOrderByWithRelationInput | CommitOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for UserToProjects.
+     * Sets the position for searching for Commits.
      */
-    cursor?: UserToProjectWhereUniqueInput
+    cursor?: CommitWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UserToProjects from the position of the cursor.
+     * Take `±n` Commits from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UserToProjects.
+     * Skip the first `n` Commits.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of UserToProjects.
+     * Filter by unique combinations of Commits.
      */
-    distinct?: UserToProjectScalarFieldEnum | UserToProjectScalarFieldEnum[]
+    distinct?: CommitScalarFieldEnum | CommitScalarFieldEnum[]
   }
 
   /**
-   * UserToProject findMany
+   * Commit findMany
    */
-  export type UserToProjectFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * Filter, which UserToProjects to fetch.
+     * Filter, which Commits to fetch.
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UserToProjects to fetch.
+     * Determine the order of Commits to fetch.
      */
-    orderBy?: UserToProjectOrderByWithRelationInput | UserToProjectOrderByWithRelationInput[]
+    orderBy?: CommitOrderByWithRelationInput | CommitOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing UserToProjects.
+     * Sets the position for listing Commits.
      */
-    cursor?: UserToProjectWhereUniqueInput
+    cursor?: CommitWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UserToProjects from the position of the cursor.
+     * Take `±n` Commits from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UserToProjects.
+     * Skip the first `n` Commits.
      */
     skip?: number
-    distinct?: UserToProjectScalarFieldEnum | UserToProjectScalarFieldEnum[]
+    distinct?: CommitScalarFieldEnum | CommitScalarFieldEnum[]
   }
 
   /**
-   * UserToProject create
+   * Commit create
    */
-  export type UserToProjectCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * The data needed to create a UserToProject.
+     * The data needed to create a Commit.
      */
-    data: XOR<UserToProjectCreateInput, UserToProjectUncheckedCreateInput>
+    data: XOR<CommitCreateInput, CommitUncheckedCreateInput>
   }
 
   /**
-   * UserToProject createMany
+   * Commit createMany
    */
-  export type UserToProjectCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many UserToProjects.
+     * The data used to create many Commits.
      */
-    data: UserToProjectCreateManyInput | UserToProjectCreateManyInput[]
+    data: CommitCreateManyInput | CommitCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * UserToProject createManyAndReturn
+   * Commit createManyAndReturn
    */
-  export type UserToProjectCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelectCreateManyAndReturn<ExtArgs> | null
+    select?: CommitSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
-     * The data used to create many UserToProjects.
+     * The data used to create many Commits.
      */
-    data: UserToProjectCreateManyInput | UserToProjectCreateManyInput[]
+    data: CommitCreateManyInput | CommitCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: CommitIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * UserToProject update
+   * Commit update
    */
-  export type UserToProjectUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * The data needed to update a UserToProject.
+     * The data needed to update a Commit.
      */
-    data: XOR<UserToProjectUpdateInput, UserToProjectUncheckedUpdateInput>
+    data: XOR<CommitUpdateInput, CommitUncheckedUpdateInput>
     /**
-     * Choose, which UserToProject to update.
+     * Choose, which Commit to update.
      */
-    where: UserToProjectWhereUniqueInput
+    where: CommitWhereUniqueInput
   }
 
   /**
-   * UserToProject updateMany
+   * Commit updateMany
    */
-  export type UserToProjectUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update UserToProjects.
+     * The data used to update Commits.
      */
-    data: XOR<UserToProjectUpdateManyMutationInput, UserToProjectUncheckedUpdateManyInput>
+    data: XOR<CommitUpdateManyMutationInput, CommitUncheckedUpdateManyInput>
     /**
-     * Filter which UserToProjects to update
+     * Filter which Commits to update
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
-     * Limit how many UserToProjects to update.
+     * Limit how many Commits to update.
      */
     limit?: number
   }
 
   /**
-   * UserToProject updateManyAndReturn
+   * Commit updateManyAndReturn
    */
-  export type UserToProjectUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: CommitSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
-     * The data used to update UserToProjects.
+     * The data used to update Commits.
      */
-    data: XOR<UserToProjectUpdateManyMutationInput, UserToProjectUncheckedUpdateManyInput>
+    data: XOR<CommitUpdateManyMutationInput, CommitUncheckedUpdateManyInput>
     /**
-     * Filter which UserToProjects to update
+     * Filter which Commits to update
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
-     * Limit how many UserToProjects to update.
+     * Limit how many Commits to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: CommitIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * UserToProject upsert
+   * Commit upsert
    */
-  export type UserToProjectUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * The filter to search for the UserToProject to update in case it exists.
+     * The filter to search for the Commit to update in case it exists.
      */
-    where: UserToProjectWhereUniqueInput
+    where: CommitWhereUniqueInput
     /**
-     * In case the UserToProject found by the `where` argument doesn't exist, create a new UserToProject with this data.
+     * In case the Commit found by the `where` argument doesn't exist, create a new Commit with this data.
      */
-    create: XOR<UserToProjectCreateInput, UserToProjectUncheckedCreateInput>
+    create: XOR<CommitCreateInput, CommitUncheckedCreateInput>
     /**
-     * In case the UserToProject was found with the provided `where` argument, update it with this data.
+     * In case the Commit was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<UserToProjectUpdateInput, UserToProjectUncheckedUpdateInput>
+    update: XOR<CommitUpdateInput, CommitUncheckedUpdateInput>
   }
 
   /**
-   * UserToProject delete
+   * Commit delete
    */
-  export type UserToProjectDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
     /**
-     * Filter which UserToProject to delete.
+     * Filter which Commit to delete.
      */
-    where: UserToProjectWhereUniqueInput
+    where: CommitWhereUniqueInput
   }
 
   /**
-   * UserToProject deleteMany
+   * Commit deleteMany
    */
-  export type UserToProjectDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which UserToProjects to delete
+     * Filter which Commits to delete
      */
-    where?: UserToProjectWhereInput
+    where?: CommitWhereInput
     /**
-     * Limit how many UserToProjects to delete.
+     * Limit how many Commits to delete.
      */
     limit?: number
   }
 
   /**
-   * UserToProject without action
+   * Commit without action
    */
-  export type UserToProjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type CommitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserToProject
+     * Select specific fields to fetch from the Commit
      */
-    select?: UserToProjectSelect<ExtArgs> | null
+    select?: CommitSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserToProject
+     * Omit specific fields from the Commit
      */
-    omit?: UserToProjectOmit<ExtArgs> | null
+    omit?: CommitOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserToProjectInclude<ExtArgs> | null
+    include?: CommitInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Issue
+   */
+
+  export type AggregateIssue = {
+    _count: IssueCountAggregateOutputType | null
+    _min: IssueMinAggregateOutputType | null
+    _max: IssueMaxAggregateOutputType | null
+  }
+
+  export type IssueMinAggregateOutputType = {
+    id: string | null
+    start: string | null
+    end: string | null
+    gist: string | null
+    headline: string | null
+    summary: string | null
+    meetingId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type IssueMaxAggregateOutputType = {
+    id: string | null
+    start: string | null
+    end: string | null
+    gist: string | null
+    headline: string | null
+    summary: string | null
+    meetingId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type IssueCountAggregateOutputType = {
+    id: number
+    start: number
+    end: number
+    gist: number
+    headline: number
+    summary: number
+    meetingId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type IssueMinAggregateInputType = {
+    id?: true
+    start?: true
+    end?: true
+    gist?: true
+    headline?: true
+    summary?: true
+    meetingId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type IssueMaxAggregateInputType = {
+    id?: true
+    start?: true
+    end?: true
+    gist?: true
+    headline?: true
+    summary?: true
+    meetingId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type IssueCountAggregateInputType = {
+    id?: true
+    start?: true
+    end?: true
+    gist?: true
+    headline?: true
+    summary?: true
+    meetingId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type IssueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Issue to aggregate.
+     */
+    where?: IssueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Issues to fetch.
+     */
+    orderBy?: IssueOrderByWithRelationInput | IssueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IssueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Issues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Issues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Issues
+    **/
+    _count?: true | IssueCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IssueMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IssueMaxAggregateInputType
+  }
+
+  export type GetIssueAggregateType<T extends IssueAggregateArgs> = {
+        [P in keyof T & keyof AggregateIssue]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIssue[P]>
+      : GetScalarType<T[P], AggregateIssue[P]>
+  }
+
+
+
+
+  export type IssueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IssueWhereInput
+    orderBy?: IssueOrderByWithAggregationInput | IssueOrderByWithAggregationInput[]
+    by: IssueScalarFieldEnum[] | IssueScalarFieldEnum
+    having?: IssueScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IssueCountAggregateInputType | true
+    _min?: IssueMinAggregateInputType
+    _max?: IssueMaxAggregateInputType
+  }
+
+  export type IssueGroupByOutputType = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    meetingId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: IssueCountAggregateOutputType | null
+    _min: IssueMinAggregateOutputType | null
+    _max: IssueMaxAggregateOutputType | null
+  }
+
+  type GetIssueGroupByPayload<T extends IssueGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IssueGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IssueGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IssueGroupByOutputType[P]>
+            : GetScalarType<T[P], IssueGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IssueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    start?: boolean
+    end?: boolean
+    gist?: boolean
+    headline?: boolean
+    summary?: boolean
+    meetingId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["issue"]>
+
+  export type IssueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    start?: boolean
+    end?: boolean
+    gist?: boolean
+    headline?: boolean
+    summary?: boolean
+    meetingId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["issue"]>
+
+  export type IssueSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    start?: boolean
+    end?: boolean
+    gist?: boolean
+    headline?: boolean
+    summary?: boolean
+    meetingId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["issue"]>
+
+  export type IssueSelectScalar = {
+    id?: boolean
+    start?: boolean
+    end?: boolean
+    gist?: boolean
+    headline?: boolean
+    summary?: boolean
+    meetingId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type IssueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "start" | "end" | "gist" | "headline" | "summary" | "meetingId" | "createdAt" | "updatedAt", ExtArgs["result"]["issue"]>
+  export type IssueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+  }
+  export type IssueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+  }
+  export type IssueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Meeting?: boolean | MeetingDefaultArgs<ExtArgs>
+  }
+
+  export type $IssuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Issue"
+    objects: {
+      Meeting: Prisma.$MeetingPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      start: string
+      end: string
+      gist: string
+      headline: string
+      summary: string
+      meetingId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["issue"]>
+    composites: {}
+  }
+
+  type IssueGetPayload<S extends boolean | null | undefined | IssueDefaultArgs> = $Result.GetResult<Prisma.$IssuePayload, S>
+
+  type IssueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<IssueFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: IssueCountAggregateInputType | true
+    }
+
+  export interface IssueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Issue'], meta: { name: 'Issue' } }
+    /**
+     * Find zero or one Issue that matches the filter.
+     * @param {IssueFindUniqueArgs} args - Arguments to find a Issue
+     * @example
+     * // Get one Issue
+     * const issue = await prisma.issue.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IssueFindUniqueArgs>(args: SelectSubset<T, IssueFindUniqueArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Issue that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {IssueFindUniqueOrThrowArgs} args - Arguments to find a Issue
+     * @example
+     * // Get one Issue
+     * const issue = await prisma.issue.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IssueFindUniqueOrThrowArgs>(args: SelectSubset<T, IssueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Issue that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueFindFirstArgs} args - Arguments to find a Issue
+     * @example
+     * // Get one Issue
+     * const issue = await prisma.issue.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IssueFindFirstArgs>(args?: SelectSubset<T, IssueFindFirstArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Issue that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueFindFirstOrThrowArgs} args - Arguments to find a Issue
+     * @example
+     * // Get one Issue
+     * const issue = await prisma.issue.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IssueFindFirstOrThrowArgs>(args?: SelectSubset<T, IssueFindFirstOrThrowArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Issues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Issues
+     * const issues = await prisma.issue.findMany()
+     * 
+     * // Get first 10 Issues
+     * const issues = await prisma.issue.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const issueWithIdOnly = await prisma.issue.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IssueFindManyArgs>(args?: SelectSubset<T, IssueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Issue.
+     * @param {IssueCreateArgs} args - Arguments to create a Issue.
+     * @example
+     * // Create one Issue
+     * const Issue = await prisma.issue.create({
+     *   data: {
+     *     // ... data to create a Issue
+     *   }
+     * })
+     * 
+     */
+    create<T extends IssueCreateArgs>(args: SelectSubset<T, IssueCreateArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Issues.
+     * @param {IssueCreateManyArgs} args - Arguments to create many Issues.
+     * @example
+     * // Create many Issues
+     * const issue = await prisma.issue.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IssueCreateManyArgs>(args?: SelectSubset<T, IssueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Issues and returns the data saved in the database.
+     * @param {IssueCreateManyAndReturnArgs} args - Arguments to create many Issues.
+     * @example
+     * // Create many Issues
+     * const issue = await prisma.issue.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Issues and only return the `id`
+     * const issueWithIdOnly = await prisma.issue.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IssueCreateManyAndReturnArgs>(args?: SelectSubset<T, IssueCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Issue.
+     * @param {IssueDeleteArgs} args - Arguments to delete one Issue.
+     * @example
+     * // Delete one Issue
+     * const Issue = await prisma.issue.delete({
+     *   where: {
+     *     // ... filter to delete one Issue
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IssueDeleteArgs>(args: SelectSubset<T, IssueDeleteArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Issue.
+     * @param {IssueUpdateArgs} args - Arguments to update one Issue.
+     * @example
+     * // Update one Issue
+     * const issue = await prisma.issue.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IssueUpdateArgs>(args: SelectSubset<T, IssueUpdateArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Issues.
+     * @param {IssueDeleteManyArgs} args - Arguments to filter Issues to delete.
+     * @example
+     * // Delete a few Issues
+     * const { count } = await prisma.issue.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IssueDeleteManyArgs>(args?: SelectSubset<T, IssueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Issues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Issues
+     * const issue = await prisma.issue.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IssueUpdateManyArgs>(args: SelectSubset<T, IssueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Issues and returns the data updated in the database.
+     * @param {IssueUpdateManyAndReturnArgs} args - Arguments to update many Issues.
+     * @example
+     * // Update many Issues
+     * const issue = await prisma.issue.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Issues and only return the `id`
+     * const issueWithIdOnly = await prisma.issue.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends IssueUpdateManyAndReturnArgs>(args: SelectSubset<T, IssueUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Issue.
+     * @param {IssueUpsertArgs} args - Arguments to update or create a Issue.
+     * @example
+     * // Update or create a Issue
+     * const issue = await prisma.issue.upsert({
+     *   create: {
+     *     // ... data to create a Issue
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Issue we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IssueUpsertArgs>(args: SelectSubset<T, IssueUpsertArgs<ExtArgs>>): Prisma__IssueClient<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Issues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueCountArgs} args - Arguments to filter Issues to count.
+     * @example
+     * // Count the number of Issues
+     * const count = await prisma.issue.count({
+     *   where: {
+     *     // ... the filter for the Issues we want to count
+     *   }
+     * })
+    **/
+    count<T extends IssueCountArgs>(
+      args?: Subset<T, IssueCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IssueCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Issue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IssueAggregateArgs>(args: Subset<T, IssueAggregateArgs>): Prisma.PrismaPromise<GetIssueAggregateType<T>>
+
+    /**
+     * Group by Issue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IssueGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IssueGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IssueGroupByArgs['orderBy'] }
+        : { orderBy?: IssueGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IssueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIssueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Issue model
+   */
+  readonly fields: IssueFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Issue.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IssueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Meeting<T extends MeetingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MeetingDefaultArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Issue model
+   */
+  interface IssueFieldRefs {
+    readonly id: FieldRef<"Issue", 'String'>
+    readonly start: FieldRef<"Issue", 'String'>
+    readonly end: FieldRef<"Issue", 'String'>
+    readonly gist: FieldRef<"Issue", 'String'>
+    readonly headline: FieldRef<"Issue", 'String'>
+    readonly summary: FieldRef<"Issue", 'String'>
+    readonly meetingId: FieldRef<"Issue", 'String'>
+    readonly createdAt: FieldRef<"Issue", 'DateTime'>
+    readonly updatedAt: FieldRef<"Issue", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Issue findUnique
+   */
+  export type IssueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * Filter, which Issue to fetch.
+     */
+    where: IssueWhereUniqueInput
+  }
+
+  /**
+   * Issue findUniqueOrThrow
+   */
+  export type IssueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * Filter, which Issue to fetch.
+     */
+    where: IssueWhereUniqueInput
+  }
+
+  /**
+   * Issue findFirst
+   */
+  export type IssueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * Filter, which Issue to fetch.
+     */
+    where?: IssueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Issues to fetch.
+     */
+    orderBy?: IssueOrderByWithRelationInput | IssueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Issues.
+     */
+    cursor?: IssueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Issues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Issues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Issues.
+     */
+    distinct?: IssueScalarFieldEnum | IssueScalarFieldEnum[]
+  }
+
+  /**
+   * Issue findFirstOrThrow
+   */
+  export type IssueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * Filter, which Issue to fetch.
+     */
+    where?: IssueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Issues to fetch.
+     */
+    orderBy?: IssueOrderByWithRelationInput | IssueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Issues.
+     */
+    cursor?: IssueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Issues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Issues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Issues.
+     */
+    distinct?: IssueScalarFieldEnum | IssueScalarFieldEnum[]
+  }
+
+  /**
+   * Issue findMany
+   */
+  export type IssueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * Filter, which Issues to fetch.
+     */
+    where?: IssueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Issues to fetch.
+     */
+    orderBy?: IssueOrderByWithRelationInput | IssueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Issues.
+     */
+    cursor?: IssueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Issues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Issues.
+     */
+    skip?: number
+    distinct?: IssueScalarFieldEnum | IssueScalarFieldEnum[]
+  }
+
+  /**
+   * Issue create
+   */
+  export type IssueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Issue.
+     */
+    data: XOR<IssueCreateInput, IssueUncheckedCreateInput>
+  }
+
+  /**
+   * Issue createMany
+   */
+  export type IssueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Issues.
+     */
+    data: IssueCreateManyInput | IssueCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Issue createManyAndReturn
+   */
+  export type IssueCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * The data used to create many Issues.
+     */
+    data: IssueCreateManyInput | IssueCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Issue update
+   */
+  export type IssueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Issue.
+     */
+    data: XOR<IssueUpdateInput, IssueUncheckedUpdateInput>
+    /**
+     * Choose, which Issue to update.
+     */
+    where: IssueWhereUniqueInput
+  }
+
+  /**
+   * Issue updateMany
+   */
+  export type IssueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Issues.
+     */
+    data: XOR<IssueUpdateManyMutationInput, IssueUncheckedUpdateManyInput>
+    /**
+     * Filter which Issues to update
+     */
+    where?: IssueWhereInput
+    /**
+     * Limit how many Issues to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Issue updateManyAndReturn
+   */
+  export type IssueUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * The data used to update Issues.
+     */
+    data: XOR<IssueUpdateManyMutationInput, IssueUncheckedUpdateManyInput>
+    /**
+     * Filter which Issues to update
+     */
+    where?: IssueWhereInput
+    /**
+     * Limit how many Issues to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Issue upsert
+   */
+  export type IssueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Issue to update in case it exists.
+     */
+    where: IssueWhereUniqueInput
+    /**
+     * In case the Issue found by the `where` argument doesn't exist, create a new Issue with this data.
+     */
+    create: XOR<IssueCreateInput, IssueUncheckedCreateInput>
+    /**
+     * In case the Issue was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IssueUpdateInput, IssueUncheckedUpdateInput>
+  }
+
+  /**
+   * Issue delete
+   */
+  export type IssueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    /**
+     * Filter which Issue to delete.
+     */
+    where: IssueWhereUniqueInput
+  }
+
+  /**
+   * Issue deleteMany
+   */
+  export type IssueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Issues to delete
+     */
+    where?: IssueWhereInput
+    /**
+     * Limit how many Issues to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Issue without action
+   */
+  export type IssueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Meeting
+   */
+
+  export type AggregateMeeting = {
+    _count: MeetingCountAggregateOutputType | null
+    _min: MeetingMinAggregateOutputType | null
+    _max: MeetingMaxAggregateOutputType | null
+  }
+
+  export type MeetingMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    url: string | null
+    projectId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    url: string | null
+    projectId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MeetingCountAggregateOutputType = {
+    id: number
+    name: number
+    url: number
+    projectId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MeetingMinAggregateInputType = {
+    id?: true
+    name?: true
+    url?: true
+    projectId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingMaxAggregateInputType = {
+    id?: true
+    name?: true
+    url?: true
+    projectId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MeetingCountAggregateInputType = {
+    id?: true
+    name?: true
+    url?: true
+    projectId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MeetingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Meeting to aggregate.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Meetings
+    **/
+    _count?: true | MeetingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MeetingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MeetingMaxAggregateInputType
+  }
+
+  export type GetMeetingAggregateType<T extends MeetingAggregateArgs> = {
+        [P in keyof T & keyof AggregateMeeting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMeeting[P]>
+      : GetScalarType<T[P], AggregateMeeting[P]>
+  }
+
+
+
+
+  export type MeetingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MeetingWhereInput
+    orderBy?: MeetingOrderByWithAggregationInput | MeetingOrderByWithAggregationInput[]
+    by: MeetingScalarFieldEnum[] | MeetingScalarFieldEnum
+    having?: MeetingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MeetingCountAggregateInputType | true
+    _min?: MeetingMinAggregateInputType
+    _max?: MeetingMaxAggregateInputType
+  }
+
+  export type MeetingGroupByOutputType = {
+    id: string
+    name: string
+    url: string
+    projectId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: MeetingCountAggregateOutputType | null
+    _min: MeetingMinAggregateOutputType | null
+    _max: MeetingMaxAggregateOutputType | null
+  }
+
+  type GetMeetingGroupByPayload<T extends MeetingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MeetingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MeetingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MeetingGroupByOutputType[P]>
+            : GetScalarType<T[P], MeetingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MeetingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    url?: boolean
+    projectId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Issue?: boolean | Meeting$IssueArgs<ExtArgs>
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    _count?: boolean | MeetingCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meeting"]>
+
+  export type MeetingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    url?: boolean
+    projectId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meeting"]>
+
+  export type MeetingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    url?: boolean
+    projectId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["meeting"]>
+
+  export type MeetingSelectScalar = {
+    id?: boolean
+    name?: boolean
+    url?: boolean
+    projectId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MeetingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "url" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["meeting"]>
+  export type MeetingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Issue?: boolean | Meeting$IssueArgs<ExtArgs>
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    _count?: boolean | MeetingCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MeetingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type MeetingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+
+  export type $MeetingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Meeting"
+    objects: {
+      Issue: Prisma.$IssuePayload<ExtArgs>[]
+      Project: Prisma.$ProjectPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      url: string
+      projectId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["meeting"]>
+    composites: {}
+  }
+
+  type MeetingGetPayload<S extends boolean | null | undefined | MeetingDefaultArgs> = $Result.GetResult<Prisma.$MeetingPayload, S>
+
+  type MeetingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MeetingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MeetingCountAggregateInputType | true
+    }
+
+  export interface MeetingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Meeting'], meta: { name: 'Meeting' } }
+    /**
+     * Find zero or one Meeting that matches the filter.
+     * @param {MeetingFindUniqueArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MeetingFindUniqueArgs>(args: SelectSubset<T, MeetingFindUniqueArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Meeting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MeetingFindUniqueOrThrowArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MeetingFindUniqueOrThrowArgs>(args: SelectSubset<T, MeetingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Meeting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingFindFirstArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MeetingFindFirstArgs>(args?: SelectSubset<T, MeetingFindFirstArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Meeting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingFindFirstOrThrowArgs} args - Arguments to find a Meeting
+     * @example
+     * // Get one Meeting
+     * const meeting = await prisma.meeting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MeetingFindFirstOrThrowArgs>(args?: SelectSubset<T, MeetingFindFirstOrThrowArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Meetings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Meetings
+     * const meetings = await prisma.meeting.findMany()
+     * 
+     * // Get first 10 Meetings
+     * const meetings = await prisma.meeting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const meetingWithIdOnly = await prisma.meeting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MeetingFindManyArgs>(args?: SelectSubset<T, MeetingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Meeting.
+     * @param {MeetingCreateArgs} args - Arguments to create a Meeting.
+     * @example
+     * // Create one Meeting
+     * const Meeting = await prisma.meeting.create({
+     *   data: {
+     *     // ... data to create a Meeting
+     *   }
+     * })
+     * 
+     */
+    create<T extends MeetingCreateArgs>(args: SelectSubset<T, MeetingCreateArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Meetings.
+     * @param {MeetingCreateManyArgs} args - Arguments to create many Meetings.
+     * @example
+     * // Create many Meetings
+     * const meeting = await prisma.meeting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MeetingCreateManyArgs>(args?: SelectSubset<T, MeetingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Meetings and returns the data saved in the database.
+     * @param {MeetingCreateManyAndReturnArgs} args - Arguments to create many Meetings.
+     * @example
+     * // Create many Meetings
+     * const meeting = await prisma.meeting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Meetings and only return the `id`
+     * const meetingWithIdOnly = await prisma.meeting.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MeetingCreateManyAndReturnArgs>(args?: SelectSubset<T, MeetingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Meeting.
+     * @param {MeetingDeleteArgs} args - Arguments to delete one Meeting.
+     * @example
+     * // Delete one Meeting
+     * const Meeting = await prisma.meeting.delete({
+     *   where: {
+     *     // ... filter to delete one Meeting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MeetingDeleteArgs>(args: SelectSubset<T, MeetingDeleteArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Meeting.
+     * @param {MeetingUpdateArgs} args - Arguments to update one Meeting.
+     * @example
+     * // Update one Meeting
+     * const meeting = await prisma.meeting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MeetingUpdateArgs>(args: SelectSubset<T, MeetingUpdateArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Meetings.
+     * @param {MeetingDeleteManyArgs} args - Arguments to filter Meetings to delete.
+     * @example
+     * // Delete a few Meetings
+     * const { count } = await prisma.meeting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MeetingDeleteManyArgs>(args?: SelectSubset<T, MeetingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Meetings
+     * const meeting = await prisma.meeting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MeetingUpdateManyArgs>(args: SelectSubset<T, MeetingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Meetings and returns the data updated in the database.
+     * @param {MeetingUpdateManyAndReturnArgs} args - Arguments to update many Meetings.
+     * @example
+     * // Update many Meetings
+     * const meeting = await prisma.meeting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Meetings and only return the `id`
+     * const meetingWithIdOnly = await prisma.meeting.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MeetingUpdateManyAndReturnArgs>(args: SelectSubset<T, MeetingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Meeting.
+     * @param {MeetingUpsertArgs} args - Arguments to update or create a Meeting.
+     * @example
+     * // Update or create a Meeting
+     * const meeting = await prisma.meeting.upsert({
+     *   create: {
+     *     // ... data to create a Meeting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Meeting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MeetingUpsertArgs>(args: SelectSubset<T, MeetingUpsertArgs<ExtArgs>>): Prisma__MeetingClient<$Result.GetResult<Prisma.$MeetingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingCountArgs} args - Arguments to filter Meetings to count.
+     * @example
+     * // Count the number of Meetings
+     * const count = await prisma.meeting.count({
+     *   where: {
+     *     // ... the filter for the Meetings we want to count
+     *   }
+     * })
+    **/
+    count<T extends MeetingCountArgs>(
+      args?: Subset<T, MeetingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MeetingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Meeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MeetingAggregateArgs>(args: Subset<T, MeetingAggregateArgs>): Prisma.PrismaPromise<GetMeetingAggregateType<T>>
+
+    /**
+     * Group by Meeting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MeetingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MeetingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MeetingGroupByArgs['orderBy'] }
+        : { orderBy?: MeetingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MeetingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMeetingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Meeting model
+   */
+  readonly fields: MeetingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Meeting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MeetingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Issue<T extends Meeting$IssueArgs<ExtArgs> = {}>(args?: Subset<T, Meeting$IssueArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IssuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Meeting model
+   */
+  interface MeetingFieldRefs {
+    readonly id: FieldRef<"Meeting", 'String'>
+    readonly name: FieldRef<"Meeting", 'String'>
+    readonly url: FieldRef<"Meeting", 'String'>
+    readonly projectId: FieldRef<"Meeting", 'String'>
+    readonly createdAt: FieldRef<"Meeting", 'DateTime'>
+    readonly updatedAt: FieldRef<"Meeting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Meeting findUnique
+   */
+  export type MeetingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting findUniqueOrThrow
+   */
+  export type MeetingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting findFirst
+   */
+  export type MeetingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Meetings.
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meetings.
+     */
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting findFirstOrThrow
+   */
+  export type MeetingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meeting to fetch.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Meetings.
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Meetings.
+     */
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting findMany
+   */
+  export type MeetingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter, which Meetings to fetch.
+     */
+    where?: MeetingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Meetings to fetch.
+     */
+    orderBy?: MeetingOrderByWithRelationInput | MeetingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Meetings.
+     */
+    cursor?: MeetingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Meetings.
+     */
+    skip?: number
+    distinct?: MeetingScalarFieldEnum | MeetingScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting create
+   */
+  export type MeetingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Meeting.
+     */
+    data: XOR<MeetingCreateInput, MeetingUncheckedCreateInput>
+  }
+
+  /**
+   * Meeting createMany
+   */
+  export type MeetingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Meetings.
+     */
+    data: MeetingCreateManyInput | MeetingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Meeting createManyAndReturn
+   */
+  export type MeetingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * The data used to create many Meetings.
+     */
+    data: MeetingCreateManyInput | MeetingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Meeting update
+   */
+  export type MeetingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Meeting.
+     */
+    data: XOR<MeetingUpdateInput, MeetingUncheckedUpdateInput>
+    /**
+     * Choose, which Meeting to update.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting updateMany
+   */
+  export type MeetingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Meetings.
+     */
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which Meetings to update
+     */
+    where?: MeetingWhereInput
+    /**
+     * Limit how many Meetings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Meeting updateManyAndReturn
+   */
+  export type MeetingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * The data used to update Meetings.
+     */
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyInput>
+    /**
+     * Filter which Meetings to update
+     */
+    where?: MeetingWhereInput
+    /**
+     * Limit how many Meetings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Meeting upsert
+   */
+  export type MeetingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Meeting to update in case it exists.
+     */
+    where: MeetingWhereUniqueInput
+    /**
+     * In case the Meeting found by the `where` argument doesn't exist, create a new Meeting with this data.
+     */
+    create: XOR<MeetingCreateInput, MeetingUncheckedCreateInput>
+    /**
+     * In case the Meeting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MeetingUpdateInput, MeetingUncheckedUpdateInput>
+  }
+
+  /**
+   * Meeting delete
+   */
+  export type MeetingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+    /**
+     * Filter which Meeting to delete.
+     */
+    where: MeetingWhereUniqueInput
+  }
+
+  /**
+   * Meeting deleteMany
+   */
+  export type MeetingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Meetings to delete
+     */
+    where?: MeetingWhereInput
+    /**
+     * Limit how many Meetings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Meeting.Issue
+   */
+  export type Meeting$IssueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Issue
+     */
+    select?: IssueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Issue
+     */
+    omit?: IssueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IssueInclude<ExtArgs> | null
+    where?: IssueWhereInput
+    orderBy?: IssueOrderByWithRelationInput | IssueOrderByWithRelationInput[]
+    cursor?: IssueWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IssueScalarFieldEnum | IssueScalarFieldEnum[]
+  }
+
+  /**
+   * Meeting without action
+   */
+  export type MeetingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Meeting
+     */
+    select?: MeetingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Meeting
+     */
+    omit?: MeetingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MeetingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Question
+   */
+
+  export type AggregateQuestion = {
+    _count: QuestionCountAggregateOutputType | null
+    _min: QuestionMinAggregateOutputType | null
+    _max: QuestionMaxAggregateOutputType | null
+  }
+
+  export type QuestionMinAggregateOutputType = {
+    id: string | null
+    question: string | null
+    answer: string | null
+    projectId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuestionMaxAggregateOutputType = {
+    id: string | null
+    question: string | null
+    answer: string | null
+    projectId: string | null
+    userId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuestionCountAggregateOutputType = {
+    id: number
+    question: number
+    answer: number
+    projectId: number
+    userId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QuestionMinAggregateInputType = {
+    id?: true
+    question?: true
+    answer?: true
+    projectId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuestionMaxAggregateInputType = {
+    id?: true
+    question?: true
+    answer?: true
+    projectId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuestionCountAggregateInputType = {
+    id?: true
+    question?: true
+    answer?: true
+    projectId?: true
+    userId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QuestionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Question to aggregate.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Questions
+    **/
+    _count?: true | QuestionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QuestionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QuestionMaxAggregateInputType
+  }
+
+  export type GetQuestionAggregateType<T extends QuestionAggregateArgs> = {
+        [P in keyof T & keyof AggregateQuestion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQuestion[P]>
+      : GetScalarType<T[P], AggregateQuestion[P]>
+  }
+
+
+
+
+  export type QuestionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuestionWhereInput
+    orderBy?: QuestionOrderByWithAggregationInput | QuestionOrderByWithAggregationInput[]
+    by: QuestionScalarFieldEnum[] | QuestionScalarFieldEnum
+    having?: QuestionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QuestionCountAggregateInputType | true
+    _min?: QuestionMinAggregateInputType
+    _max?: QuestionMaxAggregateInputType
+  }
+
+  export type QuestionGroupByOutputType = {
+    id: string
+    question: string
+    answer: string
+    projectId: string
+    userId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: QuestionCountAggregateOutputType | null
+    _min: QuestionMinAggregateOutputType | null
+    _max: QuestionMaxAggregateOutputType | null
+  }
+
+  type GetQuestionGroupByPayload<T extends QuestionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QuestionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QuestionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QuestionGroupByOutputType[P]>
+            : GetScalarType<T[P], QuestionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    question?: boolean
+    answer?: boolean
+    projectId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    User?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["question"]>
+
+  export type QuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    question?: boolean
+    answer?: boolean
+    projectId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    User?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["question"]>
+
+  export type QuestionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    question?: boolean
+    answer?: boolean
+    projectId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    User?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["question"]>
+
+  export type QuestionSelectScalar = {
+    id?: boolean
+    question?: boolean
+    answer?: boolean
+    projectId?: boolean
+    userId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "question" | "answer" | "projectId" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["question"]>
+  export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    User?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type QuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    User?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type QuestionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    User?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $QuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Question"
+    objects: {
+      Project: Prisma.$ProjectPayload<ExtArgs>
+      User: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      question: string
+      answer: string
+      projectId: string
+      userId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["question"]>
+    composites: {}
+  }
+
+  type QuestionGetPayload<S extends boolean | null | undefined | QuestionDefaultArgs> = $Result.GetResult<Prisma.$QuestionPayload, S>
+
+  type QuestionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QuestionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QuestionCountAggregateInputType | true
+    }
+
+  export interface QuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Question'], meta: { name: 'Question' } }
+    /**
+     * Find zero or one Question that matches the filter.
+     * @param {QuestionFindUniqueArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QuestionFindUniqueArgs>(args: SelectSubset<T, QuestionFindUniqueArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Question that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QuestionFindUniqueOrThrowArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QuestionFindUniqueOrThrowArgs>(args: SelectSubset<T, QuestionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Question that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionFindFirstArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QuestionFindFirstArgs>(args?: SelectSubset<T, QuestionFindFirstArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Question that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionFindFirstOrThrowArgs} args - Arguments to find a Question
+     * @example
+     * // Get one Question
+     * const question = await prisma.question.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QuestionFindFirstOrThrowArgs>(args?: SelectSubset<T, QuestionFindFirstOrThrowArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Questions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Questions
+     * const questions = await prisma.question.findMany()
+     * 
+     * // Get first 10 Questions
+     * const questions = await prisma.question.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const questionWithIdOnly = await prisma.question.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QuestionFindManyArgs>(args?: SelectSubset<T, QuestionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Question.
+     * @param {QuestionCreateArgs} args - Arguments to create a Question.
+     * @example
+     * // Create one Question
+     * const Question = await prisma.question.create({
+     *   data: {
+     *     // ... data to create a Question
+     *   }
+     * })
+     * 
+     */
+    create<T extends QuestionCreateArgs>(args: SelectSubset<T, QuestionCreateArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Questions.
+     * @param {QuestionCreateManyArgs} args - Arguments to create many Questions.
+     * @example
+     * // Create many Questions
+     * const question = await prisma.question.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QuestionCreateManyArgs>(args?: SelectSubset<T, QuestionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Questions and returns the data saved in the database.
+     * @param {QuestionCreateManyAndReturnArgs} args - Arguments to create many Questions.
+     * @example
+     * // Create many Questions
+     * const question = await prisma.question.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Questions and only return the `id`
+     * const questionWithIdOnly = await prisma.question.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QuestionCreateManyAndReturnArgs>(args?: SelectSubset<T, QuestionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Question.
+     * @param {QuestionDeleteArgs} args - Arguments to delete one Question.
+     * @example
+     * // Delete one Question
+     * const Question = await prisma.question.delete({
+     *   where: {
+     *     // ... filter to delete one Question
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QuestionDeleteArgs>(args: SelectSubset<T, QuestionDeleteArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Question.
+     * @param {QuestionUpdateArgs} args - Arguments to update one Question.
+     * @example
+     * // Update one Question
+     * const question = await prisma.question.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QuestionUpdateArgs>(args: SelectSubset<T, QuestionUpdateArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Questions.
+     * @param {QuestionDeleteManyArgs} args - Arguments to filter Questions to delete.
+     * @example
+     * // Delete a few Questions
+     * const { count } = await prisma.question.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QuestionDeleteManyArgs>(args?: SelectSubset<T, QuestionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Questions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Questions
+     * const question = await prisma.question.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QuestionUpdateManyArgs>(args: SelectSubset<T, QuestionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Questions and returns the data updated in the database.
+     * @param {QuestionUpdateManyAndReturnArgs} args - Arguments to update many Questions.
+     * @example
+     * // Update many Questions
+     * const question = await prisma.question.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Questions and only return the `id`
+     * const questionWithIdOnly = await prisma.question.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends QuestionUpdateManyAndReturnArgs>(args: SelectSubset<T, QuestionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Question.
+     * @param {QuestionUpsertArgs} args - Arguments to update or create a Question.
+     * @example
+     * // Update or create a Question
+     * const question = await prisma.question.upsert({
+     *   create: {
+     *     // ... data to create a Question
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Question we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QuestionUpsertArgs>(args: SelectSubset<T, QuestionUpsertArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Questions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionCountArgs} args - Arguments to filter Questions to count.
+     * @example
+     * // Count the number of Questions
+     * const count = await prisma.question.count({
+     *   where: {
+     *     // ... the filter for the Questions we want to count
+     *   }
+     * })
+    **/
+    count<T extends QuestionCountArgs>(
+      args?: Subset<T, QuestionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QuestionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Question.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QuestionAggregateArgs>(args: Subset<T, QuestionAggregateArgs>): Prisma.PrismaPromise<GetQuestionAggregateType<T>>
+
+    /**
+     * Group by Question.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuestionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QuestionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QuestionGroupByArgs['orderBy'] }
+        : { orderBy?: QuestionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QuestionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQuestionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Question model
+   */
+  readonly fields: QuestionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Question.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    User<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Question model
+   */
+  interface QuestionFieldRefs {
+    readonly id: FieldRef<"Question", 'String'>
+    readonly question: FieldRef<"Question", 'String'>
+    readonly answer: FieldRef<"Question", 'String'>
+    readonly projectId: FieldRef<"Question", 'String'>
+    readonly userId: FieldRef<"Question", 'String'>
+    readonly createdAt: FieldRef<"Question", 'DateTime'>
+    readonly updatedAt: FieldRef<"Question", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Question findUnique
+   */
+  export type QuestionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question findUniqueOrThrow
+   */
+  export type QuestionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question findFirst
+   */
+  export type QuestionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Questions.
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Questions.
+     */
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Question findFirstOrThrow
+   */
+  export type QuestionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Question to fetch.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Questions.
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Questions.
+     */
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Question findMany
+   */
+  export type QuestionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter, which Questions to fetch.
+     */
+    where?: QuestionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Questions to fetch.
+     */
+    orderBy?: QuestionOrderByWithRelationInput | QuestionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Questions.
+     */
+    cursor?: QuestionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Questions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Questions.
+     */
+    skip?: number
+    distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Question create
+   */
+  export type QuestionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Question.
+     */
+    data: XOR<QuestionCreateInput, QuestionUncheckedCreateInput>
+  }
+
+  /**
+   * Question createMany
+   */
+  export type QuestionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Questions.
+     */
+    data: QuestionCreateManyInput | QuestionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Question createManyAndReturn
+   */
+  export type QuestionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Questions.
+     */
+    data: QuestionCreateManyInput | QuestionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Question update
+   */
+  export type QuestionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Question.
+     */
+    data: XOR<QuestionUpdateInput, QuestionUncheckedUpdateInput>
+    /**
+     * Choose, which Question to update.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question updateMany
+   */
+  export type QuestionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Questions.
+     */
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Questions to update
+     */
+    where?: QuestionWhereInput
+    /**
+     * Limit how many Questions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Question updateManyAndReturn
+   */
+  export type QuestionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * The data used to update Questions.
+     */
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyInput>
+    /**
+     * Filter which Questions to update
+     */
+    where?: QuestionWhereInput
+    /**
+     * Limit how many Questions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Question upsert
+   */
+  export type QuestionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Question to update in case it exists.
+     */
+    where: QuestionWhereUniqueInput
+    /**
+     * In case the Question found by the `where` argument doesn't exist, create a new Question with this data.
+     */
+    create: XOR<QuestionCreateInput, QuestionUncheckedCreateInput>
+    /**
+     * In case the Question was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QuestionUpdateInput, QuestionUncheckedUpdateInput>
+  }
+
+  /**
+   * Question delete
+   */
+  export type QuestionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
+    /**
+     * Filter which Question to delete.
+     */
+    where: QuestionWhereUniqueInput
+  }
+
+  /**
+   * Question deleteMany
+   */
+  export type QuestionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Questions to delete
+     */
+    where?: QuestionWhereInput
+    /**
+     * Limit how many Questions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Question without action
+   */
+  export type QuestionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Question
+     */
+    select?: QuestionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Question
+     */
+    omit?: QuestionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionInclude<ExtArgs> | null
   }
 
 
@@ -4412,13 +8151,9 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
+    name: 'name',
     createdAt: 'createdAt',
-    updateAt: 'updateAt',
-    imageUrl: 'imageUrl',
-    firstName: 'firstName',
-    lastName: 'lastName',
-    emailAddress: 'emailAddress',
-    credits: 'credits'
+    updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -4426,25 +8161,71 @@ export namespace Prisma {
 
   export const ProjectScalarFieldEnum: {
     id: 'id',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
     name: 'name',
     githubUrl: 'githubUrl',
-    deletedAt: 'deletedAt'
+    documentation: 'documentation',
+    mermaidGraph: 'mermaidGraph',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
-  export const UserToProjectScalarFieldEnum: {
+  export const CommitScalarFieldEnum: {
     id: 'id',
+    commitMessage: 'commitMessage',
+    commitHash: 'commitHash',
+    commitAuthorName: 'commitAuthorName',
+    commitAuthorAvatar: 'commitAuthorAvatar',
+    commitDate: 'commitDate',
+    summary: 'summary',
+    projectId: 'projectId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    userId: 'userId',
-    projectId: 'projectId'
+    updatedAt: 'updatedAt'
   };
 
-  export type UserToProjectScalarFieldEnum = (typeof UserToProjectScalarFieldEnum)[keyof typeof UserToProjectScalarFieldEnum]
+  export type CommitScalarFieldEnum = (typeof CommitScalarFieldEnum)[keyof typeof CommitScalarFieldEnum]
+
+
+  export const IssueScalarFieldEnum: {
+    id: 'id',
+    start: 'start',
+    end: 'end',
+    gist: 'gist',
+    headline: 'headline',
+    summary: 'summary',
+    meetingId: 'meetingId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type IssueScalarFieldEnum = (typeof IssueScalarFieldEnum)[keyof typeof IssueScalarFieldEnum]
+
+
+  export const MeetingScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    url: 'url',
+    projectId: 'projectId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MeetingScalarFieldEnum = (typeof MeetingScalarFieldEnum)[keyof typeof MeetingScalarFieldEnum]
+
+
+  export const QuestionScalarFieldEnum: {
+    id: 'id',
+    question: 'question',
+    answer: 'answer',
+    projectId: 'projectId',
+    userId: 'userId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4516,20 +8297,6 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
   /**
    * Deep Input Types
    */
@@ -4540,57 +8307,42 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
+    name?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
-    updateAt?: DateTimeFilter<"User"> | Date | string
-    imageUrl?: StringNullableFilter<"User"> | string | null
-    firstName?: StringNullableFilter<"User"> | string | null
-    lastName?: StringNullableFilter<"User"> | string | null
-    emailAddress?: StringFilter<"User"> | string
-    credits?: IntFilter<"User"> | number
-    userToProjects?: UserToProjectListRelationFilter
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    Question?: QuestionListRelationFilter
+    Project?: ProjectListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
-    updateAt?: SortOrder
-    imageUrl?: SortOrderInput | SortOrder
-    firstName?: SortOrderInput | SortOrder
-    lastName?: SortOrderInput | SortOrder
-    emailAddress?: SortOrder
-    credits?: SortOrder
-    userToProjects?: UserToProjectOrderByRelationAggregateInput
+    updatedAt?: SortOrder
+    Question?: QuestionOrderByRelationAggregateInput
+    Project?: ProjectOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    emailAddress?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
+    name?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
-    updateAt?: DateTimeFilter<"User"> | Date | string
-    imageUrl?: StringNullableFilter<"User"> | string | null
-    firstName?: StringNullableFilter<"User"> | string | null
-    lastName?: StringNullableFilter<"User"> | string | null
-    credits?: IntFilter<"User"> | number
-    userToProjects?: UserToProjectListRelationFilter
-  }, "id" | "emailAddress">
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    Question?: QuestionListRelationFilter
+    Project?: ProjectListRelationFilter
+  }, "id">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
-    updateAt?: SortOrder
-    imageUrl?: SortOrderInput | SortOrder
-    firstName?: SortOrderInput | SortOrder
-    lastName?: SortOrderInput | SortOrder
-    emailAddress?: SortOrder
-    credits?: SortOrder
+    updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
-    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
-    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -4598,13 +8350,9 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
+    name?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    updateAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    imageUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
-    firstName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    lastName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    emailAddress?: StringWithAggregatesFilter<"User"> | string
-    credits?: IntWithAggregatesFilter<"User"> | number
+    updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type ProjectWhereInput = {
@@ -4612,22 +8360,30 @@ export namespace Prisma {
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
     id?: StringFilter<"Project"> | string
+    name?: StringFilter<"Project"> | string
+    githubUrl?: StringNullableFilter<"Project"> | string | null
+    documentation?: StringNullableFilter<"Project"> | string | null
+    mermaidGraph?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
-    name?: StringFilter<"Project"> | string
-    githubUrl?: StringFilter<"Project"> | string
-    deletedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
-    userToProjects?: UserToProjectListRelationFilter
+    Commit?: CommitListRelationFilter
+    Meeting?: MeetingListRelationFilter
+    Question?: QuestionListRelationFilter
+    User?: UserListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
     id?: SortOrder
+    name?: SortOrder
+    githubUrl?: SortOrderInput | SortOrder
+    documentation?: SortOrderInput | SortOrder
+    mermaidGraph?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    name?: SortOrder
-    githubUrl?: SortOrder
-    deletedAt?: SortOrderInput | SortOrder
-    userToProjects?: UserToProjectOrderByRelationAggregateInput
+    Commit?: CommitOrderByRelationAggregateInput
+    Meeting?: MeetingOrderByRelationAggregateInput
+    Question?: QuestionOrderByRelationAggregateInput
+    User?: UserOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -4635,21 +8391,26 @@ export namespace Prisma {
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
+    name?: StringFilter<"Project"> | string
+    githubUrl?: StringNullableFilter<"Project"> | string | null
+    documentation?: StringNullableFilter<"Project"> | string | null
+    mermaidGraph?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
-    name?: StringFilter<"Project"> | string
-    githubUrl?: StringFilter<"Project"> | string
-    deletedAt?: DateTimeNullableFilter<"Project"> | Date | string | null
-    userToProjects?: UserToProjectListRelationFilter
+    Commit?: CommitListRelationFilter
+    Meeting?: MeetingListRelationFilter
+    Question?: QuestionListRelationFilter
+    User?: UserListRelationFilter
   }, "id">
 
   export type ProjectOrderByWithAggregationInput = {
     id?: SortOrder
+    name?: SortOrder
+    githubUrl?: SortOrderInput | SortOrder
+    documentation?: SortOrderInput | SortOrder
+    mermaidGraph?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    name?: SortOrder
-    githubUrl?: SortOrder
-    deletedAt?: SortOrderInput | SortOrder
     _count?: ProjectCountOrderByAggregateInput
     _max?: ProjectMaxOrderByAggregateInput
     _min?: ProjectMinOrderByAggregateInput
@@ -4660,272 +8421,748 @@ export namespace Prisma {
     OR?: ProjectScalarWhereWithAggregatesInput[]
     NOT?: ProjectScalarWhereWithAggregatesInput | ProjectScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Project"> | string
+    name?: StringWithAggregatesFilter<"Project"> | string
+    githubUrl?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    documentation?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    mermaidGraph?: StringNullableWithAggregatesFilter<"Project"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
-    name?: StringWithAggregatesFilter<"Project"> | string
-    githubUrl?: StringWithAggregatesFilter<"Project"> | string
-    deletedAt?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
   }
 
-  export type UserToProjectWhereInput = {
-    AND?: UserToProjectWhereInput | UserToProjectWhereInput[]
-    OR?: UserToProjectWhereInput[]
-    NOT?: UserToProjectWhereInput | UserToProjectWhereInput[]
-    id?: StringFilter<"UserToProject"> | string
-    createdAt?: DateTimeFilter<"UserToProject"> | Date | string
-    updatedAt?: DateTimeFilter<"UserToProject"> | Date | string
-    userId?: StringFilter<"UserToProject"> | string
-    projectId?: StringFilter<"UserToProject"> | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  export type CommitWhereInput = {
+    AND?: CommitWhereInput | CommitWhereInput[]
+    OR?: CommitWhereInput[]
+    NOT?: CommitWhereInput | CommitWhereInput[]
+    id?: StringFilter<"Commit"> | string
+    commitMessage?: StringFilter<"Commit"> | string
+    commitHash?: StringFilter<"Commit"> | string
+    commitAuthorName?: StringFilter<"Commit"> | string
+    commitAuthorAvatar?: StringFilter<"Commit"> | string
+    commitDate?: DateTimeFilter<"Commit"> | Date | string
+    summary?: StringFilter<"Commit"> | string
+    projectId?: StringFilter<"Commit"> | string
+    createdAt?: DateTimeFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeFilter<"Commit"> | Date | string
+    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }
 
-  export type UserToProjectOrderByWithRelationInput = {
+  export type CommitOrderByWithRelationInput = {
     id?: SortOrder
+    commitMessage?: SortOrder
+    commitHash?: SortOrder
+    commitAuthorName?: SortOrder
+    commitAuthorAvatar?: SortOrder
+    commitDate?: SortOrder
+    summary?: SortOrder
+    projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    projectId?: SortOrder
-    user?: UserOrderByWithRelationInput
-    project?: ProjectOrderByWithRelationInput
+    Project?: ProjectOrderByWithRelationInput
   }
 
-  export type UserToProjectWhereUniqueInput = Prisma.AtLeast<{
+  export type CommitWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    userId_projectId?: UserToProjectUserIdProjectIdCompoundUniqueInput
-    AND?: UserToProjectWhereInput | UserToProjectWhereInput[]
-    OR?: UserToProjectWhereInput[]
-    NOT?: UserToProjectWhereInput | UserToProjectWhereInput[]
-    createdAt?: DateTimeFilter<"UserToProject"> | Date | string
-    updatedAt?: DateTimeFilter<"UserToProject"> | Date | string
-    userId?: StringFilter<"UserToProject"> | string
-    projectId?: StringFilter<"UserToProject"> | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-  }, "id" | "userId_projectId">
+    AND?: CommitWhereInput | CommitWhereInput[]
+    OR?: CommitWhereInput[]
+    NOT?: CommitWhereInput | CommitWhereInput[]
+    commitMessage?: StringFilter<"Commit"> | string
+    commitHash?: StringFilter<"Commit"> | string
+    commitAuthorName?: StringFilter<"Commit"> | string
+    commitAuthorAvatar?: StringFilter<"Commit"> | string
+    commitDate?: DateTimeFilter<"Commit"> | Date | string
+    summary?: StringFilter<"Commit"> | string
+    projectId?: StringFilter<"Commit"> | string
+    createdAt?: DateTimeFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeFilter<"Commit"> | Date | string
+    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }, "id">
 
-  export type UserToProjectOrderByWithAggregationInput = {
+  export type CommitOrderByWithAggregationInput = {
     id?: SortOrder
+    commitMessage?: SortOrder
+    commitHash?: SortOrder
+    commitAuthorName?: SortOrder
+    commitAuthorAvatar?: SortOrder
+    commitDate?: SortOrder
+    summary?: SortOrder
+    projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    projectId?: SortOrder
-    _count?: UserToProjectCountOrderByAggregateInput
-    _max?: UserToProjectMaxOrderByAggregateInput
-    _min?: UserToProjectMinOrderByAggregateInput
+    _count?: CommitCountOrderByAggregateInput
+    _max?: CommitMaxOrderByAggregateInput
+    _min?: CommitMinOrderByAggregateInput
   }
 
-  export type UserToProjectScalarWhereWithAggregatesInput = {
-    AND?: UserToProjectScalarWhereWithAggregatesInput | UserToProjectScalarWhereWithAggregatesInput[]
-    OR?: UserToProjectScalarWhereWithAggregatesInput[]
-    NOT?: UserToProjectScalarWhereWithAggregatesInput | UserToProjectScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UserToProject"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"UserToProject"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"UserToProject"> | Date | string
-    userId?: StringWithAggregatesFilter<"UserToProject"> | string
-    projectId?: StringWithAggregatesFilter<"UserToProject"> | string
+  export type CommitScalarWhereWithAggregatesInput = {
+    AND?: CommitScalarWhereWithAggregatesInput | CommitScalarWhereWithAggregatesInput[]
+    OR?: CommitScalarWhereWithAggregatesInput[]
+    NOT?: CommitScalarWhereWithAggregatesInput | CommitScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Commit"> | string
+    commitMessage?: StringWithAggregatesFilter<"Commit"> | string
+    commitHash?: StringWithAggregatesFilter<"Commit"> | string
+    commitAuthorName?: StringWithAggregatesFilter<"Commit"> | string
+    commitAuthorAvatar?: StringWithAggregatesFilter<"Commit"> | string
+    commitDate?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
+    summary?: StringWithAggregatesFilter<"Commit"> | string
+    projectId?: StringWithAggregatesFilter<"Commit"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
+  }
+
+  export type IssueWhereInput = {
+    AND?: IssueWhereInput | IssueWhereInput[]
+    OR?: IssueWhereInput[]
+    NOT?: IssueWhereInput | IssueWhereInput[]
+    id?: StringFilter<"Issue"> | string
+    start?: StringFilter<"Issue"> | string
+    end?: StringFilter<"Issue"> | string
+    gist?: StringFilter<"Issue"> | string
+    headline?: StringFilter<"Issue"> | string
+    summary?: StringFilter<"Issue"> | string
+    meetingId?: StringFilter<"Issue"> | string
+    createdAt?: DateTimeFilter<"Issue"> | Date | string
+    updatedAt?: DateTimeFilter<"Issue"> | Date | string
+    Meeting?: XOR<MeetingScalarRelationFilter, MeetingWhereInput>
+  }
+
+  export type IssueOrderByWithRelationInput = {
+    id?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    gist?: SortOrder
+    headline?: SortOrder
+    summary?: SortOrder
+    meetingId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    Meeting?: MeetingOrderByWithRelationInput
+  }
+
+  export type IssueWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: IssueWhereInput | IssueWhereInput[]
+    OR?: IssueWhereInput[]
+    NOT?: IssueWhereInput | IssueWhereInput[]
+    start?: StringFilter<"Issue"> | string
+    end?: StringFilter<"Issue"> | string
+    gist?: StringFilter<"Issue"> | string
+    headline?: StringFilter<"Issue"> | string
+    summary?: StringFilter<"Issue"> | string
+    meetingId?: StringFilter<"Issue"> | string
+    createdAt?: DateTimeFilter<"Issue"> | Date | string
+    updatedAt?: DateTimeFilter<"Issue"> | Date | string
+    Meeting?: XOR<MeetingScalarRelationFilter, MeetingWhereInput>
+  }, "id">
+
+  export type IssueOrderByWithAggregationInput = {
+    id?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    gist?: SortOrder
+    headline?: SortOrder
+    summary?: SortOrder
+    meetingId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: IssueCountOrderByAggregateInput
+    _max?: IssueMaxOrderByAggregateInput
+    _min?: IssueMinOrderByAggregateInput
+  }
+
+  export type IssueScalarWhereWithAggregatesInput = {
+    AND?: IssueScalarWhereWithAggregatesInput | IssueScalarWhereWithAggregatesInput[]
+    OR?: IssueScalarWhereWithAggregatesInput[]
+    NOT?: IssueScalarWhereWithAggregatesInput | IssueScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Issue"> | string
+    start?: StringWithAggregatesFilter<"Issue"> | string
+    end?: StringWithAggregatesFilter<"Issue"> | string
+    gist?: StringWithAggregatesFilter<"Issue"> | string
+    headline?: StringWithAggregatesFilter<"Issue"> | string
+    summary?: StringWithAggregatesFilter<"Issue"> | string
+    meetingId?: StringWithAggregatesFilter<"Issue"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Issue"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Issue"> | Date | string
+  }
+
+  export type MeetingWhereInput = {
+    AND?: MeetingWhereInput | MeetingWhereInput[]
+    OR?: MeetingWhereInput[]
+    NOT?: MeetingWhereInput | MeetingWhereInput[]
+    id?: StringFilter<"Meeting"> | string
+    name?: StringFilter<"Meeting"> | string
+    url?: StringFilter<"Meeting"> | string
+    projectId?: StringFilter<"Meeting"> | string
+    createdAt?: DateTimeFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+    Issue?: IssueListRelationFilter
+    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }
+
+  export type MeetingOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    Issue?: IssueOrderByRelationAggregateInput
+    Project?: ProjectOrderByWithRelationInput
+  }
+
+  export type MeetingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MeetingWhereInput | MeetingWhereInput[]
+    OR?: MeetingWhereInput[]
+    NOT?: MeetingWhereInput | MeetingWhereInput[]
+    name?: StringFilter<"Meeting"> | string
+    url?: StringFilter<"Meeting"> | string
+    projectId?: StringFilter<"Meeting"> | string
+    createdAt?: DateTimeFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+    Issue?: IssueListRelationFilter
+    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }, "id">
+
+  export type MeetingOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MeetingCountOrderByAggregateInput
+    _max?: MeetingMaxOrderByAggregateInput
+    _min?: MeetingMinOrderByAggregateInput
+  }
+
+  export type MeetingScalarWhereWithAggregatesInput = {
+    AND?: MeetingScalarWhereWithAggregatesInput | MeetingScalarWhereWithAggregatesInput[]
+    OR?: MeetingScalarWhereWithAggregatesInput[]
+    NOT?: MeetingScalarWhereWithAggregatesInput | MeetingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Meeting"> | string
+    name?: StringWithAggregatesFilter<"Meeting"> | string
+    url?: StringWithAggregatesFilter<"Meeting"> | string
+    projectId?: StringWithAggregatesFilter<"Meeting"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Meeting"> | Date | string
+  }
+
+  export type QuestionWhereInput = {
+    AND?: QuestionWhereInput | QuestionWhereInput[]
+    OR?: QuestionWhereInput[]
+    NOT?: QuestionWhereInput | QuestionWhereInput[]
+    id?: StringFilter<"Question"> | string
+    question?: StringFilter<"Question"> | string
+    answer?: StringFilter<"Question"> | string
+    projectId?: StringFilter<"Question"> | string
+    userId?: StringFilter<"Question"> | string
+    createdAt?: DateTimeFilter<"Question"> | Date | string
+    updatedAt?: DateTimeFilter<"Question"> | Date | string
+    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    User?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type QuestionOrderByWithRelationInput = {
+    id?: SortOrder
+    question?: SortOrder
+    answer?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    Project?: ProjectOrderByWithRelationInput
+    User?: UserOrderByWithRelationInput
+  }
+
+  export type QuestionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: QuestionWhereInput | QuestionWhereInput[]
+    OR?: QuestionWhereInput[]
+    NOT?: QuestionWhereInput | QuestionWhereInput[]
+    question?: StringFilter<"Question"> | string
+    answer?: StringFilter<"Question"> | string
+    projectId?: StringFilter<"Question"> | string
+    userId?: StringFilter<"Question"> | string
+    createdAt?: DateTimeFilter<"Question"> | Date | string
+    updatedAt?: DateTimeFilter<"Question"> | Date | string
+    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    User?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type QuestionOrderByWithAggregationInput = {
+    id?: SortOrder
+    question?: SortOrder
+    answer?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QuestionCountOrderByAggregateInput
+    _max?: QuestionMaxOrderByAggregateInput
+    _min?: QuestionMinOrderByAggregateInput
+  }
+
+  export type QuestionScalarWhereWithAggregatesInput = {
+    AND?: QuestionScalarWhereWithAggregatesInput | QuestionScalarWhereWithAggregatesInput[]
+    OR?: QuestionScalarWhereWithAggregatesInput[]
+    NOT?: QuestionScalarWhereWithAggregatesInput | QuestionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Question"> | string
+    question?: StringWithAggregatesFilter<"Question"> | string
+    answer?: StringWithAggregatesFilter<"Question"> | string
+    projectId?: StringWithAggregatesFilter<"Question"> | string
+    userId?: StringWithAggregatesFilter<"Question"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Question"> | Date | string
   }
 
   export type UserCreateInput = {
     id?: string
+    name: string
     createdAt?: Date | string
-    updateAt?: Date | string
-    imageUrl?: string | null
-    firstName?: string | null
-    lastName?: string | null
-    emailAddress: string
-    credits?: number
-    userToProjects?: UserToProjectCreateNestedManyWithoutUserInput
+    updatedAt: Date | string
+    Question?: QuestionCreateNestedManyWithoutUserInput
+    Project?: ProjectCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
+    name: string
     createdAt?: Date | string
-    updateAt?: Date | string
-    imageUrl?: string | null
-    firstName?: string | null
-    lastName?: string | null
-    emailAddress: string
-    credits?: number
-    userToProjects?: UserToProjectUncheckedCreateNestedManyWithoutUserInput
+    updatedAt: Date | string
+    Question?: QuestionUncheckedCreateNestedManyWithoutUserInput
+    Project?: ProjectUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    credits?: IntFieldUpdateOperationsInput | number
-    userToProjects?: UserToProjectUpdateManyWithoutUserNestedInput
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Question?: QuestionUpdateManyWithoutUserNestedInput
+    Project?: ProjectUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    credits?: IntFieldUpdateOperationsInput | number
-    userToProjects?: UserToProjectUncheckedUpdateManyWithoutUserNestedInput
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Question?: QuestionUncheckedUpdateManyWithoutUserNestedInput
+    Project?: ProjectUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
+    name: string
     createdAt?: Date | string
-    updateAt?: Date | string
-    imageUrl?: string | null
-    firstName?: string | null
-    lastName?: string | null
-    emailAddress: string
-    credits?: number
+    updatedAt: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    credits?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    credits?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectCreateInput = {
     id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
-    githubUrl: string
-    deletedAt?: Date | string | null
-    userToProjects?: UserToProjectCreateNestedManyWithoutProjectInput
+    Commit?: CommitCreateNestedManyWithoutProjectInput
+    Meeting?: MeetingCreateNestedManyWithoutProjectInput
+    Question?: QuestionCreateNestedManyWithoutProjectInput
+    User?: UserCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
     id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
-    githubUrl: string
-    deletedAt?: Date | string | null
-    userToProjects?: UserToProjectUncheckedCreateNestedManyWithoutProjectInput
+    Commit?: CommitUncheckedCreateNestedManyWithoutProjectInput
+    Meeting?: MeetingUncheckedCreateNestedManyWithoutProjectInput
+    Question?: QuestionUncheckedCreateNestedManyWithoutProjectInput
+    User?: UserUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    githubUrl?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    userToProjects?: UserToProjectUpdateManyWithoutProjectNestedInput
+    Commit?: CommitUpdateManyWithoutProjectNestedInput
+    Meeting?: MeetingUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUpdateManyWithoutProjectNestedInput
+    User?: UserUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    githubUrl?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    userToProjects?: UserToProjectUncheckedUpdateManyWithoutProjectNestedInput
+    Commit?: CommitUncheckedUpdateManyWithoutProjectNestedInput
+    Meeting?: MeetingUncheckedUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUncheckedUpdateManyWithoutProjectNestedInput
+    User?: UserUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
     id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
-    githubUrl: string
-    deletedAt?: Date | string | null
   }
 
   export type ProjectUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    githubUrl?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ProjectUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    githubUrl?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserToProjectCreateInput = {
-    id?: string
+  export type CommitCreateInput = {
+    id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date | string
+    summary: string
     createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutUserToProjectsInput
-    project: ProjectCreateNestedOneWithoutUserToProjectsInput
+    updatedAt: Date | string
+    Project: ProjectCreateNestedOneWithoutCommitInput
   }
 
-  export type UserToProjectUncheckedCreateInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: string
+  export type CommitUncheckedCreateInput = {
+    id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date | string
+    summary: string
     projectId: string
-  }
-
-  export type UserToProjectUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutUserToProjectsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutUserToProjectsNestedInput
-  }
-
-  export type UserToProjectUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UserToProjectCreateManyInput = {
-    id?: string
     createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: string
-    projectId: string
+    updatedAt: Date | string
   }
 
-  export type UserToProjectUpdateManyMutationInput = {
+  export type CommitUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Project?: ProjectUpdateOneRequiredWithoutCommitNestedInput
   }
 
-  export type UserToProjectUncheckedUpdateManyInput = {
+  export type CommitUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommitCreateManyInput = {
+    id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date | string
+    summary: string
+    projectId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type CommitUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommitUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueCreateInput = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Meeting: MeetingCreateNestedOneWithoutIssueInput
+  }
+
+  export type IssueUncheckedCreateInput = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    meetingId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type IssueUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Meeting?: MeetingUpdateOneRequiredWithoutIssueNestedInput
+  }
+
+  export type IssueUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueCreateManyInput = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    meetingId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type IssueUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingCreateInput = {
+    id: string
+    name: string
+    url: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Issue?: IssueCreateNestedManyWithoutMeetingInput
+    Project: ProjectCreateNestedOneWithoutMeetingInput
+  }
+
+  export type MeetingUncheckedCreateInput = {
+    id: string
+    name: string
+    url: string
+    projectId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Issue?: IssueUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type MeetingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Issue?: IssueUpdateManyWithoutMeetingNestedInput
+    Project?: ProjectUpdateOneRequiredWithoutMeetingNestedInput
+  }
+
+  export type MeetingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Issue?: IssueUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type MeetingCreateManyInput = {
+    id: string
+    name: string
+    url: string
+    projectId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type MeetingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionCreateInput = {
+    id: string
+    question: string
+    answer: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Project: ProjectCreateNestedOneWithoutQuestionInput
+    User: UserCreateNestedOneWithoutQuestionInput
+  }
+
+  export type QuestionUncheckedCreateInput = {
+    id: string
+    question: string
+    answer: string
+    projectId: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type QuestionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Project?: ProjectUpdateOneRequiredWithoutQuestionNestedInput
+    User?: UserUpdateOneRequiredWithoutQuestionNestedInput
+  }
+
+  export type QuestionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionCreateManyInput = {
+    id: string
+    question: string
+    answer: string
+    projectId: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type QuestionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -4954,86 +9191,45 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  export type QuestionListRelationFilter = {
+    every?: QuestionWhereInput
+    some?: QuestionWhereInput
+    none?: QuestionWhereInput
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+  export type ProjectListRelationFilter = {
+    every?: ProjectWhereInput
+    some?: ProjectWhereInput
+    none?: ProjectWhereInput
   }
 
-  export type UserToProjectListRelationFilter = {
-    every?: UserToProjectWhereInput
-    some?: UserToProjectWhereInput
-    none?: UserToProjectWhereInput
+  export type QuestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type UserToProjectOrderByRelationAggregateInput = {
+  export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
-    updateAt?: SortOrder
-    imageUrl?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    emailAddress?: SortOrder
-    credits?: SortOrder
-  }
-
-  export type UserAvgOrderByAggregateInput = {
-    credits?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
-    updateAt?: SortOrder
-    imageUrl?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    emailAddress?: SortOrder
-    credits?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
     createdAt?: SortOrder
-    updateAt?: SortOrder
-    imageUrl?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    emailAddress?: SortOrder
-    credits?: SortOrder
-  }
-
-  export type UserSumOrderByAggregateInput = {
-    credits?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5068,6 +9264,86 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type CommitListRelationFilter = {
+    every?: CommitWhereInput
+    some?: CommitWhereInput
+    none?: CommitWhereInput
+  }
+
+  export type MeetingListRelationFilter = {
+    every?: MeetingWhereInput
+    some?: MeetingWhereInput
+    none?: MeetingWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type CommitOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MeetingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProjectCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    githubUrl?: SortOrder
+    documentation?: SortOrder
+    mermaidGraph?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    githubUrl?: SortOrder
+    documentation?: SortOrder
+    mermaidGraph?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    githubUrl?: SortOrder
+    documentation?: SortOrder
+    mermaidGraph?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -5086,72 +9362,126 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
+  export type ProjectScalarRelationFilter = {
+    is?: ProjectWhereInput
+    isNot?: ProjectWhereInput
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type ProjectCountOrderByAggregateInput = {
+  export type CommitCountOrderByAggregateInput = {
     id?: SortOrder
+    commitMessage?: SortOrder
+    commitHash?: SortOrder
+    commitAuthorName?: SortOrder
+    commitAuthorAvatar?: SortOrder
+    commitDate?: SortOrder
+    summary?: SortOrder
+    projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    name?: SortOrder
-    githubUrl?: SortOrder
-    deletedAt?: SortOrder
   }
 
-  export type ProjectMaxOrderByAggregateInput = {
+  export type CommitMaxOrderByAggregateInput = {
     id?: SortOrder
+    commitMessage?: SortOrder
+    commitHash?: SortOrder
+    commitAuthorName?: SortOrder
+    commitAuthorAvatar?: SortOrder
+    commitDate?: SortOrder
+    summary?: SortOrder
+    projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    name?: SortOrder
-    githubUrl?: SortOrder
-    deletedAt?: SortOrder
   }
 
-  export type ProjectMinOrderByAggregateInput = {
+  export type CommitMinOrderByAggregateInput = {
     id?: SortOrder
+    commitMessage?: SortOrder
+    commitHash?: SortOrder
+    commitAuthorName?: SortOrder
+    commitAuthorAvatar?: SortOrder
+    commitDate?: SortOrder
+    summary?: SortOrder
+    projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    name?: SortOrder
-    githubUrl?: SortOrder
-    deletedAt?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type MeetingScalarRelationFilter = {
+    is?: MeetingWhereInput
+    isNot?: MeetingWhereInput
+  }
+
+  export type IssueCountOrderByAggregateInput = {
+    id?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    gist?: SortOrder
+    headline?: SortOrder
+    summary?: SortOrder
+    meetingId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IssueMaxOrderByAggregateInput = {
+    id?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    gist?: SortOrder
+    headline?: SortOrder
+    summary?: SortOrder
+    meetingId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IssueMinOrderByAggregateInput = {
+    id?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+    gist?: SortOrder
+    headline?: SortOrder
+    summary?: SortOrder
+    meetingId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IssueListRelationFilter = {
+    every?: IssueWhereInput
+    some?: IssueWhereInput
+    none?: IssueWhereInput
+  }
+
+  export type IssueOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MeetingCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MeetingMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserScalarRelationFilter = {
@@ -5159,52 +9489,60 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type ProjectScalarRelationFilter = {
-    is?: ProjectWhereInput
-    isNot?: ProjectWhereInput
-  }
-
-  export type UserToProjectUserIdProjectIdCompoundUniqueInput = {
-    userId: string
-    projectId: string
-  }
-
-  export type UserToProjectCountOrderByAggregateInput = {
+  export type QuestionCountOrderByAggregateInput = {
     id?: SortOrder
+    question?: SortOrder
+    answer?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    projectId?: SortOrder
   }
 
-  export type UserToProjectMaxOrderByAggregateInput = {
+  export type QuestionMaxOrderByAggregateInput = {
     id?: SortOrder
+    question?: SortOrder
+    answer?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    projectId?: SortOrder
   }
 
-  export type UserToProjectMinOrderByAggregateInput = {
+  export type QuestionMinOrderByAggregateInput = {
     id?: SortOrder
+    question?: SortOrder
+    answer?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
-    projectId?: SortOrder
   }
 
-  export type UserToProjectCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserToProjectCreateWithoutUserInput, UserToProjectUncheckedCreateWithoutUserInput> | UserToProjectCreateWithoutUserInput[] | UserToProjectUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutUserInput | UserToProjectCreateOrConnectWithoutUserInput[]
-    createMany?: UserToProjectCreateManyUserInputEnvelope
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
+  export type QuestionCreateNestedManyWithoutUserInput = {
+    create?: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput> | QuestionCreateWithoutUserInput[] | QuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutUserInput | QuestionCreateOrConnectWithoutUserInput[]
+    createMany?: QuestionCreateManyUserInputEnvelope
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
   }
 
-  export type UserToProjectUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserToProjectCreateWithoutUserInput, UserToProjectUncheckedCreateWithoutUserInput> | UserToProjectCreateWithoutUserInput[] | UserToProjectUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutUserInput | UserToProjectCreateOrConnectWithoutUserInput[]
-    createMany?: UserToProjectCreateManyUserInputEnvelope
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
+  export type ProjectCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput> | ProjectCreateWithoutUserInput[] | ProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutUserInput | ProjectCreateOrConnectWithoutUserInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type QuestionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput> | QuestionCreateWithoutUserInput[] | QuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutUserInput | QuestionCreateOrConnectWithoutUserInput[]
+    createMany?: QuestionCreateManyUserInputEnvelope
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+  }
+
+  export type ProjectUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput> | ProjectCreateWithoutUserInput[] | ProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutUserInput | ProjectCreateOrConnectWithoutUserInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5215,118 +9553,338 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type QuestionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput> | QuestionCreateWithoutUserInput[] | QuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutUserInput | QuestionCreateOrConnectWithoutUserInput[]
+    upsert?: QuestionUpsertWithWhereUniqueWithoutUserInput | QuestionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: QuestionCreateManyUserInputEnvelope
+    set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    update?: QuestionUpdateWithWhereUniqueWithoutUserInput | QuestionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: QuestionUpdateManyWithWhereWithoutUserInput | QuestionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+  }
+
+  export type ProjectUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput> | ProjectCreateWithoutUserInput[] | ProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutUserInput | ProjectCreateOrConnectWithoutUserInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutUserInput | ProjectUpsertWithWhereUniqueWithoutUserInput[]
+    set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutUserInput | ProjectUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutUserInput | ProjectUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type QuestionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput> | QuestionCreateWithoutUserInput[] | QuestionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutUserInput | QuestionCreateOrConnectWithoutUserInput[]
+    upsert?: QuestionUpsertWithWhereUniqueWithoutUserInput | QuestionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: QuestionCreateManyUserInputEnvelope
+    set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    update?: QuestionUpdateWithWhereUniqueWithoutUserInput | QuestionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: QuestionUpdateManyWithWhereWithoutUserInput | QuestionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput> | ProjectCreateWithoutUserInput[] | ProjectUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutUserInput | ProjectCreateOrConnectWithoutUserInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutUserInput | ProjectUpsertWithWhereUniqueWithoutUserInput[]
+    set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutUserInput | ProjectUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutUserInput | ProjectUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type CommitCreateNestedManyWithoutProjectInput = {
+    create?: XOR<CommitCreateWithoutProjectInput, CommitUncheckedCreateWithoutProjectInput> | CommitCreateWithoutProjectInput[] | CommitUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: CommitCreateOrConnectWithoutProjectInput | CommitCreateOrConnectWithoutProjectInput[]
+    createMany?: CommitCreateManyProjectInputEnvelope
+    connect?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+  }
+
+  export type MeetingCreateNestedManyWithoutProjectInput = {
+    create?: XOR<MeetingCreateWithoutProjectInput, MeetingUncheckedCreateWithoutProjectInput> | MeetingCreateWithoutProjectInput[] | MeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutProjectInput | MeetingCreateOrConnectWithoutProjectInput[]
+    createMany?: MeetingCreateManyProjectInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  }
+
+  export type QuestionCreateNestedManyWithoutProjectInput = {
+    create?: XOR<QuestionCreateWithoutProjectInput, QuestionUncheckedCreateWithoutProjectInput> | QuestionCreateWithoutProjectInput[] | QuestionUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutProjectInput | QuestionCreateOrConnectWithoutProjectInput[]
+    createMany?: QuestionCreateManyProjectInputEnvelope
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedManyWithoutProjectInput = {
+    create?: XOR<UserCreateWithoutProjectInput, UserUncheckedCreateWithoutProjectInput> | UserCreateWithoutProjectInput[] | UserUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutProjectInput | UserCreateOrConnectWithoutProjectInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type CommitUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<CommitCreateWithoutProjectInput, CommitUncheckedCreateWithoutProjectInput> | CommitCreateWithoutProjectInput[] | CommitUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: CommitCreateOrConnectWithoutProjectInput | CommitCreateOrConnectWithoutProjectInput[]
+    createMany?: CommitCreateManyProjectInputEnvelope
+    connect?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+  }
+
+  export type MeetingUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<MeetingCreateWithoutProjectInput, MeetingUncheckedCreateWithoutProjectInput> | MeetingCreateWithoutProjectInput[] | MeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutProjectInput | MeetingCreateOrConnectWithoutProjectInput[]
+    createMany?: MeetingCreateManyProjectInputEnvelope
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+  }
+
+  export type QuestionUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<QuestionCreateWithoutProjectInput, QuestionUncheckedCreateWithoutProjectInput> | QuestionCreateWithoutProjectInput[] | QuestionUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutProjectInput | QuestionCreateOrConnectWithoutProjectInput[]
+    createMany?: QuestionCreateManyProjectInputEnvelope
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<UserCreateWithoutProjectInput, UserUncheckedCreateWithoutProjectInput> | UserCreateWithoutProjectInput[] | UserUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutProjectInput | UserCreateOrConnectWithoutProjectInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type CommitUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<CommitCreateWithoutProjectInput, CommitUncheckedCreateWithoutProjectInput> | CommitCreateWithoutProjectInput[] | CommitUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: CommitCreateOrConnectWithoutProjectInput | CommitCreateOrConnectWithoutProjectInput[]
+    upsert?: CommitUpsertWithWhereUniqueWithoutProjectInput | CommitUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: CommitCreateManyProjectInputEnvelope
+    set?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    disconnect?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    delete?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    connect?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    update?: CommitUpdateWithWhereUniqueWithoutProjectInput | CommitUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: CommitUpdateManyWithWhereWithoutProjectInput | CommitUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: CommitScalarWhereInput | CommitScalarWhereInput[]
   }
 
-  export type UserToProjectUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserToProjectCreateWithoutUserInput, UserToProjectUncheckedCreateWithoutUserInput> | UserToProjectCreateWithoutUserInput[] | UserToProjectUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutUserInput | UserToProjectCreateOrConnectWithoutUserInput[]
-    upsert?: UserToProjectUpsertWithWhereUniqueWithoutUserInput | UserToProjectUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserToProjectCreateManyUserInputEnvelope
-    set?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    disconnect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    delete?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    update?: UserToProjectUpdateWithWhereUniqueWithoutUserInput | UserToProjectUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserToProjectUpdateManyWithWhereWithoutUserInput | UserToProjectUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserToProjectScalarWhereInput | UserToProjectScalarWhereInput[]
+  export type MeetingUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<MeetingCreateWithoutProjectInput, MeetingUncheckedCreateWithoutProjectInput> | MeetingCreateWithoutProjectInput[] | MeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutProjectInput | MeetingCreateOrConnectWithoutProjectInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutProjectInput | MeetingUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: MeetingCreateManyProjectInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutProjectInput | MeetingUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutProjectInput | MeetingUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
   }
 
-  export type UserToProjectUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserToProjectCreateWithoutUserInput, UserToProjectUncheckedCreateWithoutUserInput> | UserToProjectCreateWithoutUserInput[] | UserToProjectUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutUserInput | UserToProjectCreateOrConnectWithoutUserInput[]
-    upsert?: UserToProjectUpsertWithWhereUniqueWithoutUserInput | UserToProjectUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserToProjectCreateManyUserInputEnvelope
-    set?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    disconnect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    delete?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    update?: UserToProjectUpdateWithWhereUniqueWithoutUserInput | UserToProjectUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserToProjectUpdateManyWithWhereWithoutUserInput | UserToProjectUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserToProjectScalarWhereInput | UserToProjectScalarWhereInput[]
+  export type QuestionUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<QuestionCreateWithoutProjectInput, QuestionUncheckedCreateWithoutProjectInput> | QuestionCreateWithoutProjectInput[] | QuestionUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutProjectInput | QuestionCreateOrConnectWithoutProjectInput[]
+    upsert?: QuestionUpsertWithWhereUniqueWithoutProjectInput | QuestionUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: QuestionCreateManyProjectInputEnvelope
+    set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    update?: QuestionUpdateWithWhereUniqueWithoutProjectInput | QuestionUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: QuestionUpdateManyWithWhereWithoutProjectInput | QuestionUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
   }
 
-  export type UserToProjectCreateNestedManyWithoutProjectInput = {
-    create?: XOR<UserToProjectCreateWithoutProjectInput, UserToProjectUncheckedCreateWithoutProjectInput> | UserToProjectCreateWithoutProjectInput[] | UserToProjectUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutProjectInput | UserToProjectCreateOrConnectWithoutProjectInput[]
-    createMany?: UserToProjectCreateManyProjectInputEnvelope
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
+  export type UserUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<UserCreateWithoutProjectInput, UserUncheckedCreateWithoutProjectInput> | UserCreateWithoutProjectInput[] | UserUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutProjectInput | UserCreateOrConnectWithoutProjectInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutProjectInput | UserUpsertWithWhereUniqueWithoutProjectInput[]
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutProjectInput | UserUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutProjectInput | UserUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type UserToProjectUncheckedCreateNestedManyWithoutProjectInput = {
-    create?: XOR<UserToProjectCreateWithoutProjectInput, UserToProjectUncheckedCreateWithoutProjectInput> | UserToProjectCreateWithoutProjectInput[] | UserToProjectUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutProjectInput | UserToProjectCreateOrConnectWithoutProjectInput[]
-    createMany?: UserToProjectCreateManyProjectInputEnvelope
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
+  export type CommitUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<CommitCreateWithoutProjectInput, CommitUncheckedCreateWithoutProjectInput> | CommitCreateWithoutProjectInput[] | CommitUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: CommitCreateOrConnectWithoutProjectInput | CommitCreateOrConnectWithoutProjectInput[]
+    upsert?: CommitUpsertWithWhereUniqueWithoutProjectInput | CommitUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: CommitCreateManyProjectInputEnvelope
+    set?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    disconnect?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    delete?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    connect?: CommitWhereUniqueInput | CommitWhereUniqueInput[]
+    update?: CommitUpdateWithWhereUniqueWithoutProjectInput | CommitUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: CommitUpdateManyWithWhereWithoutProjectInput | CommitUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: CommitScalarWhereInput | CommitScalarWhereInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
+  export type MeetingUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<MeetingCreateWithoutProjectInput, MeetingUncheckedCreateWithoutProjectInput> | MeetingCreateWithoutProjectInput[] | MeetingUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: MeetingCreateOrConnectWithoutProjectInput | MeetingCreateOrConnectWithoutProjectInput[]
+    upsert?: MeetingUpsertWithWhereUniqueWithoutProjectInput | MeetingUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: MeetingCreateManyProjectInputEnvelope
+    set?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    disconnect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    delete?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    connect?: MeetingWhereUniqueInput | MeetingWhereUniqueInput[]
+    update?: MeetingUpdateWithWhereUniqueWithoutProjectInput | MeetingUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: MeetingUpdateManyWithWhereWithoutProjectInput | MeetingUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
   }
 
-  export type UserToProjectUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<UserToProjectCreateWithoutProjectInput, UserToProjectUncheckedCreateWithoutProjectInput> | UserToProjectCreateWithoutProjectInput[] | UserToProjectUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutProjectInput | UserToProjectCreateOrConnectWithoutProjectInput[]
-    upsert?: UserToProjectUpsertWithWhereUniqueWithoutProjectInput | UserToProjectUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: UserToProjectCreateManyProjectInputEnvelope
-    set?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    disconnect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    delete?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    update?: UserToProjectUpdateWithWhereUniqueWithoutProjectInput | UserToProjectUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: UserToProjectUpdateManyWithWhereWithoutProjectInput | UserToProjectUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: UserToProjectScalarWhereInput | UserToProjectScalarWhereInput[]
+  export type QuestionUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<QuestionCreateWithoutProjectInput, QuestionUncheckedCreateWithoutProjectInput> | QuestionCreateWithoutProjectInput[] | QuestionUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: QuestionCreateOrConnectWithoutProjectInput | QuestionCreateOrConnectWithoutProjectInput[]
+    upsert?: QuestionUpsertWithWhereUniqueWithoutProjectInput | QuestionUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: QuestionCreateManyProjectInputEnvelope
+    set?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    disconnect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    delete?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+    update?: QuestionUpdateWithWhereUniqueWithoutProjectInput | QuestionUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: QuestionUpdateManyWithWhereWithoutProjectInput | QuestionUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
   }
 
-  export type UserToProjectUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<UserToProjectCreateWithoutProjectInput, UserToProjectUncheckedCreateWithoutProjectInput> | UserToProjectCreateWithoutProjectInput[] | UserToProjectUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: UserToProjectCreateOrConnectWithoutProjectInput | UserToProjectCreateOrConnectWithoutProjectInput[]
-    upsert?: UserToProjectUpsertWithWhereUniqueWithoutProjectInput | UserToProjectUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: UserToProjectCreateManyProjectInputEnvelope
-    set?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    disconnect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    delete?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    connect?: UserToProjectWhereUniqueInput | UserToProjectWhereUniqueInput[]
-    update?: UserToProjectUpdateWithWhereUniqueWithoutProjectInput | UserToProjectUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: UserToProjectUpdateManyWithWhereWithoutProjectInput | UserToProjectUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: UserToProjectScalarWhereInput | UserToProjectScalarWhereInput[]
+  export type UserUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<UserCreateWithoutProjectInput, UserUncheckedCreateWithoutProjectInput> | UserCreateWithoutProjectInput[] | UserUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutProjectInput | UserCreateOrConnectWithoutProjectInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutProjectInput | UserUpsertWithWhereUniqueWithoutProjectInput[]
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutProjectInput | UserUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutProjectInput | UserUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutUserToProjectsInput = {
-    create?: XOR<UserCreateWithoutUserToProjectsInput, UserUncheckedCreateWithoutUserToProjectsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUserToProjectsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type ProjectCreateNestedOneWithoutUserToProjectsInput = {
-    create?: XOR<ProjectCreateWithoutUserToProjectsInput, ProjectUncheckedCreateWithoutUserToProjectsInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutUserToProjectsInput
+  export type ProjectCreateNestedOneWithoutCommitInput = {
+    create?: XOR<ProjectCreateWithoutCommitInput, ProjectUncheckedCreateWithoutCommitInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutCommitInput
     connect?: ProjectWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutUserToProjectsNestedInput = {
-    create?: XOR<UserCreateWithoutUserToProjectsInput, UserUncheckedCreateWithoutUserToProjectsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUserToProjectsInput
-    upsert?: UserUpsertWithoutUserToProjectsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserToProjectsInput, UserUpdateWithoutUserToProjectsInput>, UserUncheckedUpdateWithoutUserToProjectsInput>
+  export type ProjectUpdateOneRequiredWithoutCommitNestedInput = {
+    create?: XOR<ProjectCreateWithoutCommitInput, ProjectUncheckedCreateWithoutCommitInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutCommitInput
+    upsert?: ProjectUpsertWithoutCommitInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutCommitInput, ProjectUpdateWithoutCommitInput>, ProjectUncheckedUpdateWithoutCommitInput>
   }
 
-  export type ProjectUpdateOneRequiredWithoutUserToProjectsNestedInput = {
-    create?: XOR<ProjectCreateWithoutUserToProjectsInput, ProjectUncheckedCreateWithoutUserToProjectsInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutUserToProjectsInput
-    upsert?: ProjectUpsertWithoutUserToProjectsInput
+  export type MeetingCreateNestedOneWithoutIssueInput = {
+    create?: XOR<MeetingCreateWithoutIssueInput, MeetingUncheckedCreateWithoutIssueInput>
+    connectOrCreate?: MeetingCreateOrConnectWithoutIssueInput
+    connect?: MeetingWhereUniqueInput
+  }
+
+  export type MeetingUpdateOneRequiredWithoutIssueNestedInput = {
+    create?: XOR<MeetingCreateWithoutIssueInput, MeetingUncheckedCreateWithoutIssueInput>
+    connectOrCreate?: MeetingCreateOrConnectWithoutIssueInput
+    upsert?: MeetingUpsertWithoutIssueInput
+    connect?: MeetingWhereUniqueInput
+    update?: XOR<XOR<MeetingUpdateToOneWithWhereWithoutIssueInput, MeetingUpdateWithoutIssueInput>, MeetingUncheckedUpdateWithoutIssueInput>
+  }
+
+  export type IssueCreateNestedManyWithoutMeetingInput = {
+    create?: XOR<IssueCreateWithoutMeetingInput, IssueUncheckedCreateWithoutMeetingInput> | IssueCreateWithoutMeetingInput[] | IssueUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: IssueCreateOrConnectWithoutMeetingInput | IssueCreateOrConnectWithoutMeetingInput[]
+    createMany?: IssueCreateManyMeetingInputEnvelope
+    connect?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+  }
+
+  export type ProjectCreateNestedOneWithoutMeetingInput = {
+    create?: XOR<ProjectCreateWithoutMeetingInput, ProjectUncheckedCreateWithoutMeetingInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutMeetingInput
     connect?: ProjectWhereUniqueInput
-    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutUserToProjectsInput, ProjectUpdateWithoutUserToProjectsInput>, ProjectUncheckedUpdateWithoutUserToProjectsInput>
+  }
+
+  export type IssueUncheckedCreateNestedManyWithoutMeetingInput = {
+    create?: XOR<IssueCreateWithoutMeetingInput, IssueUncheckedCreateWithoutMeetingInput> | IssueCreateWithoutMeetingInput[] | IssueUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: IssueCreateOrConnectWithoutMeetingInput | IssueCreateOrConnectWithoutMeetingInput[]
+    createMany?: IssueCreateManyMeetingInputEnvelope
+    connect?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+  }
+
+  export type IssueUpdateManyWithoutMeetingNestedInput = {
+    create?: XOR<IssueCreateWithoutMeetingInput, IssueUncheckedCreateWithoutMeetingInput> | IssueCreateWithoutMeetingInput[] | IssueUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: IssueCreateOrConnectWithoutMeetingInput | IssueCreateOrConnectWithoutMeetingInput[]
+    upsert?: IssueUpsertWithWhereUniqueWithoutMeetingInput | IssueUpsertWithWhereUniqueWithoutMeetingInput[]
+    createMany?: IssueCreateManyMeetingInputEnvelope
+    set?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    disconnect?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    delete?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    connect?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    update?: IssueUpdateWithWhereUniqueWithoutMeetingInput | IssueUpdateWithWhereUniqueWithoutMeetingInput[]
+    updateMany?: IssueUpdateManyWithWhereWithoutMeetingInput | IssueUpdateManyWithWhereWithoutMeetingInput[]
+    deleteMany?: IssueScalarWhereInput | IssueScalarWhereInput[]
+  }
+
+  export type ProjectUpdateOneRequiredWithoutMeetingNestedInput = {
+    create?: XOR<ProjectCreateWithoutMeetingInput, ProjectUncheckedCreateWithoutMeetingInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutMeetingInput
+    upsert?: ProjectUpsertWithoutMeetingInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutMeetingInput, ProjectUpdateWithoutMeetingInput>, ProjectUncheckedUpdateWithoutMeetingInput>
+  }
+
+  export type IssueUncheckedUpdateManyWithoutMeetingNestedInput = {
+    create?: XOR<IssueCreateWithoutMeetingInput, IssueUncheckedCreateWithoutMeetingInput> | IssueCreateWithoutMeetingInput[] | IssueUncheckedCreateWithoutMeetingInput[]
+    connectOrCreate?: IssueCreateOrConnectWithoutMeetingInput | IssueCreateOrConnectWithoutMeetingInput[]
+    upsert?: IssueUpsertWithWhereUniqueWithoutMeetingInput | IssueUpsertWithWhereUniqueWithoutMeetingInput[]
+    createMany?: IssueCreateManyMeetingInputEnvelope
+    set?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    disconnect?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    delete?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    connect?: IssueWhereUniqueInput | IssueWhereUniqueInput[]
+    update?: IssueUpdateWithWhereUniqueWithoutMeetingInput | IssueUpdateWithWhereUniqueWithoutMeetingInput[]
+    updateMany?: IssueUpdateManyWithWhereWithoutMeetingInput | IssueUpdateManyWithWhereWithoutMeetingInput[]
+    deleteMany?: IssueScalarWhereInput | IssueScalarWhereInput[]
+  }
+
+  export type ProjectCreateNestedOneWithoutQuestionInput = {
+    create?: XOR<ProjectCreateWithoutQuestionInput, ProjectUncheckedCreateWithoutQuestionInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutQuestionInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutQuestionInput = {
+    create?: XOR<UserCreateWithoutQuestionInput, UserUncheckedCreateWithoutQuestionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutQuestionInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProjectUpdateOneRequiredWithoutQuestionNestedInput = {
+    create?: XOR<ProjectCreateWithoutQuestionInput, ProjectUncheckedCreateWithoutQuestionInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutQuestionInput
+    upsert?: ProjectUpsertWithoutQuestionInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutQuestionInput, ProjectUpdateWithoutQuestionInput>, ProjectUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutQuestionNestedInput = {
+    create?: XOR<UserCreateWithoutQuestionInput, UserUncheckedCreateWithoutQuestionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutQuestionInput
+    upsert?: UserUpsertWithoutQuestionInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQuestionInput, UserUpdateWithoutQuestionInput>, UserUncheckedUpdateWithoutQuestionInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5354,31 +9912,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -5396,6 +9929,17 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -5408,6 +9952,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5438,315 +9996,958 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type UserToProjectCreateWithoutUserInput = {
-    id?: string
+  export type QuestionCreateWithoutUserInput = {
+    id: string
+    question: string
+    answer: string
     createdAt?: Date | string
-    updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutUserToProjectsInput
+    updatedAt: Date | string
+    Project: ProjectCreateNestedOneWithoutQuestionInput
   }
 
-  export type UserToProjectUncheckedCreateWithoutUserInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type QuestionUncheckedCreateWithoutUserInput = {
+    id: string
+    question: string
+    answer: string
     projectId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
   }
 
-  export type UserToProjectCreateOrConnectWithoutUserInput = {
-    where: UserToProjectWhereUniqueInput
-    create: XOR<UserToProjectCreateWithoutUserInput, UserToProjectUncheckedCreateWithoutUserInput>
+  export type QuestionCreateOrConnectWithoutUserInput = {
+    where: QuestionWhereUniqueInput
+    create: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput>
   }
 
-  export type UserToProjectCreateManyUserInputEnvelope = {
-    data: UserToProjectCreateManyUserInput | UserToProjectCreateManyUserInput[]
+  export type QuestionCreateManyUserInputEnvelope = {
+    data: QuestionCreateManyUserInput | QuestionCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
-  export type UserToProjectUpsertWithWhereUniqueWithoutUserInput = {
-    where: UserToProjectWhereUniqueInput
-    update: XOR<UserToProjectUpdateWithoutUserInput, UserToProjectUncheckedUpdateWithoutUserInput>
-    create: XOR<UserToProjectCreateWithoutUserInput, UserToProjectUncheckedCreateWithoutUserInput>
-  }
-
-  export type UserToProjectUpdateWithWhereUniqueWithoutUserInput = {
-    where: UserToProjectWhereUniqueInput
-    data: XOR<UserToProjectUpdateWithoutUserInput, UserToProjectUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserToProjectUpdateManyWithWhereWithoutUserInput = {
-    where: UserToProjectScalarWhereInput
-    data: XOR<UserToProjectUpdateManyMutationInput, UserToProjectUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type UserToProjectScalarWhereInput = {
-    AND?: UserToProjectScalarWhereInput | UserToProjectScalarWhereInput[]
-    OR?: UserToProjectScalarWhereInput[]
-    NOT?: UserToProjectScalarWhereInput | UserToProjectScalarWhereInput[]
-    id?: StringFilter<"UserToProject"> | string
-    createdAt?: DateTimeFilter<"UserToProject"> | Date | string
-    updatedAt?: DateTimeFilter<"UserToProject"> | Date | string
-    userId?: StringFilter<"UserToProject"> | string
-    projectId?: StringFilter<"UserToProject"> | string
-  }
-
-  export type UserToProjectCreateWithoutProjectInput = {
+  export type ProjectCreateWithoutUserInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutUserToProjectsInput
-  }
-
-  export type UserToProjectUncheckedCreateWithoutProjectInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    userId: string
-  }
-
-  export type UserToProjectCreateOrConnectWithoutProjectInput = {
-    where: UserToProjectWhereUniqueInput
-    create: XOR<UserToProjectCreateWithoutProjectInput, UserToProjectUncheckedCreateWithoutProjectInput>
-  }
-
-  export type UserToProjectCreateManyProjectInputEnvelope = {
-    data: UserToProjectCreateManyProjectInput | UserToProjectCreateManyProjectInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UserToProjectUpsertWithWhereUniqueWithoutProjectInput = {
-    where: UserToProjectWhereUniqueInput
-    update: XOR<UserToProjectUpdateWithoutProjectInput, UserToProjectUncheckedUpdateWithoutProjectInput>
-    create: XOR<UserToProjectCreateWithoutProjectInput, UserToProjectUncheckedCreateWithoutProjectInput>
-  }
-
-  export type UserToProjectUpdateWithWhereUniqueWithoutProjectInput = {
-    where: UserToProjectWhereUniqueInput
-    data: XOR<UserToProjectUpdateWithoutProjectInput, UserToProjectUncheckedUpdateWithoutProjectInput>
-  }
-
-  export type UserToProjectUpdateManyWithWhereWithoutProjectInput = {
-    where: UserToProjectScalarWhereInput
-    data: XOR<UserToProjectUpdateManyMutationInput, UserToProjectUncheckedUpdateManyWithoutProjectInput>
-  }
-
-  export type UserCreateWithoutUserToProjectsInput = {
-    id?: string
-    createdAt?: Date | string
-    updateAt?: Date | string
-    imageUrl?: string | null
-    firstName?: string | null
-    lastName?: string | null
-    emailAddress: string
-    credits?: number
-  }
-
-  export type UserUncheckedCreateWithoutUserToProjectsInput = {
-    id?: string
-    createdAt?: Date | string
-    updateAt?: Date | string
-    imageUrl?: string | null
-    firstName?: string | null
-    lastName?: string | null
-    emailAddress: string
-    credits?: number
-  }
-
-  export type UserCreateOrConnectWithoutUserToProjectsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutUserToProjectsInput, UserUncheckedCreateWithoutUserToProjectsInput>
-  }
-
-  export type ProjectCreateWithoutUserToProjectsInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
     name: string
-    githubUrl: string
-    deletedAt?: Date | string | null
-  }
-
-  export type ProjectUncheckedCreateWithoutUserToProjectsInput = {
-    id?: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    name: string
-    githubUrl: string
-    deletedAt?: Date | string | null
+    Commit?: CommitCreateNestedManyWithoutProjectInput
+    Meeting?: MeetingCreateNestedManyWithoutProjectInput
+    Question?: QuestionCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectCreateOrConnectWithoutUserToProjectsInput = {
+  export type ProjectUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Commit?: CommitUncheckedCreateNestedManyWithoutProjectInput
+    Meeting?: MeetingUncheckedCreateNestedManyWithoutProjectInput
+    Question?: QuestionUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutUserInput = {
     where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutUserToProjectsInput, ProjectUncheckedCreateWithoutUserToProjectsInput>
+    create: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput>
   }
 
-  export type UserUpsertWithoutUserToProjectsInput = {
-    update: XOR<UserUpdateWithoutUserToProjectsInput, UserUncheckedUpdateWithoutUserToProjectsInput>
-    create: XOR<UserCreateWithoutUserToProjectsInput, UserUncheckedCreateWithoutUserToProjectsInput>
-    where?: UserWhereInput
+  export type QuestionUpsertWithWhereUniqueWithoutUserInput = {
+    where: QuestionWhereUniqueInput
+    update: XOR<QuestionUpdateWithoutUserInput, QuestionUncheckedUpdateWithoutUserInput>
+    create: XOR<QuestionCreateWithoutUserInput, QuestionUncheckedCreateWithoutUserInput>
   }
 
-  export type UserUpdateToOneWithWhereWithoutUserToProjectsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutUserToProjectsInput, UserUncheckedUpdateWithoutUserToProjectsInput>
+  export type QuestionUpdateWithWhereUniqueWithoutUserInput = {
+    where: QuestionWhereUniqueInput
+    data: XOR<QuestionUpdateWithoutUserInput, QuestionUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserUpdateWithoutUserToProjectsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    credits?: IntFieldUpdateOperationsInput | number
+  export type QuestionUpdateManyWithWhereWithoutUserInput = {
+    where: QuestionScalarWhereInput
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type UserUncheckedUpdateWithoutUserToProjectsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    emailAddress?: StringFieldUpdateOperationsInput | string
-    credits?: IntFieldUpdateOperationsInput | number
+  export type QuestionScalarWhereInput = {
+    AND?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+    OR?: QuestionScalarWhereInput[]
+    NOT?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+    id?: StringFilter<"Question"> | string
+    question?: StringFilter<"Question"> | string
+    answer?: StringFilter<"Question"> | string
+    projectId?: StringFilter<"Question"> | string
+    userId?: StringFilter<"Question"> | string
+    createdAt?: DateTimeFilter<"Question"> | Date | string
+    updatedAt?: DateTimeFilter<"Question"> | Date | string
   }
 
-  export type ProjectUpsertWithoutUserToProjectsInput = {
-    update: XOR<ProjectUpdateWithoutUserToProjectsInput, ProjectUncheckedUpdateWithoutUserToProjectsInput>
-    create: XOR<ProjectCreateWithoutUserToProjectsInput, ProjectUncheckedCreateWithoutUserToProjectsInput>
-    where?: ProjectWhereInput
+  export type ProjectUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProjectWhereUniqueInput
+    update: XOR<ProjectUpdateWithoutUserInput, ProjectUncheckedUpdateWithoutUserInput>
+    create: XOR<ProjectCreateWithoutUserInput, ProjectUncheckedCreateWithoutUserInput>
   }
 
-  export type ProjectUpdateToOneWithWhereWithoutUserToProjectsInput = {
-    where?: ProjectWhereInput
-    data: XOR<ProjectUpdateWithoutUserToProjectsInput, ProjectUncheckedUpdateWithoutUserToProjectsInput>
+  export type ProjectUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProjectWhereUniqueInput
+    data: XOR<ProjectUpdateWithoutUserInput, ProjectUncheckedUpdateWithoutUserInput>
   }
 
-  export type ProjectUpdateWithoutUserToProjectsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    githubUrl?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type ProjectUpdateManyWithWhereWithoutUserInput = {
+    where: ProjectScalarWhereInput
+    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type ProjectUncheckedUpdateWithoutUserToProjectsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    githubUrl?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type ProjectScalarWhereInput = {
+    AND?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+    OR?: ProjectScalarWhereInput[]
+    NOT?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+    id?: StringFilter<"Project"> | string
+    name?: StringFilter<"Project"> | string
+    githubUrl?: StringNullableFilter<"Project"> | string | null
+    documentation?: StringNullableFilter<"Project"> | string | null
+    mermaidGraph?: StringNullableFilter<"Project"> | string | null
+    createdAt?: DateTimeFilter<"Project"> | Date | string
+    updatedAt?: DateTimeFilter<"Project"> | Date | string
   }
 
-  export type UserToProjectCreateManyUserInput = {
-    id?: string
+  export type CommitCreateWithoutProjectInput = {
+    id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date | string
+    summary: string
     createdAt?: Date | string
-    updatedAt?: Date | string
-    projectId: string
+    updatedAt: Date | string
   }
 
-  export type UserToProjectUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutUserToProjectsNestedInput
-  }
-
-  export type UserToProjectUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projectId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UserToProjectUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projectId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UserToProjectCreateManyProjectInput = {
-    id?: string
+  export type CommitUncheckedCreateWithoutProjectInput = {
+    id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date | string
+    summary: string
     createdAt?: Date | string
-    updatedAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type CommitCreateOrConnectWithoutProjectInput = {
+    where: CommitWhereUniqueInput
+    create: XOR<CommitCreateWithoutProjectInput, CommitUncheckedCreateWithoutProjectInput>
+  }
+
+  export type CommitCreateManyProjectInputEnvelope = {
+    data: CommitCreateManyProjectInput | CommitCreateManyProjectInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MeetingCreateWithoutProjectInput = {
+    id: string
+    name: string
+    url: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Issue?: IssueCreateNestedManyWithoutMeetingInput
+  }
+
+  export type MeetingUncheckedCreateWithoutProjectInput = {
+    id: string
+    name: string
+    url: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Issue?: IssueUncheckedCreateNestedManyWithoutMeetingInput
+  }
+
+  export type MeetingCreateOrConnectWithoutProjectInput = {
+    where: MeetingWhereUniqueInput
+    create: XOR<MeetingCreateWithoutProjectInput, MeetingUncheckedCreateWithoutProjectInput>
+  }
+
+  export type MeetingCreateManyProjectInputEnvelope = {
+    data: MeetingCreateManyProjectInput | MeetingCreateManyProjectInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuestionCreateWithoutProjectInput = {
+    id: string
+    question: string
+    answer: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    User: UserCreateNestedOneWithoutQuestionInput
+  }
+
+  export type QuestionUncheckedCreateWithoutProjectInput = {
+    id: string
+    question: string
+    answer: string
     userId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
   }
 
-  export type UserToProjectUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutUserToProjectsNestedInput
+  export type QuestionCreateOrConnectWithoutProjectInput = {
+    where: QuestionWhereUniqueInput
+    create: XOR<QuestionCreateWithoutProjectInput, QuestionUncheckedCreateWithoutProjectInput>
   }
 
-  export type UserToProjectUncheckedUpdateWithoutProjectInput = {
+  export type QuestionCreateManyProjectInputEnvelope = {
+    data: QuestionCreateManyProjectInput | QuestionCreateManyProjectInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutProjectInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Question?: QuestionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutProjectInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Question?: QuestionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutProjectInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProjectInput, UserUncheckedCreateWithoutProjectInput>
+  }
+
+  export type CommitUpsertWithWhereUniqueWithoutProjectInput = {
+    where: CommitWhereUniqueInput
+    update: XOR<CommitUpdateWithoutProjectInput, CommitUncheckedUpdateWithoutProjectInput>
+    create: XOR<CommitCreateWithoutProjectInput, CommitUncheckedCreateWithoutProjectInput>
+  }
+
+  export type CommitUpdateWithWhereUniqueWithoutProjectInput = {
+    where: CommitWhereUniqueInput
+    data: XOR<CommitUpdateWithoutProjectInput, CommitUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type CommitUpdateManyWithWhereWithoutProjectInput = {
+    where: CommitScalarWhereInput
+    data: XOR<CommitUpdateManyMutationInput, CommitUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type CommitScalarWhereInput = {
+    AND?: CommitScalarWhereInput | CommitScalarWhereInput[]
+    OR?: CommitScalarWhereInput[]
+    NOT?: CommitScalarWhereInput | CommitScalarWhereInput[]
+    id?: StringFilter<"Commit"> | string
+    commitMessage?: StringFilter<"Commit"> | string
+    commitHash?: StringFilter<"Commit"> | string
+    commitAuthorName?: StringFilter<"Commit"> | string
+    commitAuthorAvatar?: StringFilter<"Commit"> | string
+    commitDate?: DateTimeFilter<"Commit"> | Date | string
+    summary?: StringFilter<"Commit"> | string
+    projectId?: StringFilter<"Commit"> | string
+    createdAt?: DateTimeFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeFilter<"Commit"> | Date | string
+  }
+
+  export type MeetingUpsertWithWhereUniqueWithoutProjectInput = {
+    where: MeetingWhereUniqueInput
+    update: XOR<MeetingUpdateWithoutProjectInput, MeetingUncheckedUpdateWithoutProjectInput>
+    create: XOR<MeetingCreateWithoutProjectInput, MeetingUncheckedCreateWithoutProjectInput>
+  }
+
+  export type MeetingUpdateWithWhereUniqueWithoutProjectInput = {
+    where: MeetingWhereUniqueInput
+    data: XOR<MeetingUpdateWithoutProjectInput, MeetingUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type MeetingUpdateManyWithWhereWithoutProjectInput = {
+    where: MeetingScalarWhereInput
+    data: XOR<MeetingUpdateManyMutationInput, MeetingUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type MeetingScalarWhereInput = {
+    AND?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+    OR?: MeetingScalarWhereInput[]
+    NOT?: MeetingScalarWhereInput | MeetingScalarWhereInput[]
+    id?: StringFilter<"Meeting"> | string
+    name?: StringFilter<"Meeting"> | string
+    url?: StringFilter<"Meeting"> | string
+    projectId?: StringFilter<"Meeting"> | string
+    createdAt?: DateTimeFilter<"Meeting"> | Date | string
+    updatedAt?: DateTimeFilter<"Meeting"> | Date | string
+  }
+
+  export type QuestionUpsertWithWhereUniqueWithoutProjectInput = {
+    where: QuestionWhereUniqueInput
+    update: XOR<QuestionUpdateWithoutProjectInput, QuestionUncheckedUpdateWithoutProjectInput>
+    create: XOR<QuestionCreateWithoutProjectInput, QuestionUncheckedCreateWithoutProjectInput>
+  }
+
+  export type QuestionUpdateWithWhereUniqueWithoutProjectInput = {
+    where: QuestionWhereUniqueInput
+    data: XOR<QuestionUpdateWithoutProjectInput, QuestionUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type QuestionUpdateManyWithWhereWithoutProjectInput = {
+    where: QuestionScalarWhereInput
+    data: XOR<QuestionUpdateManyMutationInput, QuestionUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutProjectInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutProjectInput, UserUncheckedUpdateWithoutProjectInput>
+    create: XOR<UserCreateWithoutProjectInput, UserUncheckedCreateWithoutProjectInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutProjectInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutProjectInput, UserUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutProjectInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    name?: StringFilter<"User"> | string
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+  }
+
+  export type ProjectCreateWithoutCommitInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Meeting?: MeetingCreateNestedManyWithoutProjectInput
+    Question?: QuestionCreateNestedManyWithoutProjectInput
+    User?: UserCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutCommitInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Meeting?: MeetingUncheckedCreateNestedManyWithoutProjectInput
+    Question?: QuestionUncheckedCreateNestedManyWithoutProjectInput
+    User?: UserUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutCommitInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutCommitInput, ProjectUncheckedCreateWithoutCommitInput>
+  }
+
+  export type ProjectUpsertWithoutCommitInput = {
+    update: XOR<ProjectUpdateWithoutCommitInput, ProjectUncheckedUpdateWithoutCommitInput>
+    create: XOR<ProjectCreateWithoutCommitInput, ProjectUncheckedCreateWithoutCommitInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutCommitInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutCommitInput, ProjectUncheckedUpdateWithoutCommitInput>
+  }
+
+  export type ProjectUpdateWithoutCommitInput = {
     id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Meeting?: MeetingUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUpdateManyWithoutProjectNestedInput
+    User?: UserUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutCommitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Meeting?: MeetingUncheckedUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUncheckedUpdateManyWithoutProjectNestedInput
+    User?: UserUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type MeetingCreateWithoutIssueInput = {
+    id: string
+    name: string
+    url: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Project: ProjectCreateNestedOneWithoutMeetingInput
+  }
+
+  export type MeetingUncheckedCreateWithoutIssueInput = {
+    id: string
+    name: string
+    url: string
+    projectId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type MeetingCreateOrConnectWithoutIssueInput = {
+    where: MeetingWhereUniqueInput
+    create: XOR<MeetingCreateWithoutIssueInput, MeetingUncheckedCreateWithoutIssueInput>
+  }
+
+  export type MeetingUpsertWithoutIssueInput = {
+    update: XOR<MeetingUpdateWithoutIssueInput, MeetingUncheckedUpdateWithoutIssueInput>
+    create: XOR<MeetingCreateWithoutIssueInput, MeetingUncheckedCreateWithoutIssueInput>
+    where?: MeetingWhereInput
+  }
+
+  export type MeetingUpdateToOneWithWhereWithoutIssueInput = {
+    where?: MeetingWhereInput
+    data: XOR<MeetingUpdateWithoutIssueInput, MeetingUncheckedUpdateWithoutIssueInput>
+  }
+
+  export type MeetingUpdateWithoutIssueInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Project?: ProjectUpdateOneRequiredWithoutMeetingNestedInput
+  }
+
+  export type MeetingUncheckedUpdateWithoutIssueInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueCreateWithoutMeetingInput = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type IssueUncheckedCreateWithoutMeetingInput = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type IssueCreateOrConnectWithoutMeetingInput = {
+    where: IssueWhereUniqueInput
+    create: XOR<IssueCreateWithoutMeetingInput, IssueUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type IssueCreateManyMeetingInputEnvelope = {
+    data: IssueCreateManyMeetingInput | IssueCreateManyMeetingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProjectCreateWithoutMeetingInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Commit?: CommitCreateNestedManyWithoutProjectInput
+    Question?: QuestionCreateNestedManyWithoutProjectInput
+    User?: UserCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutMeetingInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Commit?: CommitUncheckedCreateNestedManyWithoutProjectInput
+    Question?: QuestionUncheckedCreateNestedManyWithoutProjectInput
+    User?: UserUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutMeetingInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutMeetingInput, ProjectUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type IssueUpsertWithWhereUniqueWithoutMeetingInput = {
+    where: IssueWhereUniqueInput
+    update: XOR<IssueUpdateWithoutMeetingInput, IssueUncheckedUpdateWithoutMeetingInput>
+    create: XOR<IssueCreateWithoutMeetingInput, IssueUncheckedCreateWithoutMeetingInput>
+  }
+
+  export type IssueUpdateWithWhereUniqueWithoutMeetingInput = {
+    where: IssueWhereUniqueInput
+    data: XOR<IssueUpdateWithoutMeetingInput, IssueUncheckedUpdateWithoutMeetingInput>
+  }
+
+  export type IssueUpdateManyWithWhereWithoutMeetingInput = {
+    where: IssueScalarWhereInput
+    data: XOR<IssueUpdateManyMutationInput, IssueUncheckedUpdateManyWithoutMeetingInput>
+  }
+
+  export type IssueScalarWhereInput = {
+    AND?: IssueScalarWhereInput | IssueScalarWhereInput[]
+    OR?: IssueScalarWhereInput[]
+    NOT?: IssueScalarWhereInput | IssueScalarWhereInput[]
+    id?: StringFilter<"Issue"> | string
+    start?: StringFilter<"Issue"> | string
+    end?: StringFilter<"Issue"> | string
+    gist?: StringFilter<"Issue"> | string
+    headline?: StringFilter<"Issue"> | string
+    summary?: StringFilter<"Issue"> | string
+    meetingId?: StringFilter<"Issue"> | string
+    createdAt?: DateTimeFilter<"Issue"> | Date | string
+    updatedAt?: DateTimeFilter<"Issue"> | Date | string
+  }
+
+  export type ProjectUpsertWithoutMeetingInput = {
+    update: XOR<ProjectUpdateWithoutMeetingInput, ProjectUncheckedUpdateWithoutMeetingInput>
+    create: XOR<ProjectCreateWithoutMeetingInput, ProjectUncheckedCreateWithoutMeetingInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutMeetingInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutMeetingInput, ProjectUncheckedUpdateWithoutMeetingInput>
+  }
+
+  export type ProjectUpdateWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Commit?: CommitUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUpdateManyWithoutProjectNestedInput
+    User?: UserUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Commit?: CommitUncheckedUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUncheckedUpdateManyWithoutProjectNestedInput
+    User?: UserUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectCreateWithoutQuestionInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Commit?: CommitCreateNestedManyWithoutProjectInput
+    Meeting?: MeetingCreateNestedManyWithoutProjectInput
+    User?: UserCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutQuestionInput = {
+    id?: string
+    name: string
+    githubUrl?: string | null
+    documentation?: string | null
+    mermaidGraph?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Commit?: CommitUncheckedCreateNestedManyWithoutProjectInput
+    Meeting?: MeetingUncheckedCreateNestedManyWithoutProjectInput
+    User?: UserUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutQuestionInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutQuestionInput, ProjectUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type UserCreateWithoutQuestionInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Project?: ProjectCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutQuestionInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Project?: ProjectUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutQuestionInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutQuestionInput, UserUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type ProjectUpsertWithoutQuestionInput = {
+    update: XOR<ProjectUpdateWithoutQuestionInput, ProjectUncheckedUpdateWithoutQuestionInput>
+    create: XOR<ProjectCreateWithoutQuestionInput, ProjectUncheckedCreateWithoutQuestionInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutQuestionInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutQuestionInput, ProjectUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type ProjectUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Commit?: CommitUpdateManyWithoutProjectNestedInput
+    Meeting?: MeetingUpdateManyWithoutProjectNestedInput
+    User?: UserUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Commit?: CommitUncheckedUpdateManyWithoutProjectNestedInput
+    Meeting?: MeetingUncheckedUpdateManyWithoutProjectNestedInput
+    User?: UserUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type UserUpsertWithoutQuestionInput = {
+    update: XOR<UserUpdateWithoutQuestionInput, UserUncheckedUpdateWithoutQuestionInput>
+    create: XOR<UserCreateWithoutQuestionInput, UserUncheckedCreateWithoutQuestionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutQuestionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutQuestionInput, UserUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type UserUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Project?: ProjectUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutQuestionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Project?: ProjectUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type QuestionCreateManyUserInput = {
+    id: string
+    question: string
+    answer: string
+    projectId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type QuestionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Project?: ProjectUpdateOneRequiredWithoutQuestionNestedInput
+  }
+
+  export type QuestionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Commit?: CommitUpdateManyWithoutProjectNestedInput
+    Meeting?: MeetingUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Commit?: CommitUncheckedUpdateManyWithoutProjectNestedInput
+    Meeting?: MeetingUncheckedUpdateManyWithoutProjectNestedInput
+    Question?: QuestionUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    githubUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    documentation?: NullableStringFieldUpdateOperationsInput | string | null
+    mermaidGraph?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommitCreateManyProjectInput = {
+    id: string
+    commitMessage: string
+    commitHash: string
+    commitAuthorName: string
+    commitAuthorAvatar: string
+    commitDate: Date | string
+    summary: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type MeetingCreateManyProjectInput = {
+    id: string
+    name: string
+    url: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type QuestionCreateManyProjectInput = {
+    id: string
+    question: string
+    answer: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type CommitUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommitUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CommitUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commitMessage?: StringFieldUpdateOperationsInput | string
+    commitHash?: StringFieldUpdateOperationsInput | string
+    commitAuthorName?: StringFieldUpdateOperationsInput | string
+    commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
+    commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MeetingUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Issue?: IssueUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type MeetingUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Issue?: IssueUncheckedUpdateManyWithoutMeetingNestedInput
+  }
+
+  export type MeetingUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    User?: UserUpdateOneRequiredWithoutQuestionNestedInput
+  }
+
+  export type QuestionUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UserToProjectUncheckedUpdateManyWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuestionUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Question?: QuestionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Question?: QuestionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueCreateManyMeetingInput = {
+    id: string
+    start: string
+    end: string
+    gist: string
+    headline: string
+    summary: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type IssueUpdateWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueUncheckedUpdateWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IssueUncheckedUpdateManyWithoutMeetingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    start?: StringFieldUpdateOperationsInput | string
+    end?: StringFieldUpdateOperationsInput | string
+    gist?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    summary?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

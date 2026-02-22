@@ -95,30 +95,63 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   createdAt: 'createdAt',
-  updateAt: 'updateAt',
-  imageUrl: 'imageUrl',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  emailAddress: 'emailAddress',
-  credits: 'credits'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   name: 'name',
   githubUrl: 'githubUrl',
-  deletedAt: 'deletedAt'
+  documentation: 'documentation',
+  mermaidGraph: 'mermaidGraph',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
-exports.Prisma.UserToProjectScalarFieldEnum = {
+exports.Prisma.CommitScalarFieldEnum = {
   id: 'id',
+  commitMessage: 'commitMessage',
+  commitHash: 'commitHash',
+  commitAuthorName: 'commitAuthorName',
+  commitAuthorAvatar: 'commitAuthorAvatar',
+  commitDate: 'commitDate',
+  summary: 'summary',
+  projectId: 'projectId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.IssueScalarFieldEnum = {
+  id: 'id',
+  start: 'start',
+  end: 'end',
+  gist: 'gist',
+  headline: 'headline',
+  summary: 'summary',
+  meetingId: 'meetingId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MeetingScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  projectId: 'projectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  question: 'question',
+  answer: 'answer',
+  projectId: 'projectId',
   userId: 'userId',
-  projectId: 'projectId'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -140,7 +173,10 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Project: 'Project',
-  UserToProject: 'UserToProject'
+  Commit: 'Commit',
+  Issue: 'Issue',
+  Meeting: 'Meeting',
+  Question: 'Question'
 };
 /**
  * Create the Client
@@ -153,7 +189,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/vino/Vino_Project/git/generated/prisma",
+      "value": "/home/vino/Vino_Project/AI-X-GIT/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -167,7 +203,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/vino/Vino_Project/git/prisma/schema.prisma",
+    "sourceFilePath": "/home/vino/Vino_Project/AI-X-GIT/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -181,6 +217,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -189,13 +226,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updateAt  DateTime @updatedAt\n\n  imageUrl  String?\n  firstName String?\n  lastName  String?\n\n  emailAddress String @unique\n\n  credits        Int             @default(500)\n  userToProjects UserToProject[]\n}\n\nmodel Project {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  name      String\n  githubUrl String\n\n  deletedAt      DateTime?\n  userToProjects UserToProject[]\n}\n\nmodel UserToProject {\n  id        String   @id @default(cuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  userId    String\n  projectId String\n\n  user    User    @relation(fields: [userId], references: [id])\n  project Project @relation(fields: [projectId], references: [id])\n\n  @@unique([userId, projectId])\n}\n",
-  "inlineSchemaHash": "b608d02383c57fb896e7b1d104e1414ed6c3b90a3cd507d60b06b958b527dcaa",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String     @id @default(cuid())\n  name      String\n  createdAt DateTime   @default(now())\n  updatedAt DateTime\n  Question  Question[]\n  Project   Project[]\n}\n\nmodel Project {\n  id            String     @id @default(cuid())\n  name          String\n  githubUrl     String?\n  documentation String?\n  mermaidGraph  String?\n  createdAt     DateTime   @default(now())\n  updatedAt     DateTime   @updatedAt\n  Commit        Commit[]\n  Meeting       Meeting[]\n  Question      Question[]\n  User          User[]\n}\n\nmodel Commit {\n  id                 String   @id\n  commitMessage      String\n  commitHash         String\n  commitAuthorName   String\n  commitAuthorAvatar String\n  commitDate         DateTime\n  summary            String\n  projectId          String\n  createdAt          DateTime @default(now())\n  updatedAt          DateTime\n  Project            Project  @relation(fields: [projectId], references: [id])\n}\n\nmodel Issue {\n  id        String   @id\n  start     String\n  end       String\n  gist      String\n  headline  String\n  summary   String\n  meetingId String\n  createdAt DateTime @default(now())\n  updatedAt DateTime\n  Meeting   Meeting  @relation(fields: [meetingId], references: [id])\n}\n\nmodel Meeting {\n  id        String   @id\n  name      String\n  url       String\n  projectId String\n  createdAt DateTime @default(now())\n  updatedAt DateTime\n  Issue     Issue[]\n  Project   Project  @relation(fields: [projectId], references: [id])\n}\n\nmodel Question {\n  id        String   @id\n  question  String\n  answer    String\n  projectId String\n  userId    String\n  createdAt DateTime @default(now())\n  updatedAt DateTime\n  Project   Project  @relation(fields: [projectId], references: [id])\n  User      User     @relation(fields: [userId], references: [id])\n}\n",
+  "inlineSchemaHash": "e9f9ef215bb6dbe92766d0e73563b6d4beb249c24dc0e3777c1f1293be363edc",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updateAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"imageUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"emailAddress\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"credits\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userToProjects\",\"kind\":\"object\",\"type\":\"UserToProject\",\"relationName\":\"UserToUserToProject\"}],\"dbName\":null},\"Project\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"githubUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deletedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userToProjects\",\"kind\":\"object\",\"type\":\"UserToProject\",\"relationName\":\"ProjectToUserToProject\"}],\"dbName\":null},\"UserToProject\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserToProject\"},{\"name\":\"project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToUserToProject\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"Question\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"QuestionToUser\"},{\"name\":\"Project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToUser\"}],\"dbName\":null},\"Project\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"githubUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"documentation\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mermaidGraph\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"Commit\",\"kind\":\"object\",\"type\":\"Commit\",\"relationName\":\"CommitToProject\"},{\"name\":\"Meeting\",\"kind\":\"object\",\"type\":\"Meeting\",\"relationName\":\"MeetingToProject\"},{\"name\":\"Question\",\"kind\":\"object\",\"type\":\"Question\",\"relationName\":\"ProjectToQuestion\"},{\"name\":\"User\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"ProjectToUser\"}],\"dbName\":null},\"Commit\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commitMessage\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commitHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commitAuthorName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commitAuthorAvatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"commitDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"summary\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"Project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"CommitToProject\"}],\"dbName\":null},\"Issue\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"start\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"end\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"gist\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"headline\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"summary\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"meetingId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"Meeting\",\"kind\":\"object\",\"type\":\"Meeting\",\"relationName\":\"IssueToMeeting\"}],\"dbName\":null},\"Meeting\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"Issue\",\"kind\":\"object\",\"type\":\"Issue\",\"relationName\":\"IssueToMeeting\"},{\"name\":\"Project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"MeetingToProject\"}],\"dbName\":null},\"Question\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"question\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"answer\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"projectId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"Project\",\"kind\":\"object\",\"type\":\"Project\",\"relationName\":\"ProjectToQuestion\"},{\"name\":\"User\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"QuestionToUser\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

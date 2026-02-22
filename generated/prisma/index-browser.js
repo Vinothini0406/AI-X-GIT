@@ -123,30 +123,63 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   createdAt: 'createdAt',
-  updateAt: 'updateAt',
-  imageUrl: 'imageUrl',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  emailAddress: 'emailAddress',
-  credits: 'credits'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   name: 'name',
   githubUrl: 'githubUrl',
-  deletedAt: 'deletedAt'
+  documentation: 'documentation',
+  mermaidGraph: 'mermaidGraph',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
-exports.Prisma.UserToProjectScalarFieldEnum = {
+exports.Prisma.CommitScalarFieldEnum = {
   id: 'id',
+  commitMessage: 'commitMessage',
+  commitHash: 'commitHash',
+  commitAuthorName: 'commitAuthorName',
+  commitAuthorAvatar: 'commitAuthorAvatar',
+  commitDate: 'commitDate',
+  summary: 'summary',
+  projectId: 'projectId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.IssueScalarFieldEnum = {
+  id: 'id',
+  start: 'start',
+  end: 'end',
+  gist: 'gist',
+  headline: 'headline',
+  summary: 'summary',
+  meetingId: 'meetingId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MeetingScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  projectId: 'projectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  question: 'question',
+  answer: 'answer',
+  projectId: 'projectId',
   userId: 'userId',
-  projectId: 'projectId'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -168,7 +201,10 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Project: 'Project',
-  UserToProject: 'UserToProject'
+  Commit: 'Commit',
+  Issue: 'Issue',
+  Meeting: 'Meeting',
+  Question: 'Question'
 };
 
 /**

@@ -1,181 +1,127 @@
-// // import { createTRPCRouter, protectedProcedure } from "../trpc";
-// // import { z } from "zod";
-
-// // export { createTRPCRouter } from "../trpc";
-
-// // export const projectRouter = createTRPCRouter({
-// //     createProject: protectedProcedure
-// //         .input(
-// //             z.object({
-// //                 repoUrl: z.string(),
-// //                 projectname: z.string(),
-// //                 githubToken: z.string().optional(),
-// //             })
-// //         )
-// //         .mutation(async ({ ctx, input }) => {
-// //             // console.log("User:", ctx.userId);
-// //             // console.log("Input:", input);
-
-// //             const project = await ctx.db.project.create({
-// //                 data: {
-// //                     githubUrl: input.repoUrl,
-// //                     name: input.projectname,
-// //                     userToProjects: {
-// //                         create: {
-// //                             userId: ctx.user.userId!,
-// //                         }
-// //                     }
-// //                 }
-// //             })
-// //             return project;
-// //         }),
-// // });
-
-
-
-// import { createTRPCRouter, protectedProcedure } from "../trpc";
-// import { z } from "zod";
-
-// export { createTRPCRouter } from "../trpc";
-
-// export const projectRouter = createTRPCRouter({
-//     createProject: protectedProcedure
-//         .input(
-//             z.object({
-//                 repoUrl: z.string(),
-//                 projectname: z.string(),
-//                 githubToken: z.string().optional(),
-//             })
-//         )
-//         .mutation(async ({ ctx, input }) => {
-//             const project = await ctx.db.project.create({
-//                 data: {
-//                     githubUrl: input.repoUrl,
-//                     name: input.projectname,
-//                     userToProjects: {
-//                         create: {
-//                             userId: ctx.userId!, // ✅ correct
-//                         },
-//                     },
-//                 },
-//             });
-
-//             return project;
-//         }),
-// });
-
-
-// import { createTRPCRouter, protectedProcedure } from "../trpc";
-// import { z } from "zod";
-
-// export { createTRPCRouter } from "../trpc";
-
-// export const projectRouter = createTRPCRouter({
-//     createProject: protectedProcedure
-//         .input(
-//             z.object({
-//                 repoUrl: z.string(),
-//                 projectname: z.string(),
-//                 githubToken: z.string().optional(),
-//             })
-//         )
-//         .mutation(async ({ ctx, input }) => {
-
-//             // 🟢 1️⃣ Ensure the user exists in DB (prevents FK error)
-//             await ctx.db.user.upsert({
-//                 where: { id: ctx.userId! },
-//                 update: {},
-//                 create: {
-//                     id: ctx.userId!,
-//                     emailAddress: "placeholder@email.com",
-//                     // 👉 later replace with Clerk email sync
-//                 },
-//             });
-
-//             // 🟢 2️⃣ Create project + link to user
-//             const project = await ctx.db.project.create({
-//                 data: {
-//                     githubUrl: input.repoUrl,
-//                     name: input.projectname,
-//                     userToProjects: {
-//                         create: {
-//                             userId: ctx.userId!,
-//                         },
-//                     },
-//                 },
-//             });
-
-//             return project;
-//         }),
-// });
-
+import { currentUser } from "@clerk/nextjs/server";
+import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { z } from "zod";
-import { currentUser } from "@clerk/nextjs/server";
 
 export const projectRouter = createTRPCRouter({
-    createProject: protectedProcedure
-        .input(
-            z.object({
-                repoUrl: z.string(),
-                projectname: z.string(),
-                githubToken: z.string().optional(),
-            })
-        )
-        .mutation(async ({ ctx, input }) => {
+  createProject: protectedProcedure
+    .input(
+      z.object({
+        repoUrl: z.string(),
+        projectname: z.string(),
+        githubToken: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await currentUser();
 
-            // 🟢 get logged-in Clerk user
-            const user = await currentUser();
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
 
-            if (!user) {
-                throw new Error("User not authenticated");
-            }
+      const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ").trim();
+      const displayName =
+        fullName.length > 0
+          ? fullName
+          : user.username ?? user.emailAddresses[0]?.emailAddress ?? "User";
 
-            const email =
-                user.emailAddresses[0]?.emailAddress ?? `${ctx.userId}@temp.com`;
+      await ctx.db.user.upsert({
+        where: { id: ctx.userId },
+        update: {
+          name: displayName,
+          updatedAt: new Date(),
+        },
+        create: {
+          id: ctx.userId,
+          name: displayName,
+          updatedAt: new Date(),
+        },
+      });
 
-            // 🟢 ensure user exists in DB
-            await ctx.db.user.upsert({
-                where: { id: ctx.userId! },
-                update: {},
-                create: {
-                    id: ctx.userId!,
-                    emailAddress: email,
-                    firstName: user.firstName ?? "",
-                    lastName: user.lastName ?? "",
-                    imageUrl: user.imageUrl ?? "",
-                },
-            });
+      return await ctx.db.project.create({
+        data: {
+          githubUrl: input.repoUrl,
+          name: input.projectname,
+          User: {
+            connect: {
+              id: ctx.userId,
+            },
+          },
+        },
+      });
+    }),
 
-            // 🟢 create project
-            const project = await ctx.db.project.create({
-                data: {
-                    githubUrl: input.repoUrl,
-                    name: input.projectname,
-                    userToProjects: {
-                        create: {
-                            userId: ctx.userId!,
-                        },
-                    },
-                },
-            });
+  getProjects: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.project.findMany({
+      where: {
+        User: {
+          some: {
+            id: ctx.userId,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }),
 
-            return project;
-        }),
-
-
-    getProjects: protectedProcedure.query(async ({ ctx }) => {
-        return await ctx.db.project.findMany({
-            where: {
-                deletedAt: null,
-                userToProjects: {
-                    some: {
-                        userId: ctx.userId!
-                    },
-
-                }
-            }
-        })
-    })
+  getProjectDetails: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.project.findFirst({
+        where: {
+          id: input.projectId,
+          User: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+        include: {
+          User: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          Commit: {
+            select: {
+              id: true,
+              commitMessage: true,
+              commitDate: true,
+              commitHash: true,
+            },
+            orderBy: {
+              commitDate: "desc",
+            },
+            take: 5,
+          },
+          Meeting: {
+            select: {
+              id: true,
+              name: true,
+              url: true,
+              createdAt: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 5,
+          },
+          _count: {
+            select: {
+              Commit: true,
+              Meeting: true,
+              Question: true,
+              User: true,
+            },
+          },
+        },
+      });
+    }),
 });

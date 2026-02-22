@@ -11,6 +11,9 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    AUTH_NOTIFY_TO: z.string().email().default("kalandars2004@gmail.com"),
+    AUTH_NOTIFY_FROM: z.string().email().optional(),
+    RESEND_API_KEY: z.string().min(1).optional(),
   },
 
   /**
@@ -29,6 +32,9 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    AUTH_NOTIFY_TO: process.env.AUTH_NOTIFY_TO,
+    AUTH_NOTIFY_FROM: process.env.AUTH_NOTIFY_FROM,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

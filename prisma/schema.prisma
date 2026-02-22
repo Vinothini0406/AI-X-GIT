@@ -1,53 +1,82 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
-    output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updateAt  DateTime @updatedAt
-
-    imageUrl  String?
-    firstName String?
-    lastName  String?
-
-    emailAddress String @unique
-
-    credits        Int             @default(500)
-    userToProjects UserToProject[]
+  id        String     @id @default(cuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime
+  Question  Question[]
+  Project   Project[]
 }
 
 model Project {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    name      String
-    githubUrl String
-
-    deletedAt      DateTime?
-    userToProjects UserToProject[]
+  id            String     @id @default(cuid())
+  name          String
+  githubUrl     String?
+  documentation String?
+  mermaidGraph  String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  Commit        Commit[]
+  Meeting       Meeting[]
+  Question      Question[]
+  User          User[]
 }
 
-model UserToProject {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Commit {
+  id                 String   @id
+  commitMessage      String
+  commitHash         String
+  commitAuthorName   String
+  commitAuthorAvatar String
+  commitDate         DateTime
+  summary            String
+  projectId          String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+  Project            Project  @relation(fields: [projectId], references: [id])
+}
 
-    userId    String
-    projectId String
+model Issue {
+  id        String   @id
+  start     String
+  end       String
+  gist      String
+  headline  String
+  summary   String
+  meetingId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Meeting   Meeting  @relation(fields: [meetingId], references: [id])
+}
 
-    user    User    @relation(fields: [userId], references: [id])
-    project Project @relation(fields: [projectId], references: [id])
+model Meeting {
+  id        String   @id
+  name      String
+  url       String
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Issue     Issue[]
+  Project   Project  @relation(fields: [projectId], references: [id])
+}
 
-    @@unique([userId, projectId])
+model Question {
+  id        String   @id
+  question  String
+  answer    String
+  projectId String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Project   Project  @relation(fields: [projectId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 }
