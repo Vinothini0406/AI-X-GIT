@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import useRefetch from "@/hooks/use-refetch";
 
 type FormInput = {
     repoUrl: string;
@@ -18,6 +19,9 @@ const CreatePage = () => {
     const { register, handleSubmit, reset } = useForm<FormInput>();
     const createProject = api.project.createProject.useMutation()
 
+
+    const refetch = useRefetch();
+
     function onSubmit(data: FormInput) {
 
         // window.alert(JSON.stringify(data, null, 2));
@@ -28,6 +32,7 @@ const CreatePage = () => {
         }, {
             onSuccess: () => {
                 toast.success("Project created Successfully");
+                refetch()
                 reset();
             },
             onError: () => {

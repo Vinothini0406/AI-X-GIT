@@ -1,17 +1,16 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import React from "react";
+import useProject from "@/hooks/use-project";
+import { cn } from "../../../lib/utils";
 
-function DashBoardPage() {
-  const { user } = useUser();
+export default function DashBoardPage() {
+  const { project } = useProject();
 
   return (
-    <>
-      <div>{user?.firstName}</div>
-      <div>{user?.lastName}</div>
-    </>
+    <div className="p-6">
+      <h1 className={cn('text-2xl', 'font-semibold')}>
+        {project ? project.name : "Select a project"}
+      </h1>
+    </div>
   );
 }
-
-export default DashBoardPage;

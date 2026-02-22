@@ -13,6 +13,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
+import useProject from "@/hooks/use-project";
 
 import { cn } from "@/lib/utils";
 import {
@@ -34,29 +35,25 @@ const items = [
     { title: "Billing", url: "/billing", icon: CreditCard },
 ];
 
-const projects = [
-    { id: "1", name: "Project 1" },
-    { id: "2", name: "Project 2" },
-    { id: "3", name: "Project 3" },
-];
-
 export function AppSidebar() {
     const pathname = usePathname();
     const [projectId, setProjectId] = useState<string | null>(null);
 
     const { open } = useSidebar();
 
+    // FIX 1: Provide a fallback empty array in case the hook returns undefined initially
+    const { projects = [] } = useProject() || {};
+
     return (
         <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
                 <div className={cn("flex", "items-center", "gap-2")}>
                     <Image src="/logo1.png" alt="logo" width={40} height={40} />
-                    {
-                        open &&
+                    {open && (
                         <h1 className={cn("text-xl", "font-bold", "text-primary/80")}>
                             Dionysus
                         </h1>
-                    }
+                    )}
                 </div>
             </SidebarHeader>
             <SidebarContent>
@@ -91,7 +88,8 @@ export function AppSidebar() {
 
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {projects.map((project) => (
+                            {/* FIX 1 continued: Optional chaining just in case */}
+                            {projects?.map((project) => (
                                 <SidebarMenuItem key={project.id}>
                                     <SidebarMenuButton asChild>
                                         <div
@@ -115,21 +113,23 @@ export function AppSidebar() {
                                 </SidebarMenuItem>
                             ))}
 
-                            { 
-                                open &&
-                            <SidebarMenuItem>
-                                <Link href="/create">
-                                    <Button variant="outline" className="w-fit">
-                                        <Plus />
-                                        Create Project
-                                    </Button>
-                                </Link>
-                            </SidebarMenuItem>
-                            }
+                            {open && (
+                                <SidebarMenuItem>
+                                    {/* FIX 2: Wrapped in SidebarMenuButton for proper shadcn formatting */}
+                                    <SidebarMenuButton asChild>
+                                        <Link href="/create">
+                                            <Button variant="outline" className="w-fit">
+                                                <Plus className={cn('mr-2', 'size-4')} />
+                                                Create Project
+                                            </Button>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            )}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-        </Sidebar >
+        </Sidebar>
     );
 }
