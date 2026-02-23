@@ -1,12 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Document } from "@langchain/core/documents";
+// import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 const model = genAI.getGenerativeModel({
     model: "gemini-2.5-flash",
 })
-export const aiSummariseCommit = async (diff: string) => {
+export const summariseCommit = async (diff: string) => {
     const response = await model.generateContent([
         `You are an expert programmer, and you are trying to summarize a git diff.
 
@@ -63,3 +63,5 @@ It is given only as example of appropriate comments.`,
     ]);
     return response.response.text()
 }
+
+console.log(await summariseCommit(`9174ce456a6175dc5b34c72fe63860500b89979f`))
