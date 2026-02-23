@@ -1,96 +1,215 @@
 import { Octokit } from "octokit";
 
-export const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
-});
+import { aiSummariseCommit } from "./gemini";
 
-const defaultGithubUrl = "https://github.com/docker/genai-stack";
+const DEFAULT_GITHUB_URL = "https://github.com/docker/genai-stack";
+const MAX_COMMITS = 15;
 
-type Response = {
-    commitHash: string;
-    commitMessage: string;
-    commitAuthorName: string;
-    commitAuthorAvatar: string;
-    commitDate: string;
-}
-
-export const getCommitHarshes = async (githubUrl: string): Promise<Response[]> => {
-
-    const [owner, repo] = githubUrl.split('/').slice(-2)
-
-    if (!owner || !repo) throw new Error("Invalid github url")
-
-    const { data } = await octokit.rest.repos.listCommits({
-        owner,
-        repo
-    });
-
-    const sortdedCommits = data.sort(
-        (a, b) =>
-            new Date(b.commit.author?.date ?? 0).getTime() -
-            new Date(a.commit.author?.date ?? 0).getTime(),
-    );
-
-    return sortdedCommits.slice(0, 15).map((commit) => ({
-        commitHash: commit.sha as string,
-        commitMessage: commit.commit.message ?? "",
-        commitAuthorName: commit.commit.author?.name ?? "",
-        commitAuthorAvatar: commit.author?.avatar_url ?? "",
-        commitDate: commit.commit.author?.date ?? "",
-    }));
+type CommitResponse = {
+  commitHash: string;
+  commitMessage: string;
+  commitAuthorName: string;
+  commitAuthorAvatar: string;
+  commitDate: string;
 };
 
-if (process.argv[1]?.endsWith("github.ts")) {
-    // const inputGithubUrl = process.argv[2] ?? defaultGithubUrl;
+type CommitSummaryResponse = CommitResponse & {
+  summary: string;
+};
 
-    const inputGithubUrl = "https://github.com/Kalandhar01/E-Commerce-Clothes";
-        console.log(await getCommitHarshes(inputGithubUrl));
+type RepoRef = {
+  owner: string;
+  repo: string;
+  normalizedRepoUrl: string;
+};
+
+let cachedDb: any;
+
+export const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
+
+function parseGithubRepo(githubUrl: string): RepoRef {
+  const value = githubUrl.trim().replace(/\/+$/, "").replace(/\.git$/, "");
+
+  if (!value) {
+    throw new Error("Invalid github url");
+  }
+
+  if (value.startsWith("git@github.com:")) {
+    const path = value.slice("git@github.com:".length).replace(/\.git$/, "");
+    const [owner, repo] = path.split("/");
+    if (!owner || !repo) {
+      throw new Error("Invalid github url");
+    }
+    return {
+      owner,
+      repo,
+      normalizedRepoUrl: `https://github.com/${owner}/${repo}`,
+    };
+  }
+
+  if (value.startsWith("github.com/")) {
+    return parseGithubRepo(`https://${value}`);
+  }
+
+  if (!value.startsWith("http://") && !value.startsWith("https://")) {
+    const [owner, repo] = value.split("/");
+    if (!owner || !repo) {
+      throw new Error("Invalid github url");
+    }
+    return {
+      owner,
+      repo,
+      normalizedRepoUrl: `https://github.com/${owner}/${repo}`,
+    };
+  }
+
+  const url = new URL(value);
+  if (!/github\.com$/i.test(url.hostname)) {
+    throw new Error("Only github.com repositories are supported");
+  }
+
+  const [owner, repo] = url.pathname.split("/").filter(Boolean);
+  if (!owner || !repo) {
+    throw new Error("Invalid github url");
+  }
+
+  return {
+    owner,
+    repo,
+    normalizedRepoUrl: `${url.origin}/${owner}/${repo}`,
+  };
 }
 
-export const pollCommits = async (projectId: string): Promise<Response[]> => {
-    const { project, githubUrl } = await fetchProjectGithubUrl(projectId);
+export const getCommitHashes = async (
+  githubUrl: string,
+  limit = MAX_COMMITS,
+): Promise<CommitResponse[]> => {
+  const { owner, repo } = parseGithubRepo(githubUrl);
+  const { data } = await octokit.rest.repos.listCommits({
+    owner,
+    repo,
+    per_page: limit,
+  });
 
-    if (!project || !githubUrl) {
-        return [];
-    }
+  return data.slice(0, limit).map((commit) => ({
+    commitHash: commit.sha,
+    commitMessage: commit.commit.message ?? "",
+    commitAuthorName: commit.commit.author?.name ?? "",
+    commitAuthorAvatar: commit.author?.avatar_url ?? "",
+    commitDate: commit.commit.author?.date ?? "",
+  }));
+};
 
-    const commitHashes = await getCommitHarshes(githubUrl);
-    const unprocessedCommits = await filterUnprocessCommits(projectId, commitHashes);
+export const getCommitHarshes = getCommitHashes;
 
-    return unprocessedCommits;
+export const getCommitDiff = async (githubUrl: string, commitHash: string): Promise<string> => {
+  const { owner, repo } = parseGithubRepo(githubUrl);
+  const { data } = await octokit.request("GET /repos/{owner}/{repo}/commits/{ref}", {
+    owner,
+    repo,
+    ref: commitHash,
+    headers: {
+      accept: "application/vnd.github.v3.diff",
+    },
+  });
+
+  const diff = typeof data === "string" ? data : String(data ?? "");
+  if (!diff.trim().startsWith("diff --git")) {
+    throw new Error(`Unable to fetch git diff for commit ${commitHash}`);
+  }
+
+  return diff;
+};
+
+export const summariseGithubCommit = async (
+  githubUrl: string,
+  commitHash: string,
+): Promise<string> => {
+  const diff = await getCommitDiff(githubUrl, commitHash);
+  return aiSummariseCommit(diff, { repoUrl: githubUrl });
+};
+
+export const pollCommits = async (projectId: string): Promise<CommitSummaryResponse[]> => {
+  const { project, githubUrl } = await fetchProjectGithubUrl(projectId);
+
+  if (!project || !githubUrl) {
+    return [];
+  }
+
+  const commitHashes = await getCommitHashes(githubUrl);
+  const unprocessedCommits = await filterUnprocessedCommits(projectId, commitHashes);
+
+  const commitsWithSummaries = await Promise.all(
+    unprocessedCommits.map(async (commit) => {
+      try {
+        const summary = await summariseGithubCommit(githubUrl, commit.commitHash);
+        return { ...commit, summary };
+      } catch (error) {
+        const reason = error instanceof Error ? error.message : "unknown error";
+        return { ...commit, summary: `Summary unavailable: ${reason}` };
+      }
+    }),
+  );
+
+  return commitsWithSummaries;
 };
 
 async function getDb() {
+  if (cachedDb) {
+    return cachedDb;
+  }
+
+  try {
     const { db } = await import("@/server/db");
-    return db;
+    cachedDb = db;
+    return cachedDb;
+  } catch {
+    const { PrismaClient } = await import("../../generated/prisma/index.js");
+    cachedDb = new PrismaClient();
+    return cachedDb;
+  }
 }
 
 async function fetchProjectGithubUrl(projectId: string) {
-    const db = await getDb();
-    const project = await db.project.findUnique({
-        where: { id: projectId },
-        select: { githubUrl: true },
-    });
+  const db = await getDb();
+  const project = await db.project.findUnique({
+    where: { id: projectId },
+    select: { githubUrl: true },
+  });
 
-    return { project, githubUrl: project?.githubUrl };
+  return { project, githubUrl: project?.githubUrl };
 }
-async function filterUnprocessCommits(projectId: string, commitHashes: Response[]) {
-    const db = await getDb();
-    const processedCommits = await db.commit.findMany({
-        where: {
-            projectId,
-        },
-        select: {
-            commitHash: true,
-        },
-    });
 
-    const unprocessedCommits = commitHashes.filter(
-        (commit) =>
-            !processedCommits.some(
-                (processedCommit) => processedCommit.commitHash === commit.commitHash,
-            ),
-    );
+async function filterUnprocessedCommits(projectId: string, commitHashes: CommitResponse[]) {
+  const db = await getDb();
+  const processedCommits = await db.commit.findMany({
+    where: {
+      projectId,
+    },
+    select: {
+      commitHash: true,
+    },
+  });
 
-    return unprocessedCommits;
+  return commitHashes.filter(
+    (commit) =>
+      !processedCommits.some(
+        (processedCommit: { commitHash: string }) =>
+          processedCommit.commitHash === commit.commitHash,
+      ),
+  );
+}
+
+if (process.argv[1]?.endsWith("github.ts")) {
+  const input = process.argv[2] ?? DEFAULT_GITHUB_URL;
+  const isUrlInput = input.startsWith("http://") || input.startsWith("https://");
+
+  const result = isUrlInput ? await getCommitHashes(input) : await pollCommits(input);
+  console.log(JSON.stringify(result, null, 2));
+
+  if (cachedDb?.$disconnect) {
+    await cachedDb.$disconnect();
+  }
 }

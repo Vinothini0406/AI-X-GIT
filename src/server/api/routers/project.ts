@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { z } from "zod";
 
+import { askRepoQuestion } from "@/lib/gemini";
+import { pollCommits } from "@/lib/github";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const projectRouter = createTRPCRouter({
@@ -172,5 +174,125 @@ export const projectRouter = createTRPCRouter({
         },
         take: 50,
       });
+    }),
+
+  syncCommits: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const hasAccess = await ctx.db.project.findFirst({
+        where: {
+          id: input.projectId,
+          User: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!hasAccess) {
+        throw new Error("Project not found or access denied");
+      }
+
+      const commitsWithSummary = await pollCommits(input.projectId);
+      if (commitsWithSummary.length === 0) {
+        return { inserted: 0 };
+      }
+
+      const existing = await ctx.db.commit.findMany({
+        where: {
+          projectId: input.projectId,
+          commitHash: {
+            in: commitsWithSummary.map((commit) => commit.commitHash),
+          },
+        },
+        select: {
+          commitHash: true,
+        },
+      });
+
+      const existingHashes = new Set(existing.map((commit) => commit.commitHash));
+      const toInsert = commitsWithSummary.filter(
+        (commit) => !existingHashes.has(commit.commitHash),
+      );
+
+      if (toInsert.length > 0) {
+        await ctx.db.commit.createMany({
+          data: toInsert.map((commit) => {
+            const parsedDate = new Date(commit.commitDate);
+            return {
+              projectId: input.projectId,
+              commitHash: commit.commitHash,
+              commitMessage: commit.commitMessage,
+              commitAuthorName: commit.commitAuthorName,
+              commitAuthorAvatar: commit.commitAuthorAvatar,
+              commitDate: Number.isNaN(parsedDate.getTime()) ? new Date() : parsedDate,
+              summary: commit.summary,
+            };
+          }),
+        });
+      }
+
+      return { inserted: toInsert.length };
+    }),
+
+  askRepoAi: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string().min(1),
+        question: z.string().min(3).max(2000),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const project = await ctx.db.project.findFirst({
+        where: {
+          id: input.projectId,
+          User: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+        select: {
+          name: true,
+          githubUrl: true,
+        },
+      });
+
+      if (!project) {
+        throw new Error("Project not found or access denied");
+      }
+
+      const commits = await ctx.db.commit.findMany({
+        where: {
+          projectId: input.projectId,
+        },
+        select: {
+          commitHash: true,
+          commitMessage: true,
+          commitDate: true,
+          summary: true,
+        },
+        orderBy: {
+          commitDate: "desc",
+        },
+        take: 20,
+      });
+
+      const answer = await askRepoQuestion({
+        projectName: project.name,
+        githubUrl: project.githubUrl,
+        question: input.question,
+        commits,
+      });
+
+      return { answer };
     }),
 });
