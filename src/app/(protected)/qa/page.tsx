@@ -231,7 +231,11 @@ const QaPage = () => {
   };
 
   return (
-    <section className="flex h-full flex-col bg-gradient-to-b from-background to-muted/20">
+    <section className="relative flex h-full flex-col bg-gradient-to-b from-background to-muted/20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-16 h-24 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.12),transparent_68%)]"
+      />
       <header className="border-b bg-background/85 px-4 py-4 backdrop-blur-sm md:px-6">
         <div className="mx-auto flex w-full flex-wrap items-center justify-between gap-3">
           <div className="space-y-1">
@@ -258,7 +262,7 @@ const QaPage = () => {
         </div>
       </header>
 
-      <div ref={chatViewportRef} className="flex-1 overflow-y-auto px-4 py-5 md:px-6">
+      <div ref={chatViewportRef} className="relative flex-1 overflow-y-auto px-4 py-5 md:px-6">
         <div className="mx-auto flex w-full flex-col gap-4">
           {!projectId && (
             <Card className="border-dashed">
@@ -310,7 +314,7 @@ const QaPage = () => {
                     "max-w-[min(88%,56rem)] rounded-2xl border px-4 py-3 shadow-sm",
                     isUser
                       ? "border-primary/30 bg-primary text-primary-foreground"
-                      : "border-border bg-background",
+                      : "border-border bg-background shadow-[0_10px_30px_-24px_rgba(56,189,248,0.8)]",
                   )}
                 >
                   <p
@@ -350,7 +354,11 @@ const QaPage = () => {
 
       <footer className="border-t bg-background/95 px-4 py-4 md:px-6">
         <div className="mx-auto w-full">
-          <div className="rounded-2xl border bg-background p-3 shadow-sm">
+          <div className="relative rounded-2xl border bg-background p-3 shadow-sm transition-all duration-200 focus-within:border-primary/40 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.14),0_16px_36px_-28px_rgba(59,130,246,0.45)]">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent animate-pulse"
+            />
             <Textarea
               placeholder={
                 projectId

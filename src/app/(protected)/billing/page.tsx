@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
   CreditCard,
@@ -11,7 +11,9 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
+import Image from "next/image";
 import { toast } from "sonner";
+import { useLocalStorage } from "usehooks-ts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,6 +37,9 @@ import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
+type StepKey = "plan" | "summary" | "payment" | "invoice";
+type CheckoutState = "waiting" | "verifying" | "success";
+
 interface PlanOption {
   key: "starter" | "pro" | "enterprise";
   name: string;
@@ -45,6 +50,7 @@ interface PlanOption {
 
 interface PaymentMethodOption {
   id: string;
+  type: "upi" | "card";
   brand: string;
   label: string;
   meta: string;
@@ -54,17 +60,19 @@ interface PaymentMethodOption {
 const paymentMethods: PaymentMethodOption[] = [
   {
     id: "upi_primary",
+    type: "upi",
     brand: "UPI",
-    label: "UPI AutoPay",
-    meta: "demo-success@upi",
+    label: "Scan & Pay",
+    meta: "dionysus.payments@upi",
     simulateFailure: false,
   },
   {
-    id: "card_test_fail",
-    brand: "Test Card",
-    label: "Failure simulation",
-    meta: "xxxx xxxx xxxx 0002",
-    simulateFailure: true,
+    id: "card_primary",
+    type: "card",
+    brand: "Card",
+    label: "Saved card",
+    meta: "xxxx xxxx xxxx 4242",
+    simulateFailure: false,
   },
 ];
 
@@ -99,16 +107,39 @@ const formatInr = (paise: number) =>
     maximumFractionDigits: 2,
   }).format(paise / 100);
 
+const stepLabel: Record<StepKey, string> = {
+  plan: "Plan Selection",
+  summary: "Checkout Summary",
+  payment: "Payment",
+  invoice: "Invoice",
+};
+
 const BillingPage = () => {
   const { projectId, project } = useProject();
-  const [selectedPlanKey, setSelectedPlanKey] = useState<"starter" | "pro">("pro");
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>(
+
+  const [selectedPlanKey, setSelectedPlanKey] = useLocalStorage<"starter" | "pro">(
+    "dionysus-billing-selected-plan",
+    "pro",
+  );
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useLocalStorage<string>(
+    "dionysus-billing-payment-method",
     paymentMethods[0]?.id ?? "",
   );
-  const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "success" | "failure">(
-    "idle",
-  );
-  const [checkoutMessage, setCheckoutMessage] = useState<string>("");
+  const [checkoutState, setCheckoutState] = useState<CheckoutState>("waiting");
+  const [checkoutMessage, setCheckoutMessage] = useState("Waiting for payment confirmation.");
+
+  const [highlightPlans, setHighlightPlans] = useState(false);
+  const [highlightSummary, setHighlightSummary] = useState(false);
+  const [activeStep, setActiveStep] = useState<StepKey>("plan");
+
+  const [qrNonce, setQrNonce] = useState(() => `${Date.now()}`);
+  const [qrCountdown, setQrCountdown] = useState(60);
+
+  const plansSectionRef = useRef<HTMLElement | null>(null);
+  const summarySectionRef = useRef<HTMLElement | null>(null);
+  const paymentSectionRef = useRef<HTMLElement | null>(null);
+  const invoiceSectionRef = useRef<HTMLElement | null>(null);
+  const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const projectDetailsQuery = api.project.getProjectDetails.useQuery(
     { projectId: projectId ?? "" },
@@ -123,10 +154,10 @@ const BillingPage = () => {
     onSuccess: async (result) => {
       if (result.status === "SUCCESS") {
         setCheckoutState("success");
-        setCheckoutMessage("Payment successful. Invoice has been generated.");
+        setCheckoutMessage("Payment successful. Invoice generated.");
         toast.success("Payment successful");
       } else {
-        setCheckoutState("failure");
+        setCheckoutState("waiting");
         setCheckoutMessage(result.message);
         toast.error(result.message);
       }
@@ -134,39 +165,151 @@ const BillingPage = () => {
       await billingOverviewQuery.refetch();
     },
     onError: (error) => {
-      const message = error.message || "Payment failed. Please try again.";
-      setCheckoutState("failure");
+      setCheckoutState("waiting");
+      const message = error.message || "Verification failed. Please try again.";
       setCheckoutMessage(message);
       toast.error(message);
     },
   });
+
+  const selectedPlan = useMemo<PlanOption>(() => {
+    const fallbackPlan: PlanOption = {
+      key: "pro",
+      name: "Pro",
+      priceInPaise: 499900,
+      featured: true,
+      highlights: ["Unlimited projects", "1,000 commit summaries", "Priority AI support"],
+    };
+
+    return plans.find((plan) => plan.key === selectedPlanKey) ?? fallbackPlan;
+  }, [selectedPlanKey]);
+
+  const selectedMethod = useMemo<PaymentMethodOption>(() => {
+    const fallbackMethod: PaymentMethodOption = {
+      id: "upi_primary",
+      type: "upi",
+      brand: "UPI",
+      label: "Scan & Pay",
+      meta: "dionysus.payments@upi",
+      simulateFailure: false,
+    };
+
+    return paymentMethods.find((method) => method.id === selectedPaymentMethodId) ?? fallbackMethod;
+  }, [selectedPaymentMethodId]);
+
+  const isUpiSelected = selectedMethod.type === "upi";
+
+  useEffect(() => {
+    if (!isUpiSelected) {
+      setQrCountdown(60);
+      return;
+    }
+
+    setQrCountdown(60);
+    setQrNonce(`${Date.now()}`);
+
+    const timer = setInterval(() => {
+      setQrCountdown((prev) => {
+        if (prev <= 1) {
+          setQrNonce(`${Date.now()}`);
+          return 60;
+        }
+
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isUpiSelected, selectedPlanKey]);
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimerRef.current) {
+        clearTimeout(highlightTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const elements = [
+      plansSectionRef.current,
+      summarySectionRef.current,
+      paymentSectionRef.current,
+      invoiceSectionRef.current,
+    ].filter(Boolean) as HTMLElement[];
+
+    if (elements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible) {
+          return;
+        }
+
+        const sectionStep = (visible.target as HTMLElement).dataset.step as StepKey | undefined;
+        if (sectionStep) {
+          setActiveStep(sectionStep);
+        }
+      },
+      {
+        threshold: [0.25, 0.45, 0.7],
+        rootMargin: "-10% 0px -55% 0px",
+      },
+    );
+
+    for (const element of elements) {
+      observer.observe(element);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [billingOverviewQuery.data?.hasSuccessfulPayment]);
+
+  const setTemporaryHighlights = (target: "plans" | "summary") => {
+    if (highlightTimerRef.current) {
+      clearTimeout(highlightTimerRef.current);
+    }
+
+    setHighlightPlans(target === "plans");
+    setHighlightSummary(target === "summary");
+
+    highlightTimerRef.current = setTimeout(() => {
+      setHighlightPlans(false);
+      setHighlightSummary(false);
+    }, 1200);
+  };
 
   const usageCounts = projectDetailsQuery.data?._count;
   const commitsUsed = usageCounts?.Commit ?? 0;
   const questionsUsed = usageCounts?.Question ?? 0;
   const collaboratorsUsed = usageCounts?.User ?? 1;
 
-  const commitLimit = 1000;
-  const questionLimit = 500;
-  const collaboratorLimit = 10;
-
   const usageCards = [
     {
       label: "Commit Summaries",
       value: commitsUsed,
-      limit: commitLimit,
+      limit: 1000,
       tone: "from-cyan-500/20 to-blue-500/10",
     },
     {
       label: "AI Q&A Messages",
       value: questionsUsed,
-      limit: questionLimit,
+      limit: 500,
       tone: "from-emerald-500/20 to-teal-500/10",
     },
     {
       label: "Team Members",
       value: collaboratorsUsed,
-      limit: collaboratorLimit,
+      limit: 10,
       tone: "from-orange-500/20 to-amber-500/10",
     },
   ] as const;
@@ -176,93 +319,89 @@ const BillingPage = () => {
   const hasSuccessfulPayment = billingOverviewQuery.data?.hasSuccessfulPayment ?? false;
   const isTrial = !hasSuccessfulPayment;
 
-  const selectedPlan = useMemo(
-    () => plans.find((plan) => plan.key === selectedPlanKey),
-    [selectedPlanKey],
-  );
+  const upiId = "dionysus.payments@upi";
+  const upiAmount = selectedPlan.priceInPaise ? (selectedPlan.priceInPaise / 100).toFixed(2) : "0.00";
+  const upiPaymentLink = `upi://pay?pa=${upiId}&pn=Dionysus%20AI%20Git&am=${upiAmount}&cu=INR&tr=${encodeURIComponent(`DIO-${qrNonce}`)}&tn=${encodeURIComponent(selectedPlan.name + " Plan")}`;
+  const upiQrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiPaymentLink)}`;
+
+  const scrollToPlanSelection = () => {
+    plansSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    setTemporaryHighlights("plans");
+  };
+
+  const handlePlanSelection = (planKey: "starter" | "pro") => {
+    setSelectedPlanKey(planKey);
+    setCheckoutState("waiting");
+    setCheckoutMessage("Waiting for payment confirmation.");
+
+    summarySectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    setTemporaryHighlights("summary");
+  };
+
+  const handlePaymentMethodSelection = (methodId: string) => {
+    setSelectedPaymentMethodId(methodId);
+    setCheckoutState("waiting");
+    setCheckoutMessage("Waiting for payment confirmation.");
+  };
 
   const handleCheckout = async () => {
-    const method = paymentMethods.find((item) => item.id === selectedPaymentMethodId);
-    if (!method) {
-      toast.error("Please select a payment method");
-      return;
-    }
-
-    setCheckoutState("loading");
-    setCheckoutMessage("Processing payment...");
+    setCheckoutState("verifying");
+    setCheckoutMessage("Verifying payment, please wait...");
 
     await checkoutMutation.mutateAsync({
       projectId: projectId ?? null,
       planKey: selectedPlanKey,
-      paymentMethodId: method.id,
-      simulateFailure: method.simulateFailure,
+      paymentMethodId: selectedMethod.id,
+      simulateFailure: selectedMethod.simulateFailure,
     });
   };
 
   return (
     <div className="space-y-6 p-4 md:p-6">
-      <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background shadow-sm">
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.18),transparent_60%)]" />
-        <CardHeader className="relative">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="space-y-1.5">
-              <Badge className="w-fit" variant="secondary">
-                Active Plan
-              </Badge>
-              <div className="flex flex-wrap items-center gap-2">
-                <CardTitle className="text-2xl tracking-tight">Pro Workspace</CardTitle>
-                {isTrial && (
-                  <Badge variant="outline" className="border-emerald-300 bg-emerald-50 text-emerald-700">
-                    New Account — Free Trial
-                  </Badge>
-                )}
-              </div>
-              <CardDescription className="max-w-2xl text-sm leading-relaxed">
-                Scale commit intelligence and repository QA with higher limits, priority AI, and INR
-                billing support.
-              </CardDescription>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" className="hover:shadow-sm">
-                Manage Subscription
-              </Button>
-              <Button className="group bg-primary text-primary-foreground">
-                <Sparkles className="size-4 transition-transform group-hover:rotate-12" />
-                Upgrade
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="relative grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border bg-background/80 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Billing Cycle</p>
-            <p className="mt-2 text-xl font-semibold">Feb 2026</p>
-            <p className="mt-1 text-xs text-muted-foreground">Renews on Mar 1, 2026</p>
-          </div>
-          <div className="rounded-xl border bg-background/80 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Current Spend</p>
-            <p className="mt-2 text-xl font-semibold">{formatInr(totalSpendInPaise)}</p>
-            <p className="mt-1 text-xs text-muted-foreground">Includes successful INR payments</p>
-          </div>
-          <div className="rounded-xl border bg-background/80 p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Selected Project</p>
-            <p className="mt-2 truncate text-xl font-semibold">{project?.name ?? "Workspace"}</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {projectId
-                ? "Billing context filtered to selected project"
-                : "No project selected, showing workspace-level billing"}
+      <section className="space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight">Usage</h1>
+            <p className="text-sm text-muted-foreground">
+              Billing usage is visible first for fast consumption tracking.
             </p>
           </div>
-        </CardContent>
-      </Card>
-
-      <section className="space-y-3">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">Usage</h2>
-          <p className="text-sm text-muted-foreground">
-            Track limits and capacity across billing resources.
-          </p>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">Current Step: {stepLabel[activeStep]}</Badge>
+            <Button variant="outline" className="hover:shadow-sm" onClick={scrollToPlanSelection}>
+              Manage Subscription
+            </Button>
+          </div>
         </div>
+
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background">
+          <CardContent className="grid gap-3 p-5 sm:grid-cols-3">
+            <div className="rounded-xl border bg-background/80 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Workspace</p>
+              <p className="mt-1 text-lg font-semibold">Pro Workspace</p>
+              {isTrial && (
+                <Badge variant="outline" className="mt-2 border-emerald-300 bg-emerald-50 text-emerald-700">
+                  New Account — Free Trial
+                </Badge>
+              )}
+            </div>
+            <div className="rounded-xl border bg-background/80 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Current Spend</p>
+              <p className="mt-1 text-lg font-semibold">{formatInr(totalSpendInPaise)}</p>
+            </div>
+            <div className="rounded-xl border bg-background/80 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Selected Project</p>
+              <p className="mt-1 truncate text-lg font-semibold">{project?.name ?? "Workspace"}</p>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid gap-4 md:grid-cols-3">
           {usageCards.map((item) => {
             const percent = clampPercent((item.value / item.limit) * 100);
@@ -296,244 +435,338 @@ const BillingPage = () => {
         </div>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <CreditCard className="size-4" />
-              Payment Methods
-            </CardTitle>
-            <CardDescription>
-              Select a payment method and checkout in INR.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {paymentMethods.map((method) => {
-              const isSelected = selectedPaymentMethodId === method.id;
-              return (
-                <button
-                  key={method.id}
-                  type="button"
-                  onClick={() => setSelectedPaymentMethodId(method.id)}
-                  className={cn(
-                    "w-full rounded-xl border p-4 text-left transition-colors",
-                    "hover:bg-muted/35",
-                    isSelected ? "border-primary bg-primary/5" : "bg-muted/20",
-                  )}
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-semibold">{method.brand}</p>
-                      <p className="text-xs text-muted-foreground">{method.label}</p>
-                      <p className="text-xs text-muted-foreground">{method.meta}</p>
-                    </div>
-                    {method.simulateFailure ? (
-                      <Badge variant="outline">Failure test</Badge>
-                    ) : (
-                      <Badge variant="default">Recommended</Badge>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </CardContent>
-        </Card>
+      <section
+        ref={plansSectionRef}
+        data-step="plan"
+        className={cn(
+          "space-y-3 rounded-xl border border-transparent p-1 transition-colors duration-300",
+          highlightPlans && "border-primary/40 bg-primary/5",
+        )}
+      >
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">Plan Selection</h2>
+          <p className="text-sm text-muted-foreground">Select plan to continue checkout flow.</p>
+        </div>
 
+        <div className="grid gap-4 lg:grid-cols-3">
+          {plans.map((plan) => {
+            const isSelectable = plan.key === "starter" || plan.key === "pro";
+            const isSelected = isSelectable && plan.key === selectedPlanKey;
+
+            return (
+              <Card
+                key={plan.name}
+                className={cn(
+                  "relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
+                  isSelected && "border-primary bg-primary/5 shadow-sm",
+                )}
+              >
+                {plan.featured && (
+                  <Badge className="absolute right-4 top-4" variant="default">
+                    Most Popular
+                  </Badge>
+                )}
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    {plan.featured ? <Zap className="size-4 text-primary" /> : <Sparkles className="size-4" />}
+                    {plan.name}
+                  </CardTitle>
+                  <CardDescription className="text-xl font-semibold text-foreground">
+                    {plan.priceInPaise ? formatInr(plan.priceInPaise) + " / mo" : "Custom"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    {plan.highlights.map((feature) => (
+                      <div key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Check className="size-4 text-emerald-600" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {isSelectable ? (
+                    <Button
+                      className="w-full"
+                      variant={isSelected ? "default" : "outline"}
+                      onClick={() => handlePlanSelection(plan.key as "starter" | "pro")}
+                    >
+                      {isSelected ? "Selected" : "Select Plan"}
+                    </Button>
+                  ) : (
+                    <Button className="w-full" variant="outline">
+                      Contact Sales
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </section>
+
+      <section
+        ref={summarySectionRef}
+        data-step="summary"
+        className={cn(
+          "rounded-xl border border-transparent p-1 transition-colors duration-300",
+          highlightSummary && "border-primary/40 bg-primary/5",
+        )}
+      >
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <ShieldCheck className="size-4" />
-              Checkout
+              Checkout Summary
             </CardTitle>
-            <CardDescription>Simple and lightweight payment simulation for INR billing.</CardDescription>
+            <CardDescription>Updates instantly with selected plan details.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <div className="space-y-2">
-              <p className="font-medium">Select Plan</p>
-              <div className="grid gap-2">
-                {plans
-                  .filter((plan) => plan.key !== "enterprise")
-                  .map((plan) => {
-                    const isActive = selectedPlanKey === plan.key;
-                    return (
-                      <button
-                        key={plan.key}
-                        type="button"
-                        onClick={() => setSelectedPlanKey(plan.key as "starter" | "pro")}
-                        className={cn(
-                          "flex items-center justify-between rounded-lg border px-3 py-2 transition-colors",
-                          isActive ? "border-primary bg-primary/5" : "bg-muted/20 hover:bg-muted/30",
-                        )}
-                      >
-                        <span className="font-medium">{plan.name}</span>
-                        <span>{plan.priceInPaise ? formatInr(plan.priceInPaise) : "Custom"}</span>
-                      </button>
-                    );
-                  })}
-              </div>
+          <CardContent className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-lg border bg-muted/20 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Plan</p>
+              <p className="mt-1 text-lg font-semibold">{selectedPlan.name}</p>
             </div>
-
-            <div className="rounded-xl border bg-muted/20 p-4">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Checkout Amount</p>
-              <p className="mt-1 text-2xl font-semibold">
-                {selectedPlan?.priceInPaise ? formatInr(selectedPlan.priceInPaise) : "Custom"}
+            <div className="rounded-lg border bg-muted/20 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Amount</p>
+              <p className="mt-1 text-lg font-semibold">
+                {selectedPlan.priceInPaise ? formatInr(selectedPlan.priceInPaise) : "Custom"}
               </p>
             </div>
-
-            <Button
-              className="w-full"
-              onClick={() => {
-                void handleCheckout();
-              }}
-              disabled={checkoutMutation.isPending}
-            >
-              {checkoutMutation.isPending ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <Zap className="size-4" />
-                  Checkout in INR
-                </>
-              )}
-            </Button>
-
-            {checkoutState !== "idle" && (
-              <div
-                className={cn(
-                  "rounded-lg border px-3 py-2 text-xs",
-                  checkoutState === "success" && "border-emerald-300 bg-emerald-50 text-emerald-700",
-                  checkoutState === "failure" && "border-rose-300 bg-rose-50 text-rose-700",
-                  checkoutState === "loading" && "border-blue-300 bg-blue-50 text-blue-700",
-                )}
-              >
-                {checkoutMessage}
-              </div>
-            )}
+            <div className="rounded-lg border bg-muted/20 p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Method</p>
+              <p className="mt-1 text-lg font-semibold">{selectedMethod.brand}</p>
+              <p className="text-xs text-muted-foreground">{selectedMethod.meta}</p>
+            </div>
           </CardContent>
         </Card>
-      </div>
+      </section>
 
-      <Card>
-        <CardHeader>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <ReceiptText className="size-4" />
-                Invoices
-              </CardTitle>
-              <CardDescription>Fetched dynamically from Prisma after successful payment.</CardDescription>
-            </div>
-            <Button variant="outline" size="sm" disabled={invoices.length === 0}>
-              <Download className="size-4" />
-              Export CSV
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {billingOverviewQuery.isLoading && (
-            <p className="text-sm text-muted-foreground">Loading invoices...</p>
-          )}
-
-          {!billingOverviewQuery.isLoading && invoices.length === 0 && (
-            <div className="rounded-xl border border-dashed bg-muted/10 p-6 text-center">
-              <p className="text-sm font-medium">No invoices yet</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Complete a successful payment to generate your first invoice.
-              </p>
-            </div>
-          )}
-
-          {!billingOverviewQuery.isLoading && invoices.length > 0 && (
-            <div className="overflow-x-auto rounded-xl border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Invoice</TableHead>
-                    <TableHead>Plan</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {invoices.map((invoice) => (
-                    <TableRow key={invoice.id}>
-                      <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
-                      <TableCell>{invoice.payment.planName}</TableCell>
-                      <TableCell>
-                        {new Date(invoice.issuedAt).toLocaleDateString("en-IN", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="default">{invoice.status}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right font-medium">
-                        {formatInr(invoice.amountInPaise)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <section className="space-y-3 pb-2">
+      <section ref={paymentSectionRef} data-step="payment" className="space-y-3">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight">Upgrade Options</h2>
-          <p className="text-sm text-muted-foreground">Choose the plan that matches your team size.</p>
+          <h2 className="text-lg font-semibold tracking-tight">Payment</h2>
+          <p className="text-sm text-muted-foreground">
+            Choose method, pay, and verify. UPI QR appears only for UPI method.
+          </p>
         </div>
-        <div className="grid gap-4 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <Card
-              key={plan.name}
-              className={cn(
-                "relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
-                plan.featured && "border-primary shadow-sm",
-              )}
-            >
-              {plan.featured && (
-                <Badge className="absolute right-4 top-4" variant="default">
-                  Most Popular
-                </Badge>
-              )}
+
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <CreditCard className="size-4" />
+                Method Selection
+              </CardTitle>
+              <CardDescription>Select payment method for this transaction.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {paymentMethods.map((method) => {
+                const isSelected = selectedPaymentMethodId === method.id;
+
+                return (
+                  <button
+                    key={method.id}
+                    type="button"
+                    onClick={() => handlePaymentMethodSelection(method.id)}
+                    className={cn(
+                      "w-full rounded-xl border p-4 text-left transition-colors hover:bg-muted/35",
+                      isSelected ? "border-primary bg-primary/5" : "bg-muted/20",
+                    )}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-semibold">{method.brand}</p>
+                        <p className="text-xs text-muted-foreground">{method.label}</p>
+                        <p className="text-xs text-muted-foreground">{method.meta}</p>
+                      </div>
+                      <Badge variant={isSelected ? "default" : "outline"}>
+                        {isSelected ? "Selected" : "Choose"}
+                      </Badge>
+                    </div>
+                  </button>
+                );
+              })}
+            </CardContent>
+          </Card>
+
+          {isUpiSelected ? (
+            <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  {plan.featured ? <Zap className="size-4 text-primary" /> : <Sparkles className="size-4" />}
-                  {plan.name}
-                </CardTitle>
-                <CardDescription className="text-xl font-semibold text-foreground">
-                  {plan.priceInPaise ? formatInr(plan.priceInPaise) + " / mo" : "Custom"}
-                </CardDescription>
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Zap className="size-4" />
+                    UPI QR Checkout
+                  </CardTitle>
+                  <Badge variant="outline">Refresh in {qrCountdown}s</Badge>
+                </div>
+                <CardDescription>Scan to pay with any UPI app</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  {plan.highlights.map((feature) => (
-                    <div key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check className="size-4 text-emerald-600" />
-                      <span>{feature}</span>
-                    </div>
-                  ))}
+                <div className="mx-auto w-fit rounded-2xl border bg-white p-3 shadow-sm">
+                  <Image
+                    src={upiQrCodeUrl}
+                    alt="UPI QR code for payment"
+                    width={220}
+                    height={220}
+                    className="size-[220px] rounded-lg"
+                  />
                 </div>
-                <Button className="w-full" variant={plan.featured ? "default" : "outline"}>
-                  {plan.key === "enterprise"
-                    ? "Contact Sales"
-                    : plan.featured
-                      ? "Keep Pro"
-                      : "Choose Plan"}
+                <div className="rounded-lg border bg-muted/20 p-3">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">UPI ID</p>
+                  <p className="mt-1 font-medium">{upiId}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Amount: {formatInr(selectedPlan.priceInPaise ?? 0)}
+                  </p>
+                </div>
+                <div className="rounded-lg border bg-muted/20 p-3 text-xs text-muted-foreground">
+                  <p className="font-semibold uppercase tracking-wide">Status</p>
+                  <p className="mt-1">
+                    {checkoutState === "waiting" && "waiting"}
+                    {checkoutState === "verifying" && "verifying"}
+                    {checkoutState === "success" && "success"}
+                  </p>
+                  <p className="mt-1">{checkoutMessage}</p>
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    void handleCheckout();
+                  }}
+                  disabled={checkoutMutation.isPending}
+                >
+                  {checkoutMutation.isPending ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Verifying
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="size-4" />
+                      Verify Payment
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
-          ))}
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Card Checkout</CardTitle>
+                <CardDescription>UPI QR is hidden because card method is selected.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="rounded-lg border bg-muted/20 p-3">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Payable Amount</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {selectedPlan.priceInPaise ? formatInr(selectedPlan.priceInPaise) : "Custom"}
+                  </p>
+                </div>
+                <div className="rounded-lg border bg-muted/20 p-3 text-xs text-muted-foreground">
+                  <p className="font-semibold uppercase tracking-wide">Status</p>
+                  <p className="mt-1">
+                    {checkoutState === "waiting" && "waiting"}
+                    {checkoutState === "verifying" && "verifying"}
+                    {checkoutState === "success" && "success"}
+                  </p>
+                  <p className="mt-1">{checkoutMessage}</p>
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    void handleCheckout();
+                  }}
+                  disabled={checkoutMutation.isPending}
+                >
+                  {checkoutMutation.isPending ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Verifying
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="size-4" />
+                      Verify Payment
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </section>
+
+      {hasSuccessfulPayment && (
+        <section ref={invoiceSectionRef} data-step="invoice" className="space-y-3">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight">Invoice</h2>
+            <p className="text-sm text-muted-foreground">Visible only after successful payment.</p>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <ReceiptText className="size-4" />
+                    Invoices
+                  </CardTitle>
+                  <CardDescription>Fetched dynamically from Prisma.</CardDescription>
+                </div>
+                <Button variant="outline" size="sm" disabled={invoices.length === 0}>
+                  <Download className="size-4" />
+                  Export CSV
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {billingOverviewQuery.isLoading && (
+                <p className="text-sm text-muted-foreground">Loading invoices...</p>
+              )}
+
+              {!billingOverviewQuery.isLoading && invoices.length === 0 && (
+                <div className="rounded-xl border border-dashed bg-muted/10 p-6 text-center">
+                  <p className="text-sm font-medium">No invoices yet</p>
+                </div>
+              )}
+
+              {!billingOverviewQuery.isLoading && invoices.length > 0 && (
+                <div className="overflow-x-auto rounded-xl border">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Invoice</TableHead>
+                        <TableHead>Plan</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Amount</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {invoices.map((invoice) => (
+                        <TableRow key={invoice.id}>
+                          <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
+                          <TableCell>{invoice.payment.planName}</TableCell>
+                          <TableCell>
+                            {new Date(invoice.issuedAt).toLocaleDateString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="default">{invoice.status}</Badge>
+                          </TableCell>
+                          <TableCell className="text-right font-medium">
+                            {formatInr(invoice.amountInPaise)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+      )}
     </div>
   );
 };
