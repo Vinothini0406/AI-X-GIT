@@ -3721,82 +3721,82 @@ export namespace Prisma {
 
   export type CommitMinAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    projectId: string | null
     commitMessage: string | null
     commitHash: string | null
     commitAuthorName: string | null
     commitAuthorAvatar: string | null
     commitDate: Date | null
     summary: string | null
-    projectId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type CommitMaxAggregateOutputType = {
     id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    projectId: string | null
     commitMessage: string | null
     commitHash: string | null
     commitAuthorName: string | null
     commitAuthorAvatar: string | null
     commitDate: Date | null
     summary: string | null
-    projectId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
   }
 
   export type CommitCountAggregateOutputType = {
     id: number
+    createdAt: number
+    updatedAt: number
+    projectId: number
     commitMessage: number
     commitHash: number
     commitAuthorName: number
     commitAuthorAvatar: number
     commitDate: number
     summary: number
-    projectId: number
-    createdAt: number
-    updatedAt: number
     _all: number
   }
 
 
   export type CommitMinAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
+    projectId?: true
     commitMessage?: true
     commitHash?: true
     commitAuthorName?: true
     commitAuthorAvatar?: true
     commitDate?: true
     summary?: true
-    projectId?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
   export type CommitMaxAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
+    projectId?: true
     commitMessage?: true
     commitHash?: true
     commitAuthorName?: true
     commitAuthorAvatar?: true
     commitDate?: true
     summary?: true
-    projectId?: true
-    createdAt?: true
-    updatedAt?: true
   }
 
   export type CommitCountAggregateInputType = {
     id?: true
+    createdAt?: true
+    updatedAt?: true
+    projectId?: true
     commitMessage?: true
     commitHash?: true
     commitAuthorName?: true
     commitAuthorAvatar?: true
     commitDate?: true
     summary?: true
-    projectId?: true
-    createdAt?: true
-    updatedAt?: true
     _all?: true
   }
 
@@ -3874,15 +3874,15 @@ export namespace Prisma {
 
   export type CommitGroupByOutputType = {
     id: string
+    createdAt: Date
+    updatedAt: Date
+    projectId: string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date
     summary: string
-    projectId: string
-    createdAt: Date
-    updatedAt: Date
     _count: CommitCountAggregateOutputType | null
     _min: CommitMinAggregateOutputType | null
     _max: CommitMaxAggregateOutputType | null
@@ -3904,86 +3904,86 @@ export namespace Prisma {
 
   export type CommitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    projectId?: boolean
     commitMessage?: boolean
     commitHash?: boolean
     commitAuthorName?: boolean
     commitAuthorAvatar?: boolean
     commitDate?: boolean
     summary?: boolean
-    projectId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["commit"]>
 
   export type CommitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    projectId?: boolean
     commitMessage?: boolean
     commitHash?: boolean
     commitAuthorName?: boolean
     commitAuthorAvatar?: boolean
     commitDate?: boolean
     summary?: boolean
-    projectId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["commit"]>
 
   export type CommitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    projectId?: boolean
     commitMessage?: boolean
     commitHash?: boolean
     commitAuthorName?: boolean
     commitAuthorAvatar?: boolean
     commitDate?: boolean
     summary?: boolean
-    projectId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["commit"]>
 
   export type CommitSelectScalar = {
     id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    projectId?: boolean
     commitMessage?: boolean
     commitHash?: boolean
     commitAuthorName?: boolean
     commitAuthorAvatar?: boolean
     commitDate?: boolean
     summary?: boolean
-    projectId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
   }
 
-  export type CommitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "commitMessage" | "commitHash" | "commitAuthorName" | "commitAuthorAvatar" | "commitDate" | "summary" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["commit"]>
+  export type CommitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "projectId" | "commitMessage" | "commitHash" | "commitAuthorName" | "commitAuthorAvatar" | "commitDate" | "summary", ExtArgs["result"]["commit"]>
   export type CommitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
   export type CommitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
   export type CommitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Project?: boolean | ProjectDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
   }
 
   export type $CommitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Commit"
     objects: {
-      Project: Prisma.$ProjectPayload<ExtArgs>
+      project: Prisma.$ProjectPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      createdAt: Date
+      updatedAt: Date
+      projectId: string
       commitMessage: string
       commitHash: string
       commitAuthorName: string
       commitAuthorAvatar: string
       commitDate: Date
       summary: string
-      projectId: string
-      createdAt: Date
-      updatedAt: Date
     }, ExtArgs["result"]["commit"]>
     composites: {}
   }
@@ -4378,7 +4378,7 @@ export namespace Prisma {
    */
   export interface Prisma__CommitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4409,15 +4409,15 @@ export namespace Prisma {
    */
   interface CommitFieldRefs {
     readonly id: FieldRef<"Commit", 'String'>
+    readonly createdAt: FieldRef<"Commit", 'DateTime'>
+    readonly updatedAt: FieldRef<"Commit", 'DateTime'>
+    readonly projectId: FieldRef<"Commit", 'String'>
     readonly commitMessage: FieldRef<"Commit", 'String'>
     readonly commitHash: FieldRef<"Commit", 'String'>
     readonly commitAuthorName: FieldRef<"Commit", 'String'>
     readonly commitAuthorAvatar: FieldRef<"Commit", 'String'>
     readonly commitDate: FieldRef<"Commit", 'DateTime'>
     readonly summary: FieldRef<"Commit", 'String'>
-    readonly projectId: FieldRef<"Commit", 'String'>
-    readonly createdAt: FieldRef<"Commit", 'DateTime'>
-    readonly updatedAt: FieldRef<"Commit", 'DateTime'>
   }
     
 
@@ -8174,15 +8174,15 @@ export namespace Prisma {
 
   export const CommitScalarFieldEnum: {
     id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    projectId: 'projectId',
     commitMessage: 'commitMessage',
     commitHash: 'commitHash',
     commitAuthorName: 'commitAuthorName',
     commitAuthorAvatar: 'commitAuthorAvatar',
     commitDate: 'commitDate',
-    summary: 'summary',
-    projectId: 'projectId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    summary: 'summary'
   };
 
   export type CommitScalarFieldEnum = (typeof CommitScalarFieldEnum)[keyof typeof CommitScalarFieldEnum]
@@ -8434,30 +8434,30 @@ export namespace Prisma {
     OR?: CommitWhereInput[]
     NOT?: CommitWhereInput | CommitWhereInput[]
     id?: StringFilter<"Commit"> | string
+    createdAt?: DateTimeFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeFilter<"Commit"> | Date | string
+    projectId?: StringFilter<"Commit"> | string
     commitMessage?: StringFilter<"Commit"> | string
     commitHash?: StringFilter<"Commit"> | string
     commitAuthorName?: StringFilter<"Commit"> | string
     commitAuthorAvatar?: StringFilter<"Commit"> | string
     commitDate?: DateTimeFilter<"Commit"> | Date | string
     summary?: StringFilter<"Commit"> | string
-    projectId?: StringFilter<"Commit"> | string
-    createdAt?: DateTimeFilter<"Commit"> | Date | string
-    updatedAt?: DateTimeFilter<"Commit"> | Date | string
-    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }
 
   export type CommitOrderByWithRelationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    projectId?: SortOrder
     commitMessage?: SortOrder
     commitHash?: SortOrder
     commitAuthorName?: SortOrder
     commitAuthorAvatar?: SortOrder
     commitDate?: SortOrder
     summary?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    Project?: ProjectOrderByWithRelationInput
+    project?: ProjectOrderByWithRelationInput
   }
 
   export type CommitWhereUniqueInput = Prisma.AtLeast<{
@@ -8465,29 +8465,29 @@ export namespace Prisma {
     AND?: CommitWhereInput | CommitWhereInput[]
     OR?: CommitWhereInput[]
     NOT?: CommitWhereInput | CommitWhereInput[]
+    createdAt?: DateTimeFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeFilter<"Commit"> | Date | string
+    projectId?: StringFilter<"Commit"> | string
     commitMessage?: StringFilter<"Commit"> | string
     commitHash?: StringFilter<"Commit"> | string
     commitAuthorName?: StringFilter<"Commit"> | string
     commitAuthorAvatar?: StringFilter<"Commit"> | string
     commitDate?: DateTimeFilter<"Commit"> | Date | string
     summary?: StringFilter<"Commit"> | string
-    projectId?: StringFilter<"Commit"> | string
-    createdAt?: DateTimeFilter<"Commit"> | Date | string
-    updatedAt?: DateTimeFilter<"Commit"> | Date | string
-    Project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
   }, "id">
 
   export type CommitOrderByWithAggregationInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    projectId?: SortOrder
     commitMessage?: SortOrder
     commitHash?: SortOrder
     commitAuthorName?: SortOrder
     commitAuthorAvatar?: SortOrder
     commitDate?: SortOrder
     summary?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
     _count?: CommitCountOrderByAggregateInput
     _max?: CommitMaxOrderByAggregateInput
     _min?: CommitMinOrderByAggregateInput
@@ -8498,15 +8498,15 @@ export namespace Prisma {
     OR?: CommitScalarWhereWithAggregatesInput[]
     NOT?: CommitScalarWhereWithAggregatesInput | CommitScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Commit"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
+    projectId?: StringWithAggregatesFilter<"Commit"> | string
     commitMessage?: StringWithAggregatesFilter<"Commit"> | string
     commitHash?: StringWithAggregatesFilter<"Commit"> | string
     commitAuthorName?: StringWithAggregatesFilter<"Commit"> | string
     commitAuthorAvatar?: StringWithAggregatesFilter<"Commit"> | string
     commitDate?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
     summary?: StringWithAggregatesFilter<"Commit"> | string
-    projectId?: StringWithAggregatesFilter<"Commit"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Commit"> | Date | string
   }
 
   export type IssueWhereInput = {
@@ -8859,93 +8859,93 @@ export namespace Prisma {
   }
 
   export type CommitCreateInput = {
-    id: string
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date | string
     summary: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Project: ProjectCreateNestedOneWithoutCommitInput
+    project: ProjectCreateNestedOneWithoutCommitInput
   }
 
   export type CommitUncheckedCreateInput = {
-    id: string
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projectId: string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date | string
     summary: string
-    projectId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
   }
 
   export type CommitUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Project?: ProjectUpdateOneRequiredWithoutCommitNestedInput
+    project?: ProjectUpdateOneRequiredWithoutCommitNestedInput
   }
 
   export type CommitUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectId?: StringFieldUpdateOperationsInput | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommitCreateManyInput = {
-    id: string
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projectId: string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date | string
     summary: string
-    projectId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
   }
 
   export type CommitUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommitUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projectId?: StringFieldUpdateOperationsInput | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IssueCreateInput = {
@@ -9369,41 +9369,41 @@ export namespace Prisma {
 
   export type CommitCountOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    projectId?: SortOrder
     commitMessage?: SortOrder
     commitHash?: SortOrder
     commitAuthorName?: SortOrder
     commitAuthorAvatar?: SortOrder
     commitDate?: SortOrder
     summary?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type CommitMaxOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    projectId?: SortOrder
     commitMessage?: SortOrder
     commitHash?: SortOrder
     commitAuthorName?: SortOrder
     commitAuthorAvatar?: SortOrder
     commitDate?: SortOrder
     summary?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type CommitMinOrderByAggregateInput = {
     id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    projectId?: SortOrder
     commitMessage?: SortOrder
     commitHash?: SortOrder
     commitAuthorName?: SortOrder
     commitAuthorAvatar?: SortOrder
     commitDate?: SortOrder
     summary?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
   }
 
   export type MeetingScalarRelationFilter = {
@@ -10114,27 +10114,27 @@ export namespace Prisma {
   }
 
   export type CommitCreateWithoutProjectInput = {
-    id: string
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date | string
     summary: string
-    createdAt?: Date | string
-    updatedAt: Date | string
   }
 
   export type CommitUncheckedCreateWithoutProjectInput = {
-    id: string
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date | string
     summary: string
-    createdAt?: Date | string
-    updatedAt: Date | string
   }
 
   export type CommitCreateOrConnectWithoutProjectInput = {
@@ -10245,15 +10245,15 @@ export namespace Prisma {
     OR?: CommitScalarWhereInput[]
     NOT?: CommitScalarWhereInput | CommitScalarWhereInput[]
     id?: StringFilter<"Commit"> | string
+    createdAt?: DateTimeFilter<"Commit"> | Date | string
+    updatedAt?: DateTimeFilter<"Commit"> | Date | string
+    projectId?: StringFilter<"Commit"> | string
     commitMessage?: StringFilter<"Commit"> | string
     commitHash?: StringFilter<"Commit"> | string
     commitAuthorName?: StringFilter<"Commit"> | string
     commitAuthorAvatar?: StringFilter<"Commit"> | string
     commitDate?: DateTimeFilter<"Commit"> | Date | string
     summary?: StringFilter<"Commit"> | string
-    projectId?: StringFilter<"Commit"> | string
-    createdAt?: DateTimeFilter<"Commit"> | Date | string
-    updatedAt?: DateTimeFilter<"Commit"> | Date | string
   }
 
   export type MeetingUpsertWithWhereUniqueWithoutProjectInput = {
@@ -10766,15 +10766,15 @@ export namespace Prisma {
   }
 
   export type CommitCreateManyProjectInput = {
-    id: string
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
     commitMessage: string
     commitHash: string
     commitAuthorName: string
     commitAuthorAvatar: string
     commitDate: Date | string
     summary: string
-    createdAt?: Date | string
-    updatedAt: Date | string
   }
 
   export type MeetingCreateManyProjectInput = {
@@ -10796,38 +10796,38 @@ export namespace Prisma {
 
   export type CommitUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommitUncheckedUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CommitUncheckedUpdateManyWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     commitMessage?: StringFieldUpdateOperationsInput | string
     commitHash?: StringFieldUpdateOperationsInput | string
     commitAuthorName?: StringFieldUpdateOperationsInput | string
     commitAuthorAvatar?: StringFieldUpdateOperationsInput | string
     commitDate?: DateTimeFieldUpdateOperationsInput | Date | string
     summary?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MeetingUpdateWithoutProjectInput = {

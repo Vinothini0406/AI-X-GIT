@@ -140,15 +140,15 @@ exports.Prisma.ProjectScalarFieldEnum = {
 
 exports.Prisma.CommitScalarFieldEnum = {
   id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  projectId: 'projectId',
   commitMessage: 'commitMessage',
   commitHash: 'commitHash',
   commitAuthorName: 'commitAuthorName',
   commitAuthorAvatar: 'commitAuthorAvatar',
   commitDate: 'commitDate',
-  summary: 'summary',
-  projectId: 'projectId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  summary: 'summary'
 };
 
 exports.Prisma.IssueScalarFieldEnum = {

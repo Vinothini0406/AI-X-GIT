@@ -124,4 +124,53 @@ export const projectRouter = createTRPCRouter({
         },
       });
     }),
+
+  getCommits: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string().nullable(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.projectId) {
+        return [];
+      }
+
+      const hasAccess = await ctx.db.project.findFirst({
+        where: {
+          id: input.projectId,
+          User: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!hasAccess) {
+        return [];
+      }
+
+      return await ctx.db.commit.findMany({
+        where: {
+          projectId: input.projectId,
+        },
+        select: {
+          id: true,
+          commitMessage: true,
+          commitHash: true,
+          commitAuthorName: true,
+          commitAuthorAvatar: true,
+          commitDate: true,
+          summary: true,
+        },
+        orderBy: {
+          commitDate: "desc",
+        },
+        take: 50,
+      });
+    }),
 });

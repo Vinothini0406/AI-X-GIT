@@ -32,17 +32,20 @@ model Project {
 }
 
 model Commit {
-  id                 String   @id
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projectId String
+
+  project Project @relation(fields: [projectId], references: [id])
+
   commitMessage      String
   commitHash         String
   commitAuthorName   String
   commitAuthorAvatar String
   commitDate         DateTime
   summary            String
-  projectId          String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime
-  Project            Project  @relation(fields: [projectId], references: [id])
 }
 
 model Issue {
