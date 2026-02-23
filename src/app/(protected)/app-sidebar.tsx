@@ -23,16 +23,14 @@ import {
   FolderGit2,
   LayoutDashboard,
   Plus,
-  Presentation,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Q&A", url: "/qa", icon: Bot },
-  { title: "Meetings", url: "/meetings", icon: Presentation },
   { title: "Billing", url: "/billing", icon: CreditCard },
 ];
 
@@ -49,7 +47,6 @@ const getProjectMeta = (githubUrl?: string | null) => {
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { projects, isLoading, error, projectId, setProjectId } = useProject();
   const { open } = useSidebar();
 
@@ -96,11 +93,11 @@ export function AppSidebar() {
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-2.5">
               {isLoading && (
                 <>
                   {Array.from({ length: 3 }).map((_, idx) => (
-                    <SidebarMenuItem key={`project-skeleton-${idx}`}>
+                    <SidebarMenuItem key={`project-skeleton-${idx}`} className="py-0.5">
                       <div className="flex items-center gap-2 rounded-lg border p-2">
                         <Skeleton className="size-8 rounded-md" />
                         {open && (
@@ -116,13 +113,13 @@ export function AppSidebar() {
               )}
 
               {error && (
-                <SidebarMenuItem className="text-xs text-destructive">
+                <SidebarMenuItem className="py-1 text-xs text-destructive">
                   Failed to load projects
                 </SidebarMenuItem>
               )}
 
               {!isLoading && !error && projects.length === 0 && (
-                <SidebarMenuItem>
+                <SidebarMenuItem className="py-0.5">
                   <div className="rounded-lg border border-dashed p-3 text-xs text-muted-foreground">
                     No projects yet. Create one to get started.
                   </div>
@@ -132,14 +129,11 @@ export function AppSidebar() {
               {projects.map((project) => {
                 const isActive = project.id === projectId;
                 return (
-                  <SidebarMenuItem key={project.id}>
+                  <SidebarMenuItem key={project.id} className="py-0.5">
                     <button
                       type="button"
                       onClick={() => {
                         setProjectId(project.id);
-                        if (pathname !== "/dashboard") {
-                          router.push("/dashboard");
-                        }
                       }}
                       className={cn(
                         "w-full rounded-xl border p-2 text-left transition-all duration-150",
@@ -189,7 +183,7 @@ export function AppSidebar() {
               })}
 
               {open && (
-                <SidebarMenuItem>
+                <SidebarMenuItem className="pt-1">
                   <SidebarMenuButton asChild>
                     <Link href="/create">
                       <Button className="w-full justify-start" variant="outline">
