@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import {
+  Activity,
+  AlertTriangle,
   CalendarDays,
+  CheckCircle2,
+  Circle,
   ExternalLink,
   GitCommitHorizontal,
   Github,
@@ -25,6 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
@@ -90,6 +95,10 @@ const DashboardPage = () => {
     { projectId: projectId ?? null },
     { enabled: !!projectId },
   );
+  const projectDetailsQuery = api.project.getProjectDetails.useQuery(
+    { projectId: projectId ?? "" },
+    { enabled: Boolean(projectId) },
+  );
 
   const syncCommits = api.project.syncCommits.useMutation({
     onSuccess: async ({ inserted }) => {
@@ -111,8 +120,96 @@ const DashboardPage = () => {
     },
   });
 
-  const commits = commitsQuery.data ?? [];
+  const commits = useMemo(() => commitsQuery.data ?? [], [commitsQuery.data]);
   const canSync = Boolean(projectId && project?.githubUrl);
+
+  const projectCounts = projectDetailsQuery.data?._count;
+  const totalCommitCount = projectCounts?.Commit ?? 0;
+  const totalQuestionCount = projectCounts?.Question ?? 0;
+  const totalMeetingCount = projectCounts?.Meeting ?? 0;
+  const totalCollaboratorCount = projectCounts?.User ?? 0;
+
+  const latestCommitDate = useMemo(() => {
+    if (!commits[0]) {
+      return null;
+    }
+
+    const parsed = new Date(commits[0].commitDate);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }, [commits]);
+
+  const healthScore = useMemo(() => {
+    if (!projectId) {
+      return 0;
+    }
+
+    const commitScore = Math.min(40, Math.round((totalCommitCount / 30) * 40));
+    const qaScore = Math.min(30, Math.round((totalQuestionCount / 20) * 30));
+    const collaborationScore = Math.min(15, Math.round((totalCollaboratorCount / 5) * 15));
+    const meetingScore = Math.min(10, Math.round((totalMeetingCount / 5) * 10));
+
+    const freshnessScore = (() => {
+      if (!latestCommitDate) {
+        return 0;
+      }
+
+      const daysOld = Math.floor((Date.now() - latestCommitDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysOld <= 3) return 5;
+      if (daysOld <= 10) return 3;
+      return 1;
+    })();
+
+    return Math.max(
+      0,
+      Math.min(100, commitScore + qaScore + collaborationScore + meetingScore + freshnessScore),
+    );
+  }, [
+    latestCommitDate,
+    projectId,
+    totalCollaboratorCount,
+    totalCommitCount,
+    totalMeetingCount,
+    totalQuestionCount,
+  ]);
+
+  const checklistItems = [
+    {
+      id: "repo",
+      title: "Connect repository",
+      done: Boolean(project?.githubUrl),
+      hint: "Link a GitHub URL during project setup.",
+    },
+    {
+      id: "sync",
+      title: "Sync commit summaries",
+      done: totalCommitCount > 0,
+      hint: "Use Sync & Summarize to pull latest commits.",
+    },
+    {
+      id: "qa",
+      title: "Ask first AI question",
+      done: totalQuestionCount > 0,
+      hint: "Use the repo chat panel to create initial context.",
+    },
+    {
+      id: "team",
+      title: "Add at least one collaborator",
+      done: totalCollaboratorCount > 1,
+      hint: "Invite a teammate so project context is shared.",
+    },
+  ] as const;
+
+  const completedChecklistCount = checklistItems.filter((item) => item.done).length;
+  const checklistPercent = Math.round((completedChecklistCount / checklistItems.length) * 100);
+  const activityAlerts = [
+    !project?.githubUrl ? "Repository URL is missing for this project." : null,
+    totalCommitCount === 0 ? "No commit summaries yet. Sync to improve AI answers." : null,
+    latestCommitDate &&
+    Date.now() - latestCommitDate.getTime() > 1000 * 60 * 60 * 24 * 10
+      ? "Last synced commit is older than 10 days. Refresh repository context."
+      : null,
+    totalQuestionCount === 0 ? "No AI Q&A history yet. Ask one question to seed project memory." : null,
+  ].filter((alert): alert is string => Boolean(alert));
 
   useEffect(() => {
     const container = chatContainerRef.current;
@@ -277,6 +374,106 @@ const DashboardPage = () => {
 
   return (
     <div className="space-y-6">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+        <Card>
+          <CardHeader>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="size-5 text-primary" />
+                Project Health
+              </CardTitle>
+              <Badge variant="outline">{healthScore}/100</Badge>
+            </div>
+            <CardDescription>
+              Health score combines commit flow, Q&A activity, collaboration, and freshness.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Progress value={healthScore} className="h-2.5" />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-lg border bg-muted/20 p-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Commits</p>
+                <p className="mt-1 text-lg font-semibold">{totalCommitCount}</p>
+              </div>
+              <div className="rounded-lg border bg-muted/20 p-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">AI Questions</p>
+                <p className="mt-1 text-lg font-semibold">{totalQuestionCount}</p>
+              </div>
+              <div className="rounded-lg border bg-muted/20 p-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">Collaborators</p>
+                <p className="mt-1 text-lg font-semibold">{totalCollaboratorCount}</p>
+              </div>
+              <div className="rounded-lg border bg-muted/20 p-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Last Synced Commit
+                </p>
+                <p className="mt-1 text-sm font-semibold">
+                  {latestCommitDate ? latestCommitDate.toLocaleDateString() : "Not synced yet"}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Activation Checklist</CardTitle>
+            <CardDescription>
+              Complete these to improve answer quality and team adoption.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between text-sm">
+              <span>Completion</span>
+              <span>
+                {completedChecklistCount}/{checklistItems.length}
+              </span>
+            </div>
+            <Progress value={checklistPercent} className="h-2.5" />
+            <div className="space-y-2">
+              {checklistItems.map((item) => (
+                <div
+                  key={item.id}
+                  className={cn(
+                    "rounded-lg border p-3",
+                    item.done ? "border-emerald-300/70 bg-emerald-50/50" : "bg-muted/15",
+                  )}
+                >
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    {item.done ? (
+                      <CheckCircle2 className="size-4 text-emerald-600" />
+                    ) : (
+                      <Circle className="size-4 text-muted-foreground" />
+                    )}
+                    {item.title}
+                  </p>
+                  {!item.done && <p className="mt-1 text-xs text-muted-foreground">{item.hint}</p>}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {activityAlerts.length > 0 && (
+        <Card className="border-amber-200 bg-amber-50/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <AlertTriangle className="size-4 text-amber-700" />
+              Attention Needed
+            </CardTitle>
+            <CardDescription>These issues may reduce AI response quality.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {activityAlerts.map((alert) => (
+              <div key={alert} className="rounded-lg border border-amber-200 bg-white/70 px-3 py-2 text-sm">
+                {alert}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
         <Card className="overflow-hidden">
           <CardHeader className="border-b bg-gradient-to-r from-primary/5 via-background to-background pt-8">

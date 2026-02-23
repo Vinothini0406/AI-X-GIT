@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  AlertTriangle,
+  ArrowUpRight,
   Check,
   CreditCard,
   Download,
@@ -9,6 +11,7 @@ import {
   ReceiptText,
   ShieldCheck,
   Sparkles,
+  TrendingUp,
   Zap,
 } from "lucide-react";
 import Image from "next/image";
@@ -39,6 +42,8 @@ import { api } from "@/trpc/react";
 
 type StepKey = "plan" | "summary" | "payment" | "invoice";
 type CheckoutState = "waiting" | "verifying" | "success";
+type UsageRiskLevel = "healthy" | "monitor" | "warning" | "critical";
+type NudgeTone = "info" | "warning" | "critical";
 
 interface PlanOption {
   key: "starter" | "pro" | "enterprise";
@@ -114,6 +119,26 @@ const stepLabel: Record<StepKey, string> = {
   invoice: "Invoice",
 };
 
+const riskLabel: Record<UsageRiskLevel, string> = {
+  healthy: "Healthy",
+  monitor: "Monitor",
+  warning: "Warning",
+  critical: "Critical",
+};
+
+const riskClass: Record<UsageRiskLevel, string> = {
+  healthy: "border-emerald-300 bg-emerald-50 text-emerald-700",
+  monitor: "border-sky-300 bg-sky-50 text-sky-700",
+  warning: "border-amber-300 bg-amber-50 text-amber-700",
+  critical: "border-rose-300 bg-rose-50 text-rose-700",
+};
+
+const nudgeClass: Record<NudgeTone, string> = {
+  info: "border-sky-200 bg-sky-50/60",
+  warning: "border-amber-200 bg-amber-50/60",
+  critical: "border-rose-200 bg-rose-50/60",
+};
+
 const BillingPage = () => {
   const { projectId, project } = useProject();
 
@@ -141,12 +166,10 @@ const BillingPage = () => {
   const invoiceSectionRef = useRef<HTMLElement | null>(null);
   const highlightTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const projectDetailsQuery = api.project.getProjectDetails.useQuery(
-    { projectId: projectId ?? "" },
-    { enabled: Boolean(projectId) },
-  );
-
   const billingOverviewQuery = api.billing.getBillingOverview.useQuery({
+    projectId: projectId ?? null,
+  });
+  const usageInsightsQuery = api.billing.getUsageInsights.useQuery({
     projectId: projectId ?? null,
   });
 
@@ -162,7 +185,7 @@ const BillingPage = () => {
         toast.error(result.message);
       }
 
-      await billingOverviewQuery.refetch();
+      await Promise.all([billingOverviewQuery.refetch(), usageInsightsQuery.refetch()]);
     },
     onError: (error) => {
       setCheckoutState("waiting");
@@ -288,28 +311,55 @@ const BillingPage = () => {
     }, 1200);
   };
 
-  const usageCounts = projectDetailsQuery.data?._count;
-  const commitsUsed = usageCounts?.Commit ?? 0;
-  const questionsUsed = usageCounts?.Question ?? 0;
-  const collaboratorsUsed = usageCounts?.User ?? 1;
+  const usageInsights = usageInsightsQuery.data;
+  const usageRisk = usageInsights?.riskLevel ?? "healthy";
+  const usageWindow = usageInsights?.window;
+  const monthStartLabel = usageWindow
+    ? new Date(usageWindow.monthStart).toLocaleDateString("en-IN", {
+        month: "short",
+        day: "2-digit",
+      })
+    : null;
+  const monthEndLabel = usageWindow
+    ? new Date(
+        new Date(usageWindow.monthEndExclusive).getTime() - 24 * 60 * 60 * 1000,
+      ).toLocaleDateString("en-IN", {
+        month: "short",
+        day: "2-digit",
+      })
+    : null;
+  const projectedDaysLabel =
+    usageWindow && monthStartLabel && monthEndLabel
+      ? `${monthStartLabel} - ${monthEndLabel} (${usageWindow.daysElapsed}/${usageWindow.daysInMonth} days elapsed)`
+      : "Current billing month";
+
+  const commitsMetric = usageInsights?.metrics.commits;
+  const questionsMetric = usageInsights?.metrics.questions;
+  const collaboratorsMetric = usageInsights?.metrics.collaborators;
 
   const usageCards = [
     {
       label: "Commit Summaries",
-      value: commitsUsed,
-      limit: 1000,
+      value: commitsMetric?.currentMonth ?? 0,
+      projected: commitsMetric?.projectedEndOfMonth ?? 0,
+      limit: commitsMetric?.limit ?? 1000,
+      subtitle: "Current month usage",
       tone: "from-cyan-500/20 to-blue-500/10",
     },
     {
       label: "AI Q&A Messages",
-      value: questionsUsed,
-      limit: 500,
+      value: questionsMetric?.currentMonth ?? 0,
+      projected: questionsMetric?.projectedEndOfMonth ?? 0,
+      limit: questionsMetric?.limit ?? 500,
+      subtitle: "Current month usage",
       tone: "from-emerald-500/20 to-teal-500/10",
     },
     {
       label: "Team Members",
-      value: collaboratorsUsed,
-      limit: 10,
+      value: collaboratorsMetric?.active ?? 0,
+      projected: null,
+      limit: collaboratorsMetric?.limit ?? 10,
+      subtitle: "Active collaborators",
       tone: "from-orange-500/20 to-amber-500/10",
     },
   ] as const;
@@ -318,6 +368,9 @@ const BillingPage = () => {
   const totalSpendInPaise = billingOverviewQuery.data?.totalSpendInPaise ?? 0;
   const hasSuccessfulPayment = billingOverviewQuery.data?.hasSuccessfulPayment ?? false;
   const isTrial = !hasSuccessfulPayment;
+  const usageNudges = usageInsights?.nudges ?? [];
+  const usageProjects = usageInsights?.byProject ?? [];
+  const suggestedPlan = usageInsights?.suggestedPlan ?? "starter";
 
   const upiId = "dionysus.payments@upi";
   const upiAmount = selectedPlan.priceInPaise ? (selectedPlan.priceInPaise / 100).toFixed(2) : "0.00";
@@ -426,6 +479,13 @@ const BillingPage = () => {
                         / {item.limit}
                       </span>
                     </p>
+                    <p className="mt-1 text-xs text-muted-foreground">{item.subtitle}</p>
+                    {item.projected !== null && (
+                      <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <TrendingUp className="size-3.5" />
+                        Forecast: {item.projected}
+                      </p>
+                    )}
                     <Progress value={percent} className="mt-3 h-2.5" />
                   </div>
                 </CardContent>
@@ -433,6 +493,112 @@ const BillingPage = () => {
             );
           })}
         </div>
+
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+          <Card>
+            <CardHeader>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <TrendingUp className="size-4" />
+                  Usage Forecast
+                </CardTitle>
+                <Badge variant="outline" className={riskClass[usageRisk]}>
+                  {riskLabel[usageRisk]}
+                </Badge>
+              </div>
+              <CardDescription>{projectedDaysLabel}</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {usageInsightsQuery.isLoading ? (
+                <p className="text-sm text-muted-foreground">Preparing usage forecast...</p>
+              ) : (
+                <>
+                  <div className="space-y-2 rounded-lg border bg-muted/15 p-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Commits</span>
+                      <span>
+                        {commitsMetric?.currentMonth ?? 0} / {commitsMetric?.limit ?? 0}
+                      </span>
+                    </div>
+                    <Progress value={commitsMetric?.projectedPercent ?? 0} className="h-2" />
+                    <p className="text-xs text-muted-foreground">
+                      Projected end of month: {commitsMetric?.projectedEndOfMonth ?? 0}
+                    </p>
+                  </div>
+                  <div className="space-y-2 rounded-lg border bg-muted/15 p-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Q&A Messages</span>
+                      <span>
+                        {questionsMetric?.currentMonth ?? 0} / {questionsMetric?.limit ?? 0}
+                      </span>
+                    </div>
+                    <Progress value={questionsMetric?.projectedPercent ?? 0} className="h-2" />
+                    <p className="text-xs text-muted-foreground">
+                      Projected end of month: {questionsMetric?.projectedEndOfMonth ?? 0}
+                    </p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/15 p-3 text-sm">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                      Suggested Plan
+                    </p>
+                    <p className="mt-1 inline-flex items-center gap-1 font-semibold capitalize">
+                      {suggestedPlan}
+                      <ArrowUpRight className="size-4 text-muted-foreground" />
+                    </p>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <AlertTriangle className="size-4" />
+                Smart Upgrade Nudges
+              </CardTitle>
+              <CardDescription>Actionable prompts based on live usage behavior.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {usageInsightsQuery.isLoading && (
+                <p className="text-sm text-muted-foreground">Loading nudges...</p>
+              )}
+              {!usageInsightsQuery.isLoading &&
+                usageNudges.map((nudge, index) => (
+                  <div key={`${nudge.title}-${index}`} className={cn("rounded-lg border p-3", nudgeClass[nudge.tone as NudgeTone])}>
+                    <p className="text-sm font-semibold">{nudge.title}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{nudge.description}</p>
+                  </div>
+                ))}
+            </CardContent>
+          </Card>
+        </div>
+
+        {usageProjects.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Project Intelligence</CardTitle>
+              <CardDescription>Project health and activity ranking.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {usageProjects.slice(0, 5).map((projectInsight) => (
+                <div
+                  key={projectInsight.projectId}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/10 p-3"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold">{projectInsight.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {projectInsight.commits} commits • {projectInsight.questions} Q&A •{" "}
+                      {projectInsight.collaborators} collaborators
+                    </p>
+                  </div>
+                  <Badge variant="outline">Health {projectInsight.healthScore}</Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
       </section>
 
       <section
