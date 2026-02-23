@@ -132,6 +132,7 @@ export async function summariseCommit(
     "You are an expert programmer summarizing a git diff.",
     "Return concise bullet points focused on behavior changes and important refactors.",
     "Mention notable risks, migrations, test changes, and API changes when present.",
+    "Do not use markdown formatting symbols such as **, __, #, or backticks.",
     "",
     `Please summarize this git diff:\n\n${diff}`,
   ]);
@@ -171,6 +172,7 @@ export async function askRepoQuestion(input: AskRepoQuestionInput): Promise<stri
     "You are a senior engineering assistant for a GitHub repository.",
     "Answer based on repository context and commit summaries.",
     "If context is insufficient, explicitly say what is missing.",
+    "Return plain text only. Do not use markdown symbols like **, __, #, -, *, or backticks.",
     "",
     `Project: ${input.projectName}`,
     `Repository URL: ${input.githubUrl ?? "not provided"}`,
