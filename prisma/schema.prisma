@@ -15,6 +15,8 @@ model User {
   updatedAt DateTime
   Question  Question[]
   Project   Project[]
+  Payment   Payment[]
+  Invoice   Invoice[]
 }
 
 model Project {
@@ -29,6 +31,8 @@ model Project {
   Meeting       Meeting[]
   Question      Question[]
   User          User[]
+  Payment       Payment[]
+  Invoice       Invoice[]
 }
 
 model Commit {
@@ -82,4 +86,51 @@ model Question {
   updatedAt DateTime
   Project   Project  @relation(fields: [projectId], references: [id])
   User      User     @relation(fields: [userId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum InvoiceStatus {
+  PAID
+  VOID
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  projectId     String?
+  planName      String
+  amountInPaise Int
+  currency      String        @default("INR")
+  status        PaymentStatus @default(PENDING)
+  providerRef   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  Invoice       Invoice?
+  Project       Project?      @relation(fields: [projectId], references: [id])
+  User          User          @relation(fields: [userId], references: [id])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique
+  userId        String
+  projectId     String?
+  paymentId     String        @unique
+  amountInPaise Int
+  currency      String        @default("INR")
+  status        InvoiceStatus @default(PAID)
+  issuedAt      DateTime      @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  Payment       Payment       @relation(fields: [paymentId], references: [id])
+  Project       Project?      @relation(fields: [projectId], references: [id])
+  User          User          @relation(fields: [userId], references: [id])
+
+  @@index([userId, issuedAt])
+  @@index([projectId, issuedAt])
 }

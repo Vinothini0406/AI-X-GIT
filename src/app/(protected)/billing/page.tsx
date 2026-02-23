@@ -1,14 +1,17 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import {
   Check,
   CreditCard,
   Download,
+  Loader2,
   ReceiptText,
   ShieldCheck,
   Sparkles,
   Zap,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,76 +35,113 @@ import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
-interface InvoiceItem {
-  id: string;
-  date: string;
-  amount: string;
-  status: "Paid" | "Pending";
-}
-
 interface PlanOption {
+  key: "starter" | "pro" | "enterprise";
   name: string;
-  price: string;
+  priceInPaise: number | null;
   highlights: string[];
   featured?: boolean;
 }
 
-const paymentMethods = [
-  {
-    id: "pm_visa",
-    brand: "Visa",
-    label: "Corporate card",
-    last4: "4242",
-    expires: "02/29",
-    isDefault: true,
-  },
-  {
-    id: "pm_mastercard",
-    brand: "Mastercard",
-    label: "Backup card",
-    last4: "1712",
-    expires: "08/28",
-    isDefault: false,
-  },
-];
+interface PaymentMethodOption {
+  id: string;
+  brand: string;
+  label: string;
+  meta: string;
+  simulateFailure: boolean;
+}
 
-const invoices: InvoiceItem[] = [
-  { id: "INV-1042", date: "Feb 01, 2026", amount: "$49.00", status: "Paid" },
-  { id: "INV-1031", date: "Jan 01, 2026", amount: "$49.00", status: "Paid" },
-  { id: "INV-1024", date: "Dec 01, 2025", amount: "$49.00", status: "Paid" },
-  { id: "INV-1018", date: "Nov 01, 2025", amount: "$49.00", status: "Paid" },
+const paymentMethods: PaymentMethodOption[] = [
+  {
+    id: "upi_primary",
+    brand: "UPI",
+    label: "UPI AutoPay",
+    meta: "demo-success@upi",
+    simulateFailure: false,
+  },
+  {
+    id: "card_test_fail",
+    brand: "Test Card",
+    label: "Failure simulation",
+    meta: "xxxx xxxx xxxx 0002",
+    simulateFailure: true,
+  },
 ];
 
 const plans: PlanOption[] = [
   {
+    key: "starter",
     name: "Starter",
-    price: "$19 / mo",
+    priceInPaise: 149900,
     highlights: ["5 projects", "150 commit summaries", "Basic AI support"],
   },
   {
+    key: "pro",
     name: "Pro",
-    price: "$49 / mo",
+    priceInPaise: 499900,
     featured: true,
     highlights: ["Unlimited projects", "1,000 commit summaries", "Priority AI support"],
   },
   {
+    key: "enterprise",
     name: "Enterprise",
-    price: "Custom",
+    priceInPaise: null,
     highlights: ["SAML & SOC2 workflows", "Dedicated model tuning", "SLA and support"],
   },
 ];
 
 const clampPercent = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
 
+const formatInr = (paise: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 2,
+  }).format(paise / 100);
+
 const BillingPage = () => {
   const { projectId, project } = useProject();
+  const [selectedPlanKey, setSelectedPlanKey] = useState<"starter" | "pro">("pro");
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>(
+    paymentMethods[0]?.id ?? "",
+  );
+  const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "success" | "failure">(
+    "idle",
+  );
+  const [checkoutMessage, setCheckoutMessage] = useState<string>("");
+
   const projectDetailsQuery = api.project.getProjectDetails.useQuery(
     { projectId: projectId ?? "" },
     { enabled: Boolean(projectId) },
   );
 
-  const usageCounts = projectDetailsQuery.data?._count;
+  const billingOverviewQuery = api.billing.getBillingOverview.useQuery({
+    projectId: projectId ?? null,
+  });
 
+  const checkoutMutation = api.billing.checkout.useMutation({
+    onSuccess: async (result) => {
+      if (result.status === "SUCCESS") {
+        setCheckoutState("success");
+        setCheckoutMessage("Payment successful. Invoice has been generated.");
+        toast.success("Payment successful");
+      } else {
+        setCheckoutState("failure");
+        setCheckoutMessage(result.message);
+        toast.error(result.message);
+      }
+
+      await billingOverviewQuery.refetch();
+    },
+    onError: (error) => {
+      const message = error.message || "Payment failed. Please try again.";
+      setCheckoutState("failure");
+      setCheckoutMessage(message);
+      toast.error(message);
+    },
+  });
+
+  const usageCounts = projectDetailsQuery.data?._count;
   const commitsUsed = usageCounts?.Commit ?? 0;
   const questionsUsed = usageCounts?.Question ?? 0;
   const collaboratorsUsed = usageCounts?.User ?? 1;
@@ -131,6 +171,34 @@ const BillingPage = () => {
     },
   ] as const;
 
+  const invoices = billingOverviewQuery.data?.invoices ?? [];
+  const totalSpendInPaise = billingOverviewQuery.data?.totalSpendInPaise ?? 0;
+  const hasSuccessfulPayment = billingOverviewQuery.data?.hasSuccessfulPayment ?? false;
+  const isTrial = !hasSuccessfulPayment;
+
+  const selectedPlan = useMemo(
+    () => plans.find((plan) => plan.key === selectedPlanKey),
+    [selectedPlanKey],
+  );
+
+  const handleCheckout = async () => {
+    const method = paymentMethods.find((item) => item.id === selectedPaymentMethodId);
+    if (!method) {
+      toast.error("Please select a payment method");
+      return;
+    }
+
+    setCheckoutState("loading");
+    setCheckoutMessage("Processing payment...");
+
+    await checkoutMutation.mutateAsync({
+      projectId: projectId ?? null,
+      planKey: selectedPlanKey,
+      paymentMethodId: method.id,
+      simulateFailure: method.simulateFailure,
+    });
+  };
+
   return (
     <div className="space-y-6 p-4 md:p-6">
       <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background shadow-sm">
@@ -141,10 +209,17 @@ const BillingPage = () => {
               <Badge className="w-fit" variant="secondary">
                 Active Plan
               </Badge>
-              <CardTitle className="text-2xl tracking-tight">Pro Workspace</CardTitle>
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle className="text-2xl tracking-tight">Pro Workspace</CardTitle>
+                {isTrial && (
+                  <Badge variant="outline" className="border-emerald-300 bg-emerald-50 text-emerald-700">
+                    New Account — Free Trial
+                  </Badge>
+                )}
+              </div>
               <CardDescription className="max-w-2xl text-sm leading-relaxed">
-                Scale commit intelligence and repository QA with priority processing and
-                higher usage limits.
+                Scale commit intelligence and repository QA with higher limits, priority AI, and INR
+                billing support.
               </CardDescription>
             </div>
             <div className="flex gap-2">
@@ -166,14 +241,16 @@ const BillingPage = () => {
           </div>
           <div className="rounded-xl border bg-background/80 p-4">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Current Spend</p>
-            <p className="mt-2 text-xl font-semibold">$49.00</p>
-            <p className="mt-1 text-xs text-muted-foreground">Includes AI usage credits</p>
+            <p className="mt-2 text-xl font-semibold">{formatInr(totalSpendInPaise)}</p>
+            <p className="mt-1 text-xs text-muted-foreground">Includes successful INR payments</p>
           </div>
           <div className="rounded-xl border bg-background/80 p-4">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Selected Project</p>
-            <p className="mt-2 truncate text-xl font-semibold">{project?.name ?? "No project"}</p>
+            <p className="mt-2 truncate text-xl font-semibold">{project?.name ?? "Workspace"}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              {projectId ? "Usage below reflects current project context" : "Select a project in the sidebar"}
+              {projectId
+                ? "Billing context filtered to selected project"
+                : "No project selected, showing workspace-level billing"}
             </p>
           </div>
         </CardContent>
@@ -226,38 +303,39 @@ const BillingPage = () => {
               <CreditCard className="size-4" />
               Payment Methods
             </CardTitle>
-            <CardDescription>Add and manage cards for automatic billing.</CardDescription>
+            <CardDescription>
+              Select a payment method and checkout in INR.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {paymentMethods.map((method) => (
-              <div
-                key={method.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/20 p-4 transition-colors hover:bg-muted/35"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-lg border bg-background">
-                    <CreditCard className="size-4" />
+            {paymentMethods.map((method) => {
+              const isSelected = selectedPaymentMethodId === method.id;
+              return (
+                <button
+                  key={method.id}
+                  type="button"
+                  onClick={() => setSelectedPaymentMethodId(method.id)}
+                  className={cn(
+                    "w-full rounded-xl border p-4 text-left transition-colors",
+                    "hover:bg-muted/35",
+                    isSelected ? "border-primary bg-primary/5" : "bg-muted/20",
+                  )}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-semibold">{method.brand}</p>
+                      <p className="text-xs text-muted-foreground">{method.label}</p>
+                      <p className="text-xs text-muted-foreground">{method.meta}</p>
+                    </div>
+                    {method.simulateFailure ? (
+                      <Badge variant="outline">Failure test</Badge>
+                    ) : (
+                      <Badge variant="default">Recommended</Badge>
+                    )}
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold">
-                      {method.brand} •••• {method.last4}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {method.label} · Expires {method.expires}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  {method.isDefault && <Badge>Default</Badge>}
-                  <Button size="sm" variant="outline">
-                    Edit
-                  </Button>
-                </div>
-              </div>
-            ))}
-            <Button variant="outline" className="w-full sm:w-auto">
-              Add Payment Method
-            </Button>
+                </button>
+              );
+            })}
           </CardContent>
         </Card>
 
@@ -265,27 +343,75 @@ const BillingPage = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <ShieldCheck className="size-4" />
-              Billing Security
+              Checkout
             </CardTitle>
-            <CardDescription>Enterprise-grade controls for financial operations.</CardDescription>
+            <CardDescription>Simple and lightweight payment simulation for INR billing.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <div className="rounded-xl border bg-muted/20 p-4">
-              <p className="font-medium">Secure processing</p>
-              <p className="mt-1 text-muted-foreground">PCI-compliant card storage and tokenized payments.</p>
+          <CardContent className="space-y-4 text-sm">
+            <div className="space-y-2">
+              <p className="font-medium">Select Plan</p>
+              <div className="grid gap-2">
+                {plans
+                  .filter((plan) => plan.key !== "enterprise")
+                  .map((plan) => {
+                    const isActive = selectedPlanKey === plan.key;
+                    return (
+                      <button
+                        key={plan.key}
+                        type="button"
+                        onClick={() => setSelectedPlanKey(plan.key as "starter" | "pro")}
+                        className={cn(
+                          "flex items-center justify-between rounded-lg border px-3 py-2 transition-colors",
+                          isActive ? "border-primary bg-primary/5" : "bg-muted/20 hover:bg-muted/30",
+                        )}
+                      >
+                        <span className="font-medium">{plan.name}</span>
+                        <span>{plan.priceInPaise ? formatInr(plan.priceInPaise) : "Custom"}</span>
+                      </button>
+                    );
+                  })}
+              </div>
             </div>
+
             <div className="rounded-xl border bg-muted/20 p-4">
-              <p className="font-medium">Invoice compliance</p>
-              <p className="mt-1 text-muted-foreground">
-                Download tax-ready invoices and monthly statements instantly.
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Checkout Amount</p>
+              <p className="mt-1 text-2xl font-semibold">
+                {selectedPlan?.priceInPaise ? formatInr(selectedPlan.priceInPaise) : "Custom"}
               </p>
             </div>
-            <div className="rounded-xl border bg-muted/20 p-4">
-              <p className="font-medium">Usage alerts</p>
-              <p className="mt-1 text-muted-foreground">
-                Get notifications when any usage metric reaches 80%.
-              </p>
-            </div>
+
+            <Button
+              className="w-full"
+              onClick={() => {
+                void handleCheckout();
+              }}
+              disabled={checkoutMutation.isPending}
+            >
+              {checkoutMutation.isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Zap className="size-4" />
+                  Checkout in INR
+                </>
+              )}
+            </Button>
+
+            {checkoutState !== "idle" && (
+              <div
+                className={cn(
+                  "rounded-lg border px-3 py-2 text-xs",
+                  checkoutState === "success" && "border-emerald-300 bg-emerald-50 text-emerald-700",
+                  checkoutState === "failure" && "border-rose-300 bg-rose-50 text-rose-700",
+                  checkoutState === "loading" && "border-blue-300 bg-blue-50 text-blue-700",
+                )}
+              >
+                {checkoutMessage}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -298,41 +424,64 @@ const BillingPage = () => {
                 <ReceiptText className="size-4" />
                 Invoices
               </CardTitle>
-              <CardDescription>View billing history and download receipts.</CardDescription>
+              <CardDescription>Fetched dynamically from Prisma after successful payment.</CardDescription>
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={invoices.length === 0}>
               <Download className="size-4" />
               Export CSV
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto rounded-xl border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Invoice</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {invoices.map((invoice) => (
-                  <TableRow key={invoice.id}>
-                    <TableCell className="font-medium">{invoice.id}</TableCell>
-                    <TableCell>{invoice.date}</TableCell>
-                    <TableCell>
-                      <Badge variant={invoice.status === "Paid" ? "default" : "secondary"}>
-                        {invoice.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right font-medium">{invoice.amount}</TableCell>
+          {billingOverviewQuery.isLoading && (
+            <p className="text-sm text-muted-foreground">Loading invoices...</p>
+          )}
+
+          {!billingOverviewQuery.isLoading && invoices.length === 0 && (
+            <div className="rounded-xl border border-dashed bg-muted/10 p-6 text-center">
+              <p className="text-sm font-medium">No invoices yet</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Complete a successful payment to generate your first invoice.
+              </p>
+            </div>
+          )}
+
+          {!billingOverviewQuery.isLoading && invoices.length > 0 && (
+            <div className="overflow-x-auto rounded-xl border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Invoice</TableHead>
+                    <TableHead>Plan</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {invoices.map((invoice) => (
+                    <TableRow key={invoice.id}>
+                      <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
+                      <TableCell>{invoice.payment.planName}</TableCell>
+                      <TableCell>
+                        {new Date(invoice.issuedAt).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="default">{invoice.status}</Badge>
+                      </TableCell>
+                      <TableCell className="text-right font-medium">
+                        {formatInr(invoice.amountInPaise)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -361,7 +510,7 @@ const BillingPage = () => {
                   {plan.name}
                 </CardTitle>
                 <CardDescription className="text-xl font-semibold text-foreground">
-                  {plan.price}
+                  {plan.priceInPaise ? formatInr(plan.priceInPaise) + " / mo" : "Custom"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -374,7 +523,11 @@ const BillingPage = () => {
                   ))}
                 </div>
                 <Button className="w-full" variant={plan.featured ? "default" : "outline"}>
-                  {plan.featured ? "Keep Pro" : "Choose Plan"}
+                  {plan.key === "enterprise"
+                    ? "Contact Sales"
+                    : plan.featured
+                      ? "Keep Pro"
+                      : "Choose Plan"}
                 </Button>
               </CardContent>
             </Card>

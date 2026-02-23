@@ -182,6 +182,33 @@ exports.Prisma.QuestionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  projectId: 'projectId',
+  planName: 'planName',
+  amountInPaise: 'amountInPaise',
+  currency: 'currency',
+  status: 'status',
+  providerRef: 'providerRef',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  invoiceNumber: 'invoiceNumber',
+  userId: 'userId',
+  projectId: 'projectId',
+  paymentId: 'paymentId',
+  amountInPaise: 'amountInPaise',
+  currency: 'currency',
+  status: 'status',
+  issuedAt: 'issuedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -196,7 +223,16 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
 
+exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
+  PAID: 'PAID',
+  VOID: 'VOID'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -204,7 +240,9 @@ exports.Prisma.ModelName = {
   Commit: 'Commit',
   Issue: 'Issue',
   Meeting: 'Meeting',
-  Question: 'Question'
+  Question: 'Question',
+  Payment: 'Payment',
+  Invoice: 'Invoice'
 };
 
 /**

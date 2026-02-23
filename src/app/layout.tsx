@@ -23,10 +23,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider
-      signInForceRedirectUrl="/dashboard"
-      signInFallbackRedirectUrl="/dashboard"
-      signUpForceRedirectUrl="/dashboard"
-      signUpFallbackRedirectUrl="/dashboard"
+      signInForceRedirectUrl="/sync-user"
+      signInFallbackRedirectUrl="/sync-user"
+      signUpForceRedirectUrl="/sync-user"
+      signUpFallbackRedirectUrl="/sync-user"
     >
 
       <html lang="en" className={`${geist.variable}`}>
