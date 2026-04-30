@@ -14,6 +14,9 @@ export const env = createEnv({
     AUTH_NOTIFY_TO: z.string().email().default("kalandars2004@gmail.com"),
     AUTH_NOTIFY_FROM: z.string().email().optional(),
     RESEND_API_KEY: z.string().min(1).optional(),
+    GITHUB_TOKEN: z.string().min(1).optional(),
+    GEMINI_API_KEY: z.string().min(1).optional(),
+    GITHUB_REPO_URL: z.string().min(1).optional(),
   },
 
   /**
@@ -35,6 +38,9 @@ export const env = createEnv({
     AUTH_NOTIFY_TO: process.env.AUTH_NOTIFY_TO,
     AUTH_NOTIFY_FROM: process.env.AUTH_NOTIFY_FROM,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    GITHUB_REPO_URL: process.env.GITHUB_REPO_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

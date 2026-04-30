@@ -227,7 +227,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/vino/Vino_Project/AI-X-GIT/generated/prisma",
+      "value": "/home/kdx/Downloads/Vino_EE projecty/AI-X-GIT/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -241,7 +241,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/vino/Vino_Project/AI-X-GIT/prisma/schema.prisma",
+    "sourceFilePath": "/home/kdx/Downloads/Vino_EE projecty/AI-X-GIT/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -255,6 +255,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

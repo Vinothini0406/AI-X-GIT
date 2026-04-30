@@ -11,7 +11,6 @@ export const projectRouter = createTRPCRouter({
       z.object({
         repoUrl: z.string(),
         projectname: z.string(),
-        githubToken: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -21,11 +20,14 @@ export const projectRouter = createTRPCRouter({
         throw new Error("User not authenticated");
       }
 
-      const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ").trim();
+      const fullName = [user.firstName, user.lastName]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
       const displayName =
         fullName.length > 0
           ? fullName
-          : user.username ?? user.emailAddresses[0]?.emailAddress ?? "User";
+          : (user.username ?? user.emailAddresses[0]?.emailAddress ?? "User");
 
       await ctx.db.user.upsert({
         where: { id: ctx.userId },
@@ -218,7 +220,9 @@ export const projectRouter = createTRPCRouter({
         },
       });
 
-      const existingHashes = new Set(existing.map((commit) => commit.commitHash));
+      const existingHashes = new Set(
+        existing.map((commit) => commit.commitHash),
+      );
       const toInsert = commitsWithSummary.filter(
         (commit) => !existingHashes.has(commit.commitHash),
       );
@@ -233,7 +237,9 @@ export const projectRouter = createTRPCRouter({
               commitMessage: commit.commitMessage,
               commitAuthorName: commit.commitAuthorName,
               commitAuthorAvatar: commit.commitAuthorAvatar,
-              commitDate: Number.isNaN(parsedDate.getTime()) ? new Date() : parsedDate,
+              commitDate: Number.isNaN(parsedDate.getTime())
+                ? new Date()
+                : parsedDate,
               summary: commit.summary,
             };
           }),
