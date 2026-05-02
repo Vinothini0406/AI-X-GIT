@@ -1,14 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useForm } from "react-hook-form";
-import { cn } from "../../../lib/utils";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import { useLocalStorage } from "usehooks-ts";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useRefetch from "@/hooks/use-refetch";
+import { api } from "@/trpc/react";
+
+import { cn } from "../../../lib/utils";
+import { GithubImportButton } from "./github-import-button";
 
 interface FormInput {
   repoUrl: string;
@@ -18,8 +23,12 @@ interface FormInput {
 const CreatePage = () => {
   const { register, handleSubmit, reset } = useForm<FormInput>();
   const createProject = api.project.createProject.useMutation();
-
+  const router = useRouter();
   const refetch = useRefetch();
+  const [, setProjectId] = useLocalStorage<string | null>(
+    "dionysus-projectId",
+    null,
+  );
 
   function onSubmit(data: FormInput) {
     createProject.mutate(
@@ -42,6 +51,11 @@ const CreatePage = () => {
 
   const handleCreateProjectSubmit = (event: FormEvent<HTMLFormElement>) => {
     void handleSubmit(onSubmit)(event);
+  };
+
+  const handleImported = (projectId: string) => {
+    setProjectId(projectId);
+    router.push("/dashboard");
   };
 
   return (
@@ -95,14 +109,19 @@ const CreatePage = () => {
             server <code>.env</code> file and restart the dev server.
           </p>
 
-          {/* Submit */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={createProject.isPending}
-          >
-            Create Project
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              type="submit"
+              className="w-full flex-1"
+              disabled={createProject.isPending}
+            >
+              Create Project
+            </Button>
+            <GithubImportButton
+              className="flex-1"
+              onImported={handleImported}
+            />
+          </div>
         </form>
       </div>
     </div>

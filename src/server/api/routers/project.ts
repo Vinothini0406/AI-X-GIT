@@ -1,8 +1,14 @@
 import { currentUser } from "@clerk/nextjs/server";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { askRepoQuestion } from "@/lib/gemini";
 import { pollCommits } from "@/lib/github";
+import {
+  getGithubRepositoryForUser,
+  hasGithubRepositoryAccess,
+  listGithubRepositoriesForUser,
+} from "@/server/github/user-repositories";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const projectRouter = createTRPCRouter({
@@ -53,6 +59,136 @@ export const projectRouter = createTRPCRouter({
           },
         },
       });
+    }),
+
+  getGithubImportStatus: protectedProcedure.query(async ({ ctx }) => {
+    return {
+      hasGithubAuth: await hasGithubRepositoryAccess(ctx.userId),
+    };
+  }),
+
+  getGithubRepositories: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      return await listGithubRepositoriesForUser(ctx.userId);
+    } catch (error) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch GitHub repositories.",
+      });
+    }
+  }),
+
+  importGithubRepository: protectedProcedure
+    .input(
+      z.object({
+        fullName: z
+          .string()
+          .min(3)
+          .max(160)
+          .regex(
+            /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/,
+            "Choose a valid GitHub repository.",
+          ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let repository: Awaited<ReturnType<typeof getGithubRepositoryForUser>>;
+
+      try {
+        repository = await getGithubRepositoryForUser(
+          ctx.userId,
+          input.fullName,
+        );
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to import GitHub repository.",
+        });
+      }
+
+      const user = await currentUser();
+
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not authenticated",
+        });
+      }
+
+      const fullName = [user.firstName, user.lastName]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      const displayName =
+        fullName.length > 0
+          ? fullName
+          : (user.username ?? user.emailAddresses[0]?.emailAddress ?? "User");
+
+      await ctx.db.user.upsert({
+        where: { id: ctx.userId },
+        update: {
+          name: displayName,
+          updatedAt: new Date(),
+        },
+        create: {
+          id: ctx.userId,
+          name: displayName,
+          updatedAt: new Date(),
+        },
+      });
+
+      const existingProject = await ctx.db.project.findFirst({
+        where: {
+          githubUrl: {
+            in: [repository.htmlUrl, `${repository.htmlUrl}.git`],
+          },
+          User: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+        select: {
+          githubUrl: true,
+          id: true,
+          name: true,
+        },
+      });
+
+      if (existingProject) {
+        return {
+          imported: false,
+          project: existingProject,
+        };
+      }
+
+      const project = await ctx.db.project.create({
+        data: {
+          githubUrl: repository.htmlUrl,
+          name: repository.fullName,
+          User: {
+            connect: {
+              id: ctx.userId,
+            },
+          },
+        },
+        select: {
+          githubUrl: true,
+          id: true,
+          name: true,
+        },
+      });
+
+      return {
+        imported: true,
+        project,
+      };
     }),
 
   getProjects: protectedProcedure.query(async ({ ctx }) => {
