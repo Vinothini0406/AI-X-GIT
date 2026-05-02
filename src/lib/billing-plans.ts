@@ -2,10 +2,13 @@ export const billingPlans = {
   basic: {
     key: "basic",
     name: "Basic",
-    eyebrow: "Stripe minimum",
+    eyebrow: "Previous price",
+    displayAmountInPaise: 2000,
     amountInPaise: 5000,
     description:
-      "A lightweight plan for trying repository intelligence on a small project, priced to clear Stripe's minimum charge.",
+      "A lightweight plan for trying repository intelligence on a small project.",
+    checkoutNote:
+      "Stripe requires this checkout to be at least ₹50 for this account settlement currency.",
     benefits: [
       "One active repository workspace",
       "Core commit summary workflow",
@@ -17,9 +20,11 @@ export const billingPlans = {
     key: "premium",
     name: "Early Access Premium",
     eyebrow: "Best value",
+    displayAmountInPaise: 49900,
     amountInPaise: 49900,
     description:
       "Full early access for teams that want richer project context and priority workflows.",
+    checkoutNote: null,
     benefits: [
       "Unlimited repository workspaces",
       "Expanded AI context for commits and Q&A",

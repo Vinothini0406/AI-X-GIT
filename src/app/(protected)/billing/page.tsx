@@ -71,10 +71,28 @@ const BillingPage = () => {
   });
 
   const createCheckoutSession = api.billing.createCheckoutSession.useMutation({
+    onMutate: () => {
+      setCheckoutNotice({
+        tone: "info",
+        title: "Starting checkout",
+        description: "Creating a secure Stripe Checkout session.",
+      });
+    },
     onSuccess: (result) => {
+      setCheckoutNotice({
+        tone: "info",
+        title: "Redirecting to Stripe",
+        description:
+          "You will complete payment on Stripe's hosted checkout page.",
+      });
       window.location.assign(result.checkoutUrl);
     },
     onError: (error) => {
+      setCheckoutNotice({
+        tone: "warning",
+        title: "Checkout could not start",
+        description: error.message || "Unable to start Stripe Checkout.",
+      });
       toast.error(error.message || "Unable to start Stripe Checkout");
     },
   });
@@ -312,7 +330,7 @@ const BillingPage = () => {
                   </div>
                   <div className="pt-2">
                     <p className="text-4xl font-semibold tracking-tight">
-                      {formatInr(plan.amountInPaise)}
+                      {formatInr(plan.displayAmountInPaise)}
                     </p>
                     <p
                       className={cn(
@@ -325,6 +343,19 @@ const BillingPage = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-5">
+                  {plan.checkoutNote && (
+                    <div
+                      className={cn(
+                        "rounded-md border px-3 py-2 text-xs leading-5",
+                        isPremium && isSelected
+                          ? "border-background/20 text-background/75"
+                          : "bg-muted/25 text-muted-foreground",
+                      )}
+                    >
+                      Checkout amount: {formatInr(plan.amountInPaise)}.{" "}
+                      {plan.checkoutNote}
+                    </div>
+                  )}
                   <div className="space-y-3">
                     {plan.benefits.map((benefit) => (
                       <div
@@ -393,6 +424,21 @@ const BillingPage = () => {
                 </span>
               </div>
             </div>
+
+            {selectedPlan.displayAmountInPaise !==
+              selectedPlan.amountInPaise && (
+              <div className="bg-muted/25 rounded-md border p-3 text-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-muted-foreground">Plan price</span>
+                  <span className="font-medium">
+                    {formatInr(selectedPlan.displayAmountInPaise)}
+                  </span>
+                </div>
+                <p className="text-muted-foreground mt-2 text-xs leading-5">
+                  {selectedPlan.checkoutNote}
+                </p>
+              </div>
+            )}
 
             <div className="bg-muted/25 text-muted-foreground rounded-md border p-3 text-sm">
               <div className="text-foreground flex items-center gap-2 font-medium">

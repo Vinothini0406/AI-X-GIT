@@ -9,7 +9,9 @@ import {
   type KeyboardEvent,
 } from "react";
 import {
+  Activity,
   AlertCircle,
+  BarChart3,
   Bot,
   CalendarDays,
   Check,
@@ -228,6 +230,117 @@ const DashboardPage = () => {
   const isCommitLoading = Boolean(projectId) && commitsQuery.isLoading;
   const loadedCommitContext = commits.length;
   const latestCommitAge = getRelativeAge(latestCommitDate);
+
+  const repositoryInsights = useMemo(() => {
+    const now = Date.now();
+    const datedCommits = commits.flatMap((commit) => {
+      const date = parseDate(commit.commitDate);
+      if (!date) {
+        return [];
+      }
+
+      return [
+        {
+          author: commit.commitAuthorName || "Unknown author",
+          summaryReady:
+            Boolean(commit.summary) &&
+            !commit.summary.startsWith("Summary unavailable:"),
+          date,
+        },
+      ];
+    });
+
+    const recentCommitCount = datedCommits.filter(
+      (commit) => now - commit.date.getTime() <= 1000 * 60 * 60 * 24 * 7,
+    ).length;
+
+    const authorCounts = new Map<string, number>();
+    for (const commit of datedCommits) {
+      authorCounts.set(
+        commit.author,
+        (authorCounts.get(commit.author) ?? 0) + 1,
+      );
+    }
+
+    const topAuthor =
+      [...authorCounts.entries()].sort(
+        (left, right) => right[1] - left[1],
+      )[0]?.[0] ?? "No commits loaded";
+
+    const summaryReadyCount = datedCommits.filter(
+      (commit) => commit.summaryReady,
+    ).length;
+    const summaryCoverage =
+      commits.length > 0
+        ? Math.round((summaryReadyCount / commits.length) * 100)
+        : 0;
+
+    const dayFormatter = new Intl.DateTimeFormat(undefined, {
+      weekday: "short",
+    });
+    const dayKeyFormatter = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const commitsByDay = new Map<string, number>();
+
+    for (const commit of datedCommits) {
+      const key = dayKeyFormatter.format(commit.date);
+      commitsByDay.set(key, (commitsByDay.get(key) ?? 0) + 1);
+    }
+
+    const activityBuckets = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date();
+      date.setHours(12, 0, 0, 0);
+      date.setDate(date.getDate() - (6 - index));
+      const key = dayKeyFormatter.format(date);
+      return {
+        key,
+        label: dayFormatter.format(date),
+        count: commitsByDay.get(key) ?? 0,
+      };
+    });
+
+    const maxBucketCount = Math.max(
+      1,
+      ...activityBuckets.map((bucket) => bucket.count),
+    );
+
+    const suggestedActions = [
+      projectId && !project?.githubUrl
+        ? "Connect a GitHub URL for this project."
+        : null,
+      projectId && commits.length === 0
+        ? "Sync commit summaries to unlock repository insights."
+        : null,
+      projectId && commits.length > 0 && summaryCoverage < 80
+        ? "Refresh summaries so AI has fuller context."
+        : null,
+      latestCommitDate &&
+      now - latestCommitDate.getTime() > 1000 * 60 * 60 * 24 * 10
+        ? "Refresh repository context; latest synced commit is stale."
+        : null,
+      projectId && commits.length > 0 && recentCommitCount > 0
+        ? "Ask AI for release risk based on this week’s commits."
+        : null,
+    ].filter((action): action is string => Boolean(action));
+
+    return {
+      recentCommitCount,
+      activeAuthorCount: authorCounts.size,
+      topAuthor,
+      summaryCoverage,
+      activityBuckets,
+      maxBucketCount,
+      suggestedActions:
+        suggestedActions.length > 0
+          ? suggestedActions.slice(0, 3)
+          : [
+              "Repository context looks current. Keep syncing after meaningful changes.",
+            ],
+    };
+  }, [commits, latestCommitDate, project?.githubUrl, projectId]);
 
   const attentionItems = [
     !projectId
@@ -692,6 +805,92 @@ const DashboardPage = () => {
                     </div>
                   ))}
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-lg shadow-none">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Activity className="size-4" />
+                Smart insights
+              </CardTitle>
+              <CardDescription>
+                Lightweight analytics from the selected repository context.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="grid gap-2 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3">
+                <div className="rounded-md border px-3 py-2">
+                  <p className="text-muted-foreground text-xs">7-day commits</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {repositoryInsights.recentCommitCount}
+                  </p>
+                </div>
+                <div className="rounded-md border px-3 py-2">
+                  <p className="text-muted-foreground text-xs">Authors</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {repositoryInsights.activeAuthorCount}
+                  </p>
+                </div>
+                <div className="rounded-md border px-3 py-2">
+                  <p className="text-muted-foreground text-xs">AI coverage</p>
+                  <p className="mt-1 text-lg font-semibold">
+                    {repositoryInsights.summaryCoverage}%
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <div className="mb-2 flex items-center justify-between gap-3 text-sm">
+                  <span className="inline-flex items-center gap-2 font-medium">
+                    <BarChart3 className="size-4" />
+                    Weekly activity
+                  </span>
+                  <span className="text-muted-foreground truncate text-xs">
+                    Top author: {repositoryInsights.topAuthor}
+                  </span>
+                </div>
+                <div className="grid grid-cols-7 gap-2">
+                  {repositoryInsights.activityBuckets.map((bucket) => (
+                    <div key={bucket.key} className="space-y-2">
+                      <div className="bg-muted/20 flex h-20 items-end rounded-md border px-1.5 py-1.5">
+                        <div
+                          className="bg-foreground w-full rounded-sm transition-all"
+                          style={{
+                            height: `${Math.max(
+                              bucket.count === 0
+                                ? 8
+                                : (bucket.count /
+                                    repositoryInsights.maxBucketCount) *
+                                    100,
+                              8,
+                            )}%`,
+                            opacity: bucket.count === 0 ? 0.18 : 1,
+                          }}
+                        />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-muted-foreground text-[11px]">
+                          {bucket.label}
+                        </p>
+                        <p className="text-xs font-medium">{bucket.count}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Suggested next steps</p>
+                {repositoryInsights.suggestedActions.map((action) => (
+                  <div
+                    key={action}
+                    className="bg-muted/20 rounded-md border px-3 py-2 text-sm leading-5"
+                  >
+                    {action}
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
