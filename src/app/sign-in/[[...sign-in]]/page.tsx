@@ -11,7 +11,7 @@ export default function Page() {
     >
       <SignIn
         appearance={clerkAppearance}
-        forceRedirectUrl="/dashboard"
+        forceRedirectUrl="/sync-user"
         path="/sign-in"
         routing="path"
         signUpUrl="/sign-up"
