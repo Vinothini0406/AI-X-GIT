@@ -3,8 +3,10 @@ import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
   "/",
+  "/sync-user",
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/api/auth/sync-user",
   "/api/stripe/webhook",
 ]);
 
