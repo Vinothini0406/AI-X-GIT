@@ -227,7 +227,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/kdx/Downloads/Vino_EE projecty/AI-X-GIT/generated/prisma",
+      "value": "/home/kdx/Downloads/V1/AI-X-GIT/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -241,12 +241,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/kdx/Downloads/Vino_EE projecty/AI-X-GIT/prisma/schema.prisma",
+    "sourceFilePath": "/home/kdx/Downloads/V1/AI-X-GIT/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.19.2",

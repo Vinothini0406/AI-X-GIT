@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Sidebar,
@@ -17,14 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
-import {
-  Bot,
-  CreditCard,
-  FolderGit2,
-  LayoutDashboard,
-  Plus,
-} from "lucide-react";
-import Image from "next/image";
+import { Bot, CreditCard, LayoutDashboard, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -51,31 +43,43 @@ export function AppSidebar() {
   const { open } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" variant="floating">
-      <SidebarHeader>
-        <div className={cn("flex", "items-center", "gap-2")}>
-          <Image src="/logo1.png" alt="logo" width={40} height={40} />
+    <Sidebar collapsible="icon" variant="sidebar">
+      <SidebarHeader className="border-b px-3 py-3">
+        <Link href="/dashboard" className="flex h-10 items-center gap-2">
+          <div className="bg-foreground text-background flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold">
+            D
+          </div>
           {open && (
-            <h1 className={cn("text-xl", "font-bold", "text-primary/80")}>
-              Dionysus
-            </h1>
+            <div className="min-w-0">
+              <h1 className="truncate text-sm leading-5 font-semibold">
+                Dionysus
+              </h1>
+              <p className="text-muted-foreground truncate text-xs">
+                Repository AI
+              </p>
+            </div>
           )}
-        </div>
+        </Link>
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+      <SidebarContent className="gap-4 px-1 py-2">
+        <SidebarGroup className="px-2">
+          <SidebarGroupLabel className="h-7 px-2 text-[11px] font-semibold tracking-wide uppercase">
+            Navigate
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href={item.url}
-                      className={cn("transition-colors", {
-                        "!bg-primary !text-white": pathname === item.url,
-                      })}
-                    >
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === item.url}
+                    className={cn(
+                      "h-9 rounded-md",
+                      pathname === item.url &&
+                        "bg-foreground text-background hover:bg-foreground hover:text-background",
+                    )}
+                  >
+                    <Link href={item.url} className="transition-colors">
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
@@ -86,19 +90,29 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center justify-between">
+        <SidebarGroup className="px-2">
+          <SidebarGroupLabel className="flex h-7 items-center justify-between px-2 text-[11px] font-semibold tracking-wide uppercase">
             <span>Your Projects</span>
-            {open && <Badge variant="secondary">{projects.length}</Badge>}
+            {open && (
+              <Badge
+                variant="outline"
+                className="h-5 rounded-sm px-1.5 text-[10px]"
+              >
+                {projects.length}
+              </Badge>
+            )}
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2.5">
+            <SidebarMenu className="gap-1">
               {isLoading && (
                 <>
                   {Array.from({ length: 3 }).map((_, idx) => (
-                    <SidebarMenuItem key={`project-skeleton-${idx}`} className="py-0.5">
-                      <div className="flex items-center gap-2 rounded-lg border p-2">
+                    <SidebarMenuItem
+                      key={`project-skeleton-${idx}`}
+                      className="py-0.5"
+                    >
+                      <div className="flex items-center gap-2 rounded-md border p-2">
                         <Skeleton className="size-8 rounded-md" />
                         {open && (
                           <div className="w-full space-y-1">
@@ -113,14 +127,14 @@ export function AppSidebar() {
               )}
 
               {error && (
-                <SidebarMenuItem className="py-1 text-xs text-destructive">
+                <SidebarMenuItem className="text-destructive py-1 text-xs">
                   Failed to load projects
                 </SidebarMenuItem>
               )}
 
               {!isLoading && !error && projects.length === 0 && (
                 <SidebarMenuItem className="py-0.5">
-                  <div className="rounded-lg border border-dashed p-3 text-xs text-muted-foreground">
+                  <div className="text-muted-foreground rounded-md border border-dashed p-3 text-xs">
                     No projects yet. Create one to get started.
                   </div>
                 </SidebarMenuItem>
@@ -136,11 +150,10 @@ export function AppSidebar() {
                         setProjectId(project.id);
                       }}
                       className={cn(
-                        "w-full rounded-xl border p-2 text-left transition-all duration-150",
-                        "hover:border-primary/30 hover:bg-primary/5",
+                        "w-full rounded-md border border-transparent px-2.5 py-2 text-left transition-colors",
+                        "hover:border-border hover:bg-muted",
                         {
-                          "border-primary/40 bg-primary/10 shadow-sm": isActive,
-                          "border-border/60": !isActive,
+                          "border-border bg-muted": isActive,
                         },
                       )}
                     >
@@ -149,7 +162,7 @@ export function AppSidebar() {
                           className={cn(
                             "flex size-8 shrink-0 items-center justify-center rounded-md border text-xs font-semibold",
                             {
-                              "border-primary bg-primary text-primary-foreground":
+                              "border-foreground bg-foreground text-background":
                                 isActive,
                               "border-border bg-background text-muted-foreground":
                                 !isActive,
@@ -164,18 +177,20 @@ export function AppSidebar() {
                             <div className="truncate text-sm font-medium">
                               {project.name}
                             </div>
-                            <div className="truncate text-xs text-muted-foreground">
+                            <div className="text-muted-foreground truncate text-xs">
                               {getProjectMeta(project.githubUrl)}
                             </div>
                           </div>
                         )}
 
                         {open && isActive && (
-                          <Badge className="shrink-0" variant="default">
-                            Active
+                          <Badge
+                            className="h-5 shrink-0 rounded-sm px-1.5 text-[10px]"
+                            variant="outline"
+                          >
+                            Selected
                           </Badge>
                         )}
-                        {!open && <FolderGit2 className="size-4" />}
                       </div>
                     </button>
                   </SidebarMenuItem>
@@ -185,11 +200,12 @@ export function AppSidebar() {
               {open && (
                 <SidebarMenuItem className="pt-1">
                   <SidebarMenuButton asChild>
-                    <Link href="/create">
-                      <Button className="w-full justify-start" variant="outline">
-                        <Plus className="mr-2 size-4" />
-                        Create Project
-                      </Button>
+                    <Link
+                      href="/create"
+                      className="bg-background hover:bg-muted h-9 rounded-md border px-2 text-sm font-medium"
+                    >
+                      <Plus className="size-4" />
+                      <span>Create Project</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

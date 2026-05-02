@@ -1,5 +1,13 @@
+import { currentUser } from "@clerk/nextjs/server";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { env } from "@/env";
+import { billingPlans } from "@/lib/billing-plans";
+import {
+  fulfillCheckoutSession,
+  getStripeClient,
+} from "@/server/billing/stripe";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 const usageLimits = {
@@ -8,7 +16,8 @@ const usageLimits = {
   collaborators: 10,
 } as const;
 
-const clampPercent = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
+const clampPercent = (value: number) =>
+  Math.max(0, Math.min(100, Math.round(value)));
 
 const percentFrom = (value: number, limit: number) => {
   if (limit <= 0) {
@@ -37,15 +46,27 @@ const projectHealthScore = ({
 
   const commitScore = Math.min(40, Math.round((commitCount / 30) * 40));
   const questionScore = Math.min(35, Math.round((questionCount / 25) * 35));
-  const collaborationScore = Math.min(15, Math.round((memberCount / usageLimits.collaborators) * 15));
-  const freshnessScore = daysSinceUpdate <= 3 ? 10 : daysSinceUpdate <= 10 ? 6 : 3;
+  const collaborationScore = Math.min(
+    15,
+    Math.round((memberCount / usageLimits.collaborators) * 15),
+  );
+  const freshnessScore =
+    daysSinceUpdate <= 3 ? 10 : daysSinceUpdate <= 10 ? 6 : 3;
 
-  return Math.max(0, Math.min(100, commitScore + questionScore + collaborationScore + freshnessScore));
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      commitScore + questionScore + collaborationScore + freshnessScore,
+    ),
+  );
 };
 
 type UsageRiskLevel = "healthy" | "monitor" | "warning" | "critical";
 
-const usageRiskFromProjectedPercent = (projectedPercent: number): UsageRiskLevel => {
+const usageRiskFromProjectedPercent = (
+  projectedPercent: number,
+): UsageRiskLevel => {
   if (projectedPercent >= 100) {
     return "critical";
   }
@@ -57,17 +78,6 @@ const usageRiskFromProjectedPercent = (projectedPercent: number): UsageRiskLevel
   }
   return "healthy";
 };
-
-const planCatalog = {
-  starter: {
-    name: "Starter",
-    amountInPaise: 149900,
-  },
-  pro: {
-    name: "Pro Workspace",
-    amountInPaise: 499900,
-  },
-} as const;
 
 interface ProjectAccessDb {
   project: {
@@ -115,6 +125,74 @@ const ensureProjectAccess = async (
   return projectId;
 };
 
+const planKeySchema = z.enum(["basic", "premium"]);
+
+const getAppUrl = (headers: Headers) => {
+  const configuredUrl = env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "");
+  if (configuredUrl) {
+    return configuredUrl;
+  }
+
+  const origin = headers.get("origin")?.replace(/\/+$/, "");
+  if (origin) {
+    return origin;
+  }
+
+  const host = headers.get("host");
+  if (host) {
+    const protocol = host.includes("localhost") ? "http" : "https";
+    return `${protocol}://${host}`;
+  }
+
+  return "http://localhost:3000";
+};
+
+const ensureBillingUser = async (
+  userId: string,
+  db: {
+    user: {
+      upsert: (args: {
+        where: { id: string };
+        update: { name: string; updatedAt: Date };
+        create: { id: string; name: string; updatedAt: Date };
+      }) => Promise<unknown>;
+    };
+  },
+) => {
+  const user = await currentUser();
+
+  if (!user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to access billing.",
+    });
+  }
+
+  const fullName = [user.firstName, user.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const displayName =
+    fullName.length > 0
+      ? fullName
+      : (user.username ?? user.emailAddresses[0]?.emailAddress ?? "User");
+
+  await db.user.upsert({
+    where: { id: userId },
+    update: {
+      name: displayName,
+      updatedAt: new Date(),
+    },
+    create: {
+      id: userId,
+      name: displayName,
+      updatedAt: new Date(),
+    },
+  });
+
+  return user;
+};
+
 export const billingRouter = createTRPCRouter({
   getBillingOverview: protectedProcedure
     .input(
@@ -123,7 +201,11 @@ export const billingRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const projectId = await ensureProjectAccess(input.projectId, ctx.userId, ctx.db);
+      const projectId = await ensureProjectAccess(
+        input.projectId,
+        ctx.userId,
+        ctx.db,
+      );
 
       const invoices = await ctx.db.invoice.findMany({
         where: {
@@ -156,9 +238,12 @@ export const billingRouter = createTRPCRouter({
           },
         })) > 0;
 
-      const totalSpendInPaise = invoices.reduce((acc: number, invoice: { amountInPaise: number }) => {
-        return acc + invoice.amountInPaise;
-      }, 0);
+      const totalSpendInPaise = invoices.reduce(
+        (acc: number, invoice: { amountInPaise: number }) => {
+          return acc + invoice.amountInPaise;
+        },
+        0,
+      );
 
       return {
         hasSuccessfulPayment,
@@ -187,7 +272,11 @@ export const billingRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const projectId = await ensureProjectAccess(input.projectId, ctx.userId, ctx.db);
+      const projectId = await ensureProjectAccess(
+        input.projectId,
+        ctx.userId,
+        ctx.db,
+      );
 
       const projects = await ctx.db.project.findMany({
         where: {
@@ -219,13 +308,17 @@ export const billingRouter = createTRPCRouter({
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
       const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
       const daysElapsed = Math.max(1, now.getDate());
-      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      const daysInMonth = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0,
+      ).getDate();
 
       if (projects.length === 0) {
         return {
           scope: projectId ? "project" : "workspace",
           riskLevel: "healthy" as UsageRiskLevel,
-          suggestedPlan: "starter" as const,
+          suggestedPlan: "basic" as const,
           window: {
             monthStart,
             monthEndExclusive: nextMonthStart,
@@ -256,7 +349,8 @@ export const billingRouter = createTRPCRouter({
           nudges: [
             {
               title: "Create your first project",
-              description: "Usage insights will appear once a project is active.",
+              description:
+                "Usage insights will appear once a project is active.",
               tone: "info" as const,
             },
           ],
@@ -274,50 +368,70 @@ export const billingRouter = createTRPCRouter({
 
       const projectIds = projects.map((project) => project.id);
 
-      const [monthlyCommitCount, monthlyQuestionCount, activeCollaborators] = await Promise.all([
-        ctx.db.commit.count({
-          where: {
-            projectId: {
-              in: projectIds,
+      const [monthlyCommitCount, monthlyQuestionCount, activeCollaborators] =
+        await Promise.all([
+          ctx.db.commit.count({
+            where: {
+              projectId: {
+                in: projectIds,
+              },
+              createdAt: {
+                gte: monthStart,
+                lt: nextMonthStart,
+              },
             },
-            createdAt: {
-              gte: monthStart,
-              lt: nextMonthStart,
+          }),
+          ctx.db.question.count({
+            where: {
+              projectId: {
+                in: projectIds,
+              },
+              createdAt: {
+                gte: monthStart,
+                lt: nextMonthStart,
+              },
             },
-          },
-        }),
-        ctx.db.question.count({
-          where: {
-            projectId: {
-              in: projectIds,
-            },
-            createdAt: {
-              gte: monthStart,
-              lt: nextMonthStart,
-            },
-          },
-        }),
-        ctx.db.user.count({
-          where: {
-            Project: {
-              some: {
-                id: {
-                  in: projectIds,
+          }),
+          ctx.db.user.count({
+            where: {
+              Project: {
+                some: {
+                  id: {
+                    in: projectIds,
+                  },
                 },
               },
             },
-          },
-        }),
-      ]);
+          }),
+        ]);
 
-      const projectedCommitCount = Math.ceil((monthlyCommitCount / daysElapsed) * daysInMonth);
-      const projectedQuestionCount = Math.ceil((monthlyQuestionCount / daysElapsed) * daysInMonth);
+      const projectedCommitCount = Math.ceil(
+        (monthlyCommitCount / daysElapsed) * daysInMonth,
+      );
+      const projectedQuestionCount = Math.ceil(
+        (monthlyQuestionCount / daysElapsed) * daysInMonth,
+      );
 
-      const commitCurrentPercent = percentFrom(monthlyCommitCount, usageLimits.commits);
-      const commitProjectedPercent = percentFrom(projectedCommitCount, usageLimits.commits);
-      const questionCurrentPercent = percentFrom(monthlyQuestionCount, usageLimits.questions);
-      const questionProjectedPercent = percentFrom(projectedQuestionCount, usageLimits.questions);
-      const collaboratorPercent = percentFrom(activeCollaborators, usageLimits.collaborators);
+      const commitCurrentPercent = percentFrom(
+        monthlyCommitCount,
+        usageLimits.commits,
+      );
+      const commitProjectedPercent = percentFrom(
+        projectedCommitCount,
+        usageLimits.commits,
+      );
+      const questionCurrentPercent = percentFrom(
+        monthlyQuestionCount,
+        usageLimits.questions,
+      );
+      const questionProjectedPercent = percentFrom(
+        projectedQuestionCount,
+        usageLimits.questions,
+      );
+      const collaboratorPercent = percentFrom(
+        activeCollaborators,
+        usageLimits.collaborators,
+      );
 
       const projectedPeakPercent = Math.max(
         commitProjectedPercent,
@@ -396,7 +510,10 @@ export const billingRouter = createTRPCRouter({
       return {
         scope: projectId ? "project" : "workspace",
         riskLevel,
-        suggestedPlan: projectedPeakPercent >= 80 ? ("pro" as const) : ("starter" as const),
+        suggestedPlan:
+          projectedPeakPercent >= 80
+            ? ("premium" as const)
+            : ("basic" as const),
         window: {
           monthStart,
           monthEndExclusive: nextMonthStart,
@@ -429,18 +546,24 @@ export const billingRouter = createTRPCRouter({
       };
     }),
 
-  checkout: protectedProcedure
+  createCheckoutSession: protectedProcedure
     .input(
       z.object({
         projectId: z.string().nullable(),
-        planKey: z.enum(["starter", "pro"]),
-        paymentMethodId: z.string().min(2),
-        simulateFailure: z.boolean().default(false),
+        planKey: planKeySchema,
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const projectId = await ensureProjectAccess(input.projectId, ctx.userId, ctx.db);
-      const plan = planCatalog[input.planKey];
+      const projectId = await ensureProjectAccess(
+        input.projectId,
+        ctx.userId,
+        ctx.db,
+      );
+      const plan = billingPlans[input.planKey];
+      const user = await ensureBillingUser(ctx.userId, ctx.db);
+      const stripe = getStripeClient();
+      const appUrl = getAppUrl(ctx.headers);
+      const email = user.emailAddresses[0]?.emailAddress;
 
       const payment = await ctx.db.payment.create({
         data: {
@@ -450,56 +573,85 @@ export const billingRouter = createTRPCRouter({
           amountInPaise: plan.amountInPaise,
           currency: "INR",
           status: "PENDING",
-          providerRef: `sim_${input.paymentMethodId}_${Date.now()}`,
         },
         select: {
           id: true,
         },
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      try {
+        const metadata = {
+          paymentId: payment.id,
+          planKey: input.planKey,
+          userId: ctx.userId,
+          projectId: projectId ?? "workspace",
+        };
 
-      if (input.simulateFailure) {
+        const session = await stripe.checkout.sessions.create({
+          mode: "payment",
+          client_reference_id: payment.id,
+          customer_email: email,
+          billing_address_collection: "auto",
+          success_url: `${appUrl}/billing?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${appUrl}/billing?checkout=cancelled&plan=${input.planKey}`,
+          metadata,
+          payment_intent_data: {
+            metadata,
+          },
+          line_items: [
+            {
+              quantity: 1,
+              price_data: {
+                currency: "inr",
+                unit_amount: plan.amountInPaise,
+                product_data: {
+                  name: `Dionysus ${plan.name}`,
+                  description: plan.description,
+                },
+              },
+            },
+          ],
+        });
+
+        if (!session.url) {
+          throw new Error("Stripe did not return a checkout URL.");
+        }
+
+        await ctx.db.payment.update({
+          where: { id: payment.id },
+          data: { providerRef: session.id },
+        });
+
+        return {
+          checkoutUrl: session.url,
+          sessionId: session.id,
+          paymentId: payment.id,
+        };
+      } catch (error) {
         await ctx.db.payment.update({
           where: { id: payment.id },
           data: { status: "FAILED" },
         });
 
-        return {
-          status: "FAILED" as const,
-          paymentId: payment.id,
-          message: "Payment failed. Please try another payment method.",
-        };
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Unable to start Stripe Checkout.",
+        });
       }
+    }),
 
-      await ctx.db.payment.update({
-        where: { id: payment.id },
-        data: { status: "SUCCESS" },
+  verifyCheckoutSession: protectedProcedure
+    .input(
+      z.object({
+        sessionId: z.string().min(8),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return fulfillCheckoutSession(input.sessionId, {
+        expectedUserId: ctx.userId,
       });
-
-      const invoice = await ctx.db.invoice.create({
-        data: {
-          invoiceNumber: `INV-INR-${new Date().getUTCFullYear()}-${payment.id.slice(-8).toUpperCase()}`,
-          userId: ctx.userId,
-          projectId,
-          paymentId: payment.id,
-          amountInPaise: plan.amountInPaise,
-          currency: "INR",
-          status: "PAID",
-        },
-        select: {
-          id: true,
-          invoiceNumber: true,
-          amountInPaise: true,
-          currency: true,
-          issuedAt: true,
-        },
-      });
-
-      return {
-        status: "SUCCESS" as const,
-        paymentId: payment.id,
-        invoice,
-      };
     }),
 });
