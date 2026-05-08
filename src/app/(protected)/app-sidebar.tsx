@@ -1,7 +1,19 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Sidebar,
@@ -17,9 +29,11 @@ import {
 } from "@/components/ui/sidebar";
 import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
-import { Bot, CreditCard, LayoutDashboard, Plus } from "lucide-react";
+import { api } from "@/trpc/react";
+import { Bot, CreditCard, LayoutDashboard, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { GithubImportButton } from "./create/github-import-button";
 
@@ -44,8 +58,25 @@ export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useUser();
-  const { projects, isLoading, error, projectId, setProjectId } = useProject();
+  const { projects, isLoading, error, project, projectId, setProjectId } =
+    useProject();
   const { open } = useSidebar();
+  const utils = api.useUtils();
+  const deleteProject = api.project.deleteProject.useMutation({
+    onSuccess: async (deletedProject) => {
+      toast.success(`Deleted ${deletedProject.name}`);
+      setProjectId(null);
+      await Promise.all([
+        utils.project.getProjects.invalidate(),
+        utils.project.getProjectDetails.invalidate(),
+        utils.project.getCommits.invalidate(),
+      ]);
+      router.push("/dashboard");
+    },
+    onError: (mutationError) => {
+      toast.error(mutationError.message || "Failed to delete project");
+    },
+  });
   const hasGithubAuth =
     user?.externalAccounts.some((account) => {
       const provider = String(account.provider);
@@ -229,6 +260,52 @@ export function AppSidebar() {
                         className="h-9 min-w-0 px-2 text-sm"
                         onImported={handleImported}
                       />
+                    ) : null}
+                    {project ? (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            className="h-9 w-full px-2 text-sm"
+                            disabled={deleteProject.isPending}
+                          >
+                            <Trash2 className="size-4" />
+                            Delete Project
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete project?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This will permanently delete{" "}
+                              <span className="text-foreground font-medium">
+                                {project.name}
+                              </span>{" "}
+                              and its commits, meetings, issues, and questions
+                              from Prisma. This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel
+                              disabled={deleteProject.isPending}
+                            >
+                              Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              variant="destructive"
+                              disabled={deleteProject.isPending}
+                              onClick={() => {
+                                deleteProject.mutate({
+                                  projectId: project.id,
+                                });
+                              }}
+                            >
+                              Delete Project
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     ) : null}
                   </div>
                 </SidebarMenuItem>

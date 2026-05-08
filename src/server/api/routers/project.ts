@@ -81,6 +81,113 @@ export const projectRouter = createTRPCRouter({
     }
   }),
 
+  deleteProject: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const project = await ctx.db.project.findFirst({
+        where: {
+          id: input.projectId,
+          User: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      if (!project) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Project not found or access denied",
+        });
+      }
+
+      await ctx.db.$transaction(async (tx) => {
+        const meetings = await tx.meeting.findMany({
+          where: {
+            projectId: input.projectId,
+          },
+          select: {
+            id: true,
+          },
+        });
+        const meetingIds = meetings.map((meeting) => meeting.id);
+
+        await tx.invoice.updateMany({
+          where: {
+            projectId: input.projectId,
+          },
+          data: {
+            projectId: null,
+          },
+        });
+
+        await tx.payment.updateMany({
+          where: {
+            projectId: input.projectId,
+          },
+          data: {
+            projectId: null,
+          },
+        });
+
+        if (meetingIds.length > 0) {
+          await tx.issue.deleteMany({
+            where: {
+              meetingId: {
+                in: meetingIds,
+              },
+            },
+          });
+        }
+
+        await tx.meeting.deleteMany({
+          where: {
+            projectId: input.projectId,
+          },
+        });
+
+        await tx.question.deleteMany({
+          where: {
+            projectId: input.projectId,
+          },
+        });
+
+        await tx.commit.deleteMany({
+          where: {
+            projectId: input.projectId,
+          },
+        });
+
+        await tx.project.update({
+          where: {
+            id: input.projectId,
+          },
+          data: {
+            User: {
+              set: [],
+            },
+          },
+        });
+
+        await tx.project.delete({
+          where: {
+            id: input.projectId,
+          },
+        });
+      });
+
+      return project;
+    }),
+
   importGithubRepository: protectedProcedure
     .input(
       z.object({
