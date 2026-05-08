@@ -109,7 +109,7 @@ const CreatePage = () => {
             server <code>.env</code> file and restart the dev server.
           </p>
 
-          <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="grid grid-cols-2 gap-2">
             <Button
               type="submit"
               className="w-full flex-1"

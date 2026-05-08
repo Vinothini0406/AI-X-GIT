@@ -1,6 +1,13 @@
 "use client";
 
-import { Github, Search } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import {
+  Github,
+  GitPullRequestArrow,
+  Globe2,
+  LockKeyhole,
+  Search,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -52,20 +59,24 @@ export function GithubImportButton({
   onImported,
 }: GithubImportButtonProps) {
   const refetch = useRefetch();
+  const { isLoaded: isUserLoaded, user } = useUser();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedFullName, setSelectedFullName] = useState<string | null>(null);
-  const githubStatus = api.project.getGithubImportStatus.useQuery(undefined, {
-    staleTime: 60_000,
-  });
+  const [importingFullName, setImportingFullName] = useState<string | null>(
+    null,
+  );
+  const hasGithubAuth =
+    user?.externalAccounts.some((account) => {
+      const provider = String(account.provider);
+      return provider === "github" || account.providerSlug() === "github";
+    }) ?? false;
   const repositories = api.project.getGithubRepositories.useQuery(undefined, {
-    enabled: open && githubStatus.data?.hasGithubAuth === true,
+    enabled: open && hasGithubAuth,
     retry: false,
     staleTime: 30_000,
   });
   const importRepository = api.project.importGithubRepository.useMutation();
 
-  const hasGithubAuth = githubStatus.data?.hasGithubAuth === true;
   const filteredRepositories = useMemo(() => {
     const query = search.trim().toLowerCase();
     const allRepositories = repositories.data ?? [];
@@ -87,20 +98,27 @@ export function GithubImportButton({
       return searchableText.includes(query);
     });
   }, [repositories.data, search]);
-  const selectedRepository = (repositories.data ?? []).find(
-    (repository) => repository.fullName === selectedFullName,
-  );
 
-  if (githubStatus.isLoading || !hasGithubAuth) {
+  if (!isUserLoaded || !hasGithubAuth) {
     return null;
   }
 
-  function handleImport() {
-    if (!selectedRepository || importRepository.isPending) return;
+  function handleOpenChange(nextOpen: boolean) {
+    setOpen(nextOpen);
 
+    if (!nextOpen) {
+      setSearch("");
+      setImportingFullName(null);
+    }
+  }
+
+  function handleImport(repository: GithubRepository) {
+    if (importRepository.isPending) return;
+
+    setImportingFullName(repository.fullName);
     importRepository.mutate(
       {
-        fullName: selectedRepository.fullName,
+        fullName: repository.fullName,
       },
       {
         onSuccess: (result) => {
@@ -110,20 +128,21 @@ export function GithubImportButton({
               : "Repository already linked",
           );
           void refetch();
-          setOpen(false);
-          setSearch("");
-          setSelectedFullName(null);
+          handleOpenChange(false);
           onImported?.(result.project.id);
         },
         onError: (error) => {
           toast.error(error.message || "Failed to import repository");
+        },
+        onSettled: () => {
+          setImportingFullName(null);
         },
       },
     );
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           type="button"
@@ -131,60 +150,54 @@ export function GithubImportButton({
           className={cn("w-full", className)}
         >
           <Github className="size-4" />
-          Import from GitHub
+          Import Project
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Import from GitHub</DialogTitle>
+      <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-3xl">
+        <DialogHeader className="border-b px-6 py-5">
+          <DialogTitle className="flex items-center gap-2">
+            <Github className="size-5" />
+            Import Project
+          </DialogTitle>
           <DialogDescription>
-            Select a repository from your GitHub account to link it with
-            Dionysus.
+            Choose one of your GitHub repositories to link it with Dionysus.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="relative">
-          <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-          <Input
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-            }}
-            placeholder="Search repositories"
-            className="pl-9"
+        <div className="space-y-4 p-6">
+          <div className="relative">
+            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+            <Input
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+              }}
+              placeholder="Search repositories"
+              className="pl-9"
+            />
+          </div>
+
+          <RepositoryList
+            errorMessage={repositories.error?.message}
+            importingFullName={importingFullName}
+            isImporting={importRepository.isPending}
+            isLoading={repositories.isLoading || repositories.isFetching}
+            repositories={filteredRepositories}
+            totalCount={repositories.data?.length ?? 0}
+            onImport={handleImport}
           />
         </div>
 
-        <RepositoryList
-          errorMessage={repositories.error?.message}
-          isLoading={repositories.isLoading || repositories.isFetching}
-          repositories={filteredRepositories}
-          selectedFullName={selectedFullName}
-          totalCount={repositories.data?.length ?? 0}
-          onSelect={setSelectedFullName}
-        />
-
-        <DialogFooter>
+        <DialogFooter className="bg-muted/30 border-t px-6 py-4">
           <Button
             type="button"
             variant="outline"
             onClick={() => {
-              setOpen(false);
+              handleOpenChange(false);
             }}
+            disabled={importRepository.isPending}
           >
-            Cancel
-          </Button>
-          <Button
-            type="button"
-            disabled={!selectedRepository || importRepository.isPending}
-            onClick={handleImport}
-          >
-            {importRepository.isPending ? (
-              <Spinner className="size-4" />
-            ) : (
-              <Github className="size-4" />
-            )}
-            Import repository
+            Close
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -194,18 +207,20 @@ export function GithubImportButton({
 
 function RepositoryList({
   errorMessage,
+  importingFullName,
+  isImporting,
   isLoading,
   repositories,
-  selectedFullName,
   totalCount,
-  onSelect,
+  onImport,
 }: {
   errorMessage?: string;
+  importingFullName: string | null;
+  isImporting: boolean;
   isLoading: boolean;
   repositories: GithubRepository[];
-  selectedFullName: string | null;
   totalCount: number;
-  onSelect: (fullName: string) => void;
+  onImport: (repository: GithubRepository) => void;
 }) {
   if (isLoading) {
     return (
@@ -255,35 +270,33 @@ function RepositoryList({
   }
 
   return (
-    <ScrollArea className="h-[360px] rounded-md border">
-      <div className="divide-y">
+    <ScrollArea className="h-[420px] pr-3">
+      <div className="space-y-3">
         {repositories.map((repository) => {
-          const isSelected = selectedFullName === repository.fullName;
+          const isCurrentImport = importingFullName === repository.fullName;
 
           return (
-            <button
+            <div
               key={repository.id}
-              type="button"
-              onClick={() => {
-                onSelect(repository.fullName);
-              }}
               className={cn(
-                "hover:bg-muted/70 w-full px-4 py-3 text-left transition-colors",
-                isSelected && "bg-muted",
+                "group bg-background rounded-md border p-4 shadow-xs transition-all duration-200",
+                "hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-md",
               )}
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate text-sm font-medium">
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <span className="truncate text-sm font-semibold">
                       {repository.fullName}
                     </span>
                     {repository.isPrivate ? (
-                      <Badge variant="outline" className="rounded-sm">
+                      <Badge variant="outline" className="gap-1 rounded-sm">
+                        <LockKeyhole className="size-3" />
                         Private
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="rounded-sm">
+                      <Badge variant="outline" className="gap-1 rounded-sm">
+                        <Globe2 className="size-3" />
                         Public
                       </Badge>
                     )}
@@ -300,16 +313,24 @@ function RepositoryList({
                     <span>Updated {formatDate(repository.updatedAt)}</span>
                   </div>
                 </div>
-                <span
-                  className={cn(
-                    "mt-1 size-4 shrink-0 rounded-full border",
-                    isSelected &&
-                      "border-black bg-black shadow-[inset_0_0_0_4px_white]",
+                <Button
+                  type="button"
+                  size="sm"
+                  className="w-full sm:w-auto"
+                  disabled={isImporting}
+                  onClick={() => {
+                    onImport(repository);
+                  }}
+                >
+                  {isCurrentImport ? (
+                    <Spinner className="size-4" />
+                  ) : (
+                    <GitPullRequestArrow className="size-4" />
                   )}
-                  aria-hidden="true"
-                />
+                  Import
+                </Button>
               </div>
-            </button>
+            </div>
           );
         })}
       </div>

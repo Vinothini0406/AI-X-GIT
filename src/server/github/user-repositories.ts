@@ -91,18 +91,26 @@ function parseGithubFullName(fullName: string) {
   return { owner, repo };
 }
 
-async function getGithubUserAccessToken(userId: string) {
+function isGithubProvider(provider: string) {
+  return provider === "github" || provider === "oauth_github";
+}
+
+export async function hasGithubAccount(userId: string) {
   const client = await clerkClient();
   const user = await client.users.getUser(userId);
-  const hasGithubAccount = user.externalAccounts.some(
-    (account) => account.provider === "github",
-  );
 
-  if (!hasGithubAccount) {
+  return user.externalAccounts.some((account) =>
+    isGithubProvider(account.provider),
+  );
+}
+
+async function getGithubUserAccessToken(userId: string) {
+  if (!(await hasGithubAccount(userId))) {
     return null;
   }
 
   try {
+    const client = await clerkClient();
     const response = await client.users.getUserOauthAccessToken(
       userId,
       "github",
@@ -139,10 +147,6 @@ function mapRepository(
   };
 }
 
-export async function hasGithubRepositoryAccess(userId: string) {
-  return Boolean(await getGithubUserAccessToken(userId));
-}
-
 export async function listGithubRepositoriesForUser(
   userId: string,
 ): Promise<GithubImportRepository[]> {
@@ -150,19 +154,22 @@ export async function listGithubRepositoriesForUser(
 
   if (!token) {
     throw new Error(
-      "Sign in with GitHub to import repositories from your account.",
+      "GitHub is connected, but repository access is not available yet. Sign out and sign in with GitHub again, then approve repository access.",
     );
   }
 
   try {
     const github = createGithubClient(token);
-    const { data } = await github.rest.repos.listForAuthenticatedUser({
-      affiliation: "owner,collaborator,organization_member",
-      direction: "desc",
-      per_page: 100,
-      sort: "updated",
-      visibility: "all",
-    });
+    const data = await github.paginate(
+      github.rest.repos.listForAuthenticatedUser,
+      {
+        affiliation: "owner,collaborator,organization_member",
+        direction: "desc",
+        per_page: 100,
+        sort: "updated",
+        visibility: "all",
+      },
+    );
 
     return data.map(mapRepository);
   } catch (error) {
@@ -178,7 +185,7 @@ export async function getGithubRepositoryForUser(
 
   if (!token) {
     throw new Error(
-      "Sign in with GitHub to import repositories from your account.",
+      "GitHub is connected, but repository access is not available yet. Sign out and sign in with GitHub again, then approve repository access.",
     );
   }
 

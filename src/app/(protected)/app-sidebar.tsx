@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -18,7 +19,9 @@ import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
 import { Bot, CreditCard, LayoutDashboard, Plus } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
+import { GithubImportButton } from "./create/github-import-button";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -39,8 +42,20 @@ const getProjectMeta = (githubUrl?: string | null) => {
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useUser();
   const { projects, isLoading, error, projectId, setProjectId } = useProject();
   const { open } = useSidebar();
+  const hasGithubAuth =
+    user?.externalAccounts.some((account) => {
+      const provider = String(account.provider);
+      return provider === "github" || account.providerSlug() === "github";
+    }) ?? false;
+
+  const handleImported = (importedProjectId: string) => {
+    setProjectId(importedProjectId);
+    router.push("/dashboard");
+  };
 
   return (
     <Sidebar collapsible="icon" variant="sidebar">
@@ -199,15 +214,23 @@ export function AppSidebar() {
 
               {open && (
                 <SidebarMenuItem className="pt-1">
-                  <SidebarMenuButton asChild>
-                    <Link
-                      href="/create"
-                      className="bg-background hover:bg-muted h-9 rounded-md border px-2 text-sm font-medium"
-                    >
-                      <Plus className="size-4" />
-                      <span>Create Project</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <div className="grid grid-cols-1 gap-2">
+                    <SidebarMenuButton asChild>
+                      <Link
+                        href="/create"
+                        className="bg-background hover:bg-muted h-9 min-w-0 justify-center rounded-md border px-2 text-sm font-medium"
+                      >
+                        <Plus className="size-4" />
+                        <span>Create Project</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {hasGithubAuth ? (
+                      <GithubImportButton
+                        className="h-9 min-w-0 px-2 text-sm"
+                        onImported={handleImported}
+                      />
+                    ) : null}
+                  </div>
                 </SidebarMenuItem>
               )}
             </SidebarMenu>

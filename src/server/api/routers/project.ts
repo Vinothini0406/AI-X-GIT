@@ -6,7 +6,7 @@ import { askRepoQuestion } from "@/lib/gemini";
 import { pollCommits } from "@/lib/github";
 import {
   getGithubRepositoryForUser,
-  hasGithubRepositoryAccess,
+  hasGithubAccount,
   listGithubRepositoriesForUser,
 } from "@/server/github/user-repositories";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -63,7 +63,7 @@ export const projectRouter = createTRPCRouter({
 
   getGithubImportStatus: protectedProcedure.query(async ({ ctx }) => {
     return {
-      hasGithubAuth: await hasGithubRepositoryAccess(ctx.userId),
+      hasGithubAuth: await hasGithubAccount(ctx.userId),
     };
   }),
 
