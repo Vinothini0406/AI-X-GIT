@@ -48,17 +48,27 @@ const formatInr = (paise: number) =>
     maximumFractionDigits: 0,
   }).format(paise / 100);
 
+const formatInvoiceDate = (date: Date | string) =>
+  new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit",
+    month: "short",
+    timeZone: "UTC",
+    year: "numeric",
+  }).format(new Date(date));
+
 const planOptions = Object.values(billingPlans);
 
 const BillingPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { projectId, project } = useProject();
+  const processedCancelledCheckoutRef = useRef<string | null>(null);
   const processedSessionRef = useRef<string | null>(null);
 
   const [selectedPlanKey, setSelectedPlanKey] = useLocalStorage<BillingPlanKey>(
     "dionysus-billing-selected-plan",
     "premium",
+    { initializeWithValue: false },
   );
   const [checkoutNotice, setCheckoutNotice] = useState<{
     tone: "success" | "warning" | "info";
@@ -97,24 +107,27 @@ const BillingPage = () => {
     },
   });
 
-  const verifyCheckoutSession = api.billing.verifyCheckoutSession.useMutation({
+  const {
+    isPending: isVerifying,
+    mutate: verifyCheckoutSession,
+  } = api.billing.verifyCheckoutSession.useMutation({
     onSuccess: async (result) => {
-      if (result.status === "SUCCESS") {
-        setCheckoutNotice({
-          tone: "success",
-          title: "Payment confirmed",
-          description: "Your invoice is ready in billing history.",
-        });
-        toast.success("Payment confirmed");
-      } else {
+      if (result.status !== "SUCCESS") {
         setCheckoutNotice({
           tone: "info",
           title: "Payment pending",
           description: result.message,
         });
+        return;
       }
 
       await billingOverviewQuery.refetch();
+      setCheckoutNotice({
+        tone: "success",
+        title: "Payment confirmed",
+        description: "Your invoice is ready in billing history.",
+      });
+      toast.success("Payment confirmed");
       router.replace("/billing", { scroll: false });
     },
     onError: (error) => {
@@ -139,17 +152,26 @@ const BillingPage = () => {
   }, [cancelledPlan, setSelectedPlanKey]);
 
   useEffect(() => {
-    if (checkoutStatus === "cancelled") {
-      setCheckoutNotice({
-        tone: "warning",
-        title: "Checkout cancelled",
-        description:
-          "No payment was recorded. You can restart checkout when ready.",
-      });
-      router.replace("/billing", { scroll: false });
+    if (checkoutStatus !== "cancelled") {
+      processedCancelledCheckoutRef.current = null;
       return;
     }
 
+    const cancelledCheckoutKey = cancelledPlan ?? "unknown";
+    if (processedCancelledCheckoutRef.current === cancelledCheckoutKey) {
+      return;
+    }
+
+    processedCancelledCheckoutRef.current = cancelledCheckoutKey;
+    setCheckoutNotice({
+      tone: "warning",
+      title: "Checkout cancelled",
+      description: "No payment was recorded. You can restart checkout when ready.",
+    });
+    router.replace("/billing", { scroll: false });
+  }, [cancelledPlan, checkoutStatus, router]);
+
+  useEffect(() => {
     if (checkoutStatus !== "success" || !checkoutSessionId) {
       return;
     }
@@ -166,16 +188,19 @@ const BillingPage = () => {
         "Checking the Stripe session and refreshing your invoice history.",
     });
 
-    verifyCheckoutSession.mutate({ sessionId: checkoutSessionId });
-  }, [checkoutSessionId, checkoutStatus, router, verifyCheckoutSession]);
+    verifyCheckoutSession({ sessionId: checkoutSessionId });
+  }, [checkoutSessionId, checkoutStatus, verifyCheckoutSession]);
 
-  const selectedPlan = billingPlans[selectedPlanKey];
+  const safeSelectedPlanKey: BillingPlanKey =
+    selectedPlanKey === "basic" || selectedPlanKey === "premium"
+      ? selectedPlanKey
+      : "premium";
+  const selectedPlan = billingPlans[safeSelectedPlanKey];
   const invoices = billingOverviewQuery.data?.invoices ?? [];
   const totalSpendInPaise = billingOverviewQuery.data?.totalSpendInPaise ?? 0;
   const latestInvoice = invoices[0];
   const currentPlan = latestInvoice?.payment.planName ?? "No paid plan yet";
   const isCheckingOut = createCheckoutSession.isPending;
-  const isVerifying = verifyCheckoutSession.isPending;
 
   const billingStats = useMemo(
     () => [
@@ -201,7 +226,7 @@ const BillingPage = () => {
   const handleCheckout = async () => {
     await createCheckoutSession.mutateAsync({
       projectId: projectId ?? null,
-      planKey: selectedPlanKey,
+      planKey: safeSelectedPlanKey,
     });
   };
 
@@ -280,7 +305,7 @@ const BillingPage = () => {
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
         <div className="grid gap-4 md:grid-cols-2">
           {planOptions.map((plan) => {
-            const isSelected = selectedPlanKey === plan.key;
+            const isSelected = safeSelectedPlanKey === plan.key;
             const isPremium = plan.key === "premium";
 
             return (
@@ -533,14 +558,7 @@ const BillingPage = () => {
                       </TableCell>
                       <TableCell>{invoice.payment.planName}</TableCell>
                       <TableCell>
-                        {new Date(invoice.issuedAt).toLocaleDateString(
-                          "en-IN",
-                          {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          },
-                        )}
+                        {formatInvoiceDate(invoice.issuedAt)}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline" className="rounded-sm">
