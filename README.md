@@ -2,14 +2,14 @@
 
 A modern AI workspace for GitHub repositories. Dionysus helps teams connect repositories, sync commit history, generate AI summaries, ask repository-aware questions, and manage billing from a clean Next.js dashboard.
 
-Built with Next.js, Clerk, tRPC, Prisma, PostgreSQL, Google Gemini, GitHub OAuth, and Stripe.
+Built with Next.js, Clerk, tRPC, Prisma, PostgreSQL, OpenAI, GitHub OAuth, and Stripe.
 
 ## Features
 
 - Minimal SaaS landing page with Google and GitHub authentication
 - Protected workspace routes with a smooth user sync flow after login
 - Clean dashboard with selected-repository context, activity metrics, commit insights, and smart suggestions
-- Repository Q&A powered by Google Gemini
+- Repository Q&A powered by OpenAI
 - GitHub repository linking by URL
 - GitHub import flow for users authenticated with GitHub
 - Commit sync and AI commit summaries
@@ -25,7 +25,7 @@ Built with Next.js, Clerk, tRPC, Prisma, PostgreSQL, Google Gemini, GitHub OAuth
 | Auth      | Clerk                                        |
 | API       | tRPC, TanStack Query                         |
 | Database  | PostgreSQL, Prisma                           |
-| AI        | Google Gemini                                |
+| AI        | OpenAI-compatible Chat Completions providers |
 | GitHub    | Octokit, GitHub OAuth tokens                 |
 | Billing   | Stripe Checkout and webhooks                 |
 | UI        | Tailwind CSS, Radix UI, lucide-react, Sonner |
@@ -63,8 +63,14 @@ DATABASE_URL="postgresql://postgres:password@localhost:5432/git"
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 
-# Google Gemini
-GEMINI_API_KEY=
+# Free AI via OpenRouter
+OPENROUTER_API_KEY=
+AI_BASE_URL="https://openrouter.ai/api/v1"
+AI_MODEL="openrouter/free"
+
+# Optional paid OpenAI fallback
+OPENAI_API_KEY=
+OPENAI_MODEL=
 
 # GitHub
 GITHUB_TOKEN=
@@ -88,6 +94,8 @@ Notes:
 - Enable Google and GitHub providers in your Clerk dashboard.
 - For GitHub import, enable GitHub OAuth in Clerk and request repository read access.
 - `GITHUB_TOKEN` is optional for public repos, but recommended for private repository sync and higher GitHub API limits.
+- For free AI experiments, create an OpenRouter key and use `AI_MODEL="openrouter/free"`.
+- Free OpenRouter models have low rate limits and changing availability, so use paid models for production workloads.
 - Stripe keys are required only for checkout and billing flows.
 
 ### 4. Set up the database
@@ -191,7 +199,7 @@ src/
     landing/           Landing page background and OAuth CTA components
     ui/                Reusable UI primitives
   hooks/               Client hooks for selected project and refetching
-  lib/                 Gemini and GitHub helpers
+  lib/                 OpenAI and GitHub helpers
   server/
     api/               tRPC routers
     auth/              Server-side user sync helpers

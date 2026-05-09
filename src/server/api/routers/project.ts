@@ -2,7 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { askRepoQuestion } from "@/lib/gemini";
+import { askRepoQuestion } from "@/lib/openai";
 import { pollCommits } from "@/lib/github";
 import {
   getGithubRepositoryForUser,

@@ -1,6 +1,6 @@
 import { Octokit } from "octokit";
 
-import { aiSummariseCommit } from "./gemini";
+import { aiSummariseCommit } from "./openai";
 
 type PrismaDb = Awaited<typeof import("@/server/db")>["db"];
 
