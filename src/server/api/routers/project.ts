@@ -110,64 +110,54 @@ export const projectRouter = createTRPCRouter({
         });
       }
 
-      await ctx.db.$transaction(async (tx) => {
-        const meetings = await tx.meeting.findMany({
-          where: {
-            projectId: input.projectId,
-          },
-          select: {
-            id: true,
-          },
-        });
-        const meetingIds = meetings.map((meeting) => meeting.id);
-
-        await tx.invoice.updateMany({
+      await ctx.db.$transaction([
+        ctx.db.invoice.updateMany({
           where: {
             projectId: input.projectId,
           },
           data: {
             projectId: null,
           },
-        });
+        }),
 
-        await tx.payment.updateMany({
+        ctx.db.payment.updateMany({
           where: {
             projectId: input.projectId,
           },
           data: {
             projectId: null,
           },
-        });
+        }),
 
-        if (meetingIds.length > 0) {
-          await tx.issue.deleteMany({
-            where: {
-              meetingId: {
-                in: meetingIds,
+        ctx.db.issue.deleteMany({
+          where: {
+            Meeting: {
+              is: {
+                projectId: input.projectId,
               },
             },
-          });
-        }
+          },
+        }),
 
-        await tx.meeting.deleteMany({
+        ctx.db.meeting.deleteMany({
           where: {
             projectId: input.projectId,
           },
-        });
+        }),
 
-        await tx.question.deleteMany({
+        ctx.db.question.deleteMany({
           where: {
             projectId: input.projectId,
           },
-        });
+        }),
 
-        await tx.commit.deleteMany({
+        ctx.db.commit.deleteMany({
           where: {
             projectId: input.projectId,
           },
-        });
+        }),
 
-        await tx.project.update({
+        ctx.db.project.update({
           where: {
             id: input.projectId,
           },
@@ -176,14 +166,14 @@ export const projectRouter = createTRPCRouter({
               set: [],
             },
           },
-        });
+        }),
 
-        await tx.project.delete({
+        ctx.db.project.delete({
           where: {
             id: input.projectId,
           },
-        });
-      });
+        }),
+      ]);
 
       return project;
     }),
